@@ -13,12 +13,11 @@ An intelligent meal planning application powered by AI that helps you manage ing
 
 ## Tech Stack
 
-- **Frontend**: Next.js 14+ (React) with Tailwind CSS
-- **Backend**: Next.js API routes (Node.js)
+- **Framework**: Python + Streamlit (all-in-one solution)
 - **AI**: Anthropic Claude API (Claude 3.5 Sonnet)
-- **Storage**: File-based JSON (simple and LLM-friendly)
-- **Hosting**: Vercel
-- **Auth**: NextAuth.js (simple password protection)
+- **Vision**: Claude 3.5 Sonnet (photo recognition)
+- **Storage**: Markdown files (human-readable, LLM-friendly)
+- **Hosting**: Streamlit Cloud (free tier)
 
 ## Documentation
 
@@ -26,17 +25,78 @@ See [SPEC.md](./SPEC.md) for detailed product specification, architecture, and d
 
 ## Getting Started
 
-Coming soon - development in progress!
+### Prerequisites
+- Python 3.9 or higher
+- Anthropic API key ([get one here](https://console.anthropic.com/))
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/meal-planner-v2.git
+   cd meal-planner-v2
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env and add your ANTHROPIC_API_KEY
+   ```
+
+4. **Run the app**
+   ```bash
+   streamlit run app.py
+   ```
+
+5. **Open your browser**
+   - The app will automatically open at `http://localhost:8501`
 
 ## Project Structure
 
 ```
-/data          # JSON files for pantry, recipes, preferences
-/src           # Application source code
-  /app         # Next.js app directory
-  /components  # React components
-  /lib         # Utilities and AI agent logic
+meal-planner-v2/
+├── app.py                 # Main Streamlit app (home dashboard)
+├── requirements.txt       # Python dependencies
+├── .env                   # API keys (not committed)
+├── .env.example          # Example environment file
+├── .gitignore
+│
+├── pages/                 # Streamlit pages (coming soon)
+│   ├── generate_recipes.py
+│   ├── update_pantry.py
+│   └── meal_history.py
+│
+├── lib/                   # Core logic (coming soon)
+│   ├── llm_agents.py      # Claude API interactions
+│   ├── file_manager.py    # Markdown file operations
+│   └── vision.py          # Image processing
+│
+└── data/                  # All user data (markdown files)
+    ├── pantry/
+    │   ├── staples.md
+    │   ├── fresh.md
+    │   └── shopping_list.md
+    ├── recipes/
+    │   ├── loved.md
+    │   ├── liked.md
+    │   └── not_again.md
+    ├── preferences.md
+    └── meal_history.md
 ```
+
+## Current Status
+
+✅ Project structure created
+✅ Sample data files added
+✅ Basic home dashboard implemented
+🚧 Recipe generation page (coming next)
+🚧 Pantry management (coming next)
+🚧 Claude AI integration (coming next)
 
 ## License
 
