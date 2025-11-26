@@ -655,6 +655,353 @@ pytest --cov=lib --cov-report=html --cov-report=term
 
 ---
 
+## Avoiding AI-Written Test Weaknesses
+
+> "AI can write tests fast, but fast tests that don't catch bugs are worse than no tests at all."
+
+When using AI to assist with test generation (including yourself as an AI assistant), be aware of common weaknesses and actively work to avoid them.
+
+### Common AI Test Weaknesses
+
+#### 1. Poor Mock Implementation (25% failure rate)
+
+**Problem:** LLMs often create broken mocks that turn unit tests into integration tests.
+
+```python
+# ❌ BAD: AI-generated test without proper mocking
+def test_suggest_recipes():
+    service = RecipeService()  # Creates real dependencies!
+    recipes = service.suggest_recipes(['italian'], ['pasta'])
+    assert len(recipes) > 0  # Calls real LLM API, hits real files
+
+# ✅ GOOD: Properly mocked dependencies
+def test_suggest_recipes_with_mocks(mock_repository, mock_llm):
+    """Test recipe suggestion with isolated dependencies."""
+    # Arrange: Configure mocks
+    mock_repository.get_loved_recipes.return_value = "Sample recipes..."
+    mock_llm.generate.return_value = "Pasta Carbonara\nMargherita Pizza"
+
+    service = RecipeService(repository=mock_repository, llm=mock_llm)
+
+    # Act
+    recipes = service.suggest_recipes(['italian'], ['pasta', 'eggs'])
+
+    # Assert
+    assert len(recipes) == 2
+    assert "Pasta Carbonara" in recipes
+    mock_llm.generate.assert_called_once()  # Verify interaction
+```
+
+**Fix Checklist:**
+- [ ] All external dependencies are mocked (APIs, databases, file systems)
+- [ ] Mocks are configured with realistic return values
+- [ ] Test verifies mocks were called correctly
+- [ ] Test runs in milliseconds (not seconds)
+
+#### 2. Inadequate Edge Case Coverage
+
+**Problem:** AI focuses on happy paths, missing edge cases and error conditions.
+
+```python
+# ❌ BAD: Only tests happy path
+def test_load_recipe():
+    recipe = load_recipe_file(Path('data/recipes/loved.md'))
+    assert recipe is not None
+
+# ✅ GOOD: Comprehensive edge case coverage
+@pytest.mark.parametrize("file_path,expected_error", [
+    (Path('nonexistent.md'), FileNotFoundError),
+    (Path('/dev/null'), ValueError),  # Empty file
+    (Path('malformed.md'), InvalidRecipeFormatError),
+])
+def test_load_recipe_error_cases(file_path, expected_error):
+    """Test error handling for invalid inputs."""
+    with pytest.raises(expected_error):
+        load_recipe_file(file_path)
+
+def test_load_recipe_with_unicode():
+    """Test handling of unicode characters."""
+    recipe = load_recipe_file(Path('data/recipes/unicode_test.md'))
+    assert '🍝' in recipe  # Emoji in recipe name
+
+def test_load_recipe_very_large_file():
+    """Test performance with large files."""
+    large_recipe = 'x' * (10 * 1024 * 1024)  # 10MB
+    with pytest.raises(ValueError, match="File too large"):
+        parse_recipe(large_recipe)
+```
+
+**Edge Cases Checklist:**
+- [ ] Empty inputs (empty strings, empty lists, None)
+- [ ] Boundary values (0, -1, MAX_INT)
+- [ ] Invalid types
+- [ ] Unicode and special characters
+- [ ] Very large inputs
+- [ ] Concurrent access (if applicable)
+- [ ] Network failures (if applicable)
+
+#### 3. Cryptic Variable Names & Poor Readability
+
+**Problem:** AI-generated tests often have meaningless variable names.
+
+```python
+# ❌ BAD: Robotic, unclear test
+def test_func():
+    obj = Thing()
+    result_obj = obj.do_thing(param1, param2)
+    assert result_obj.val == expected_val  # What does this test?
+
+# ✅ GOOD: Clear, descriptive test
+def test_recipe_service_suggests_italian_when_pasta_available():
+    """Test that Italian recipes are suggested when pasta is in pantry."""
+    # Arrange
+    service = RecipeService(repository=mock_repo, llm=mock_llm)
+    available_ingredients = ['pasta', 'tomatoes', 'basil']
+    preferred_cuisines = ['italian']
+
+    mock_llm.generate.return_value = "Pasta Marinara"
+
+    # Act
+    suggested_recipes = service.suggest_recipes(
+        cuisines=preferred_cuisines,
+        ingredients=available_ingredients
+    )
+
+    # Assert: Verify Italian recipe was suggested
+    assert len(suggested_recipes) == 1
+    assert "Pasta Marinara" in suggested_recipes[0]
+```
+
+**Readability Checklist:**
+- [ ] Test name describes what is being tested
+- [ ] Variable names are descriptive
+- [ ] Comments explain "why", not "what"
+- [ ] AAA pattern is clear (Arrange, Act, Assert)
+- [ ] Can understand test without reading implementation
+
+#### 4. Testing Implementation Instead of Behavior
+
+**Problem:** AI tests often check internal implementation details instead of public behavior.
+
+```python
+# ❌ BAD: Tests implementation details
+def test_recipe_parser_uses_regex():
+    parser = RecipeParser()
+    assert hasattr(parser, '_regex_pattern')  # Who cares?
+    assert parser._internal_cache == {}  # Implementation detail
+
+# ✅ GOOD: Tests behavior/outcomes
+def test_recipe_parser_extracts_ingredients():
+    """Test that parser correctly extracts ingredients from recipe text."""
+    # Arrange
+    recipe_text = """
+    Pasta Carbonara
+    Ingredients: pasta, eggs, bacon, parmesan
+    """
+
+    # Act
+    parsed = RecipeParser().parse(recipe_text)
+
+    # Assert: Verify behavior/outcome
+    assert parsed.name == "Pasta Carbonara"
+    assert "pasta" in parsed.ingredients
+    assert "eggs" in parsed.ingredients
+    assert len(parsed.ingredients) == 4
+```
+
+**Behavior Testing Checklist:**
+- [ ] Tests verify public API, not private methods
+- [ ] Tests don't access internal state (_attributes)
+- [ ] Tests don't care about implementation details
+- [ ] Refactoring code shouldn't break tests
+- [ ] Tests describe what the code does, not how
+
+#### 5. Missing Assertions or Weak Assertions
+
+**Problem:** AI sometimes writes tests that don't actually verify anything useful.
+
+```python
+# ❌ BAD: Weak or missing assertions
+def test_load_recipes():
+    recipes = load_all_recipes()
+    assert recipes  # Too vague! Tests almost nothing
+
+def test_parse_recipe():
+    result = parse_recipe("some text")
+    # No assertions at all!
+
+# ✅ GOOD: Strong, specific assertions
+def test_load_recipes_returns_all_categories():
+    """Test that all recipe categories are loaded."""
+    recipes = load_all_recipes()
+
+    # Specific assertions about structure and content
+    assert isinstance(recipes, dict)
+    assert 'loved' in recipes
+    assert 'liked' in recipes
+    assert 'not_again' in recipes
+
+    # Verify content
+    assert len(recipes['loved']) > 0
+    for recipe in recipes['loved']:
+        assert 'name' in recipe
+        assert 'ingredients' in recipe
+        assert 'rating' in recipe
+        assert recipe['rating'] == 5  # Loved recipes are 5-star
+```
+
+**Assertion Checklist:**
+- [ ] Every test has at least one meaningful assertion
+- [ ] Assertions are specific, not vague
+- [ ] Assertions verify the actual requirement
+- [ ] Assertions check types, values, and structure
+- [ ] No "assert True" or similar useless assertions
+
+#### 6. Language-Specific Issues
+
+**Problem:** AI performs differently across programming languages.
+
+**Python-Specific Gotchas:**
+```python
+# ❌ BAD: Doesn't handle Python's dynamic typing
+def test_add_item(pantry):
+    pantry.add_item("milk")  # What if someone passes an int?
+
+# ✅ GOOD: Tests type validation
+def test_add_item_rejects_invalid_types():
+    """Test that add_item validates input types."""
+    pantry = PantryManager()
+
+    with pytest.raises(TypeError, match="Item must be a string"):
+        pantry.add_item(123)  # Invalid type
+
+    with pytest.raises(TypeError):
+        pantry.add_item(None)
+```
+
+---
+
+### Human Review Checklist for AI-Generated Tests
+
+Before accepting any AI-generated test code, verify:
+
+**Correctness:**
+- [ ] Test actually tests the requirement
+- [ ] Assertions are meaningful and specific
+- [ ] Edge cases are covered
+- [ ] Error cases are tested
+
+**Quality:**
+- [ ] Proper mocking of external dependencies
+- [ ] Fast execution (< 100ms for unit tests)
+- [ ] Clear, descriptive names
+- [ ] Follows AAA pattern
+- [ ] No implementation details tested
+
+**Completeness:**
+- [ ] Happy path covered
+- [ ] Error paths covered
+- [ ] Edge cases covered
+- [ ] Boundary conditions covered
+
+**Maintainability:**
+- [ ] Future developers can understand it
+- [ ] Doesn't rely on implementation details
+- [ ] Easy to update when requirements change
+
+---
+
+### Best Practices When Using AI for Tests
+
+1. **Start with requirements, not implementation**
+   - Tell AI what behavior to test, not how to test it
+   - Provide edge cases explicitly
+
+2. **Review every line**
+   - Don't blindly accept AI-generated tests
+   - Verify mocks are correct
+   - Check assertions are meaningful
+
+3. **Run tests and verify they fail first**
+   - Temporarily break the code to ensure test catches it
+   - Verify test fails for the right reason
+
+4. **Improve iteratively**
+   - Start with AI draft
+   - Add edge cases AI missed
+   - Improve variable names and clarity
+   - Add documentation
+
+5. **Use AI as a starting point, not final solution**
+   - AI can scaffold tests quickly
+   - Human review is essential for quality
+   - Combine AI speed with human insight
+
+---
+
+### Example: From AI-Generated to Professional Test
+
+```python
+# AI First Draft (needs improvement)
+def test_recipe():
+    r = get_recipe("pasta")
+    assert r
+
+# After Human Review (professional quality)
+def test_get_recipe_returns_loved_pasta_recipe_when_exists():
+    """Test that get_recipe returns the correct recipe for 'pasta' query.
+
+    Given: A recipe database with Italian pasta recipes marked as 'loved'
+    When: User searches for 'pasta'
+    Then: System returns the loved pasta recipe with all required fields
+    """
+    # Arrange: Set up test database with known recipes
+    test_db = RecipeDatabase()
+    expected_recipe = Recipe(
+        name="Pasta Carbonara",
+        cuisine="italian",
+        rating=5,
+        ingredients=["pasta", "eggs", "bacon", "parmesan"]
+    )
+    test_db.add_recipe(expected_recipe)
+
+    # Act: Search for pasta recipe
+    actual_recipe = test_db.get_recipe("pasta")
+
+    # Assert: Verify correct recipe returned with all fields
+    assert actual_recipe is not None, "Recipe should be found"
+    assert actual_recipe.name == "Pasta Carbonara"
+    assert actual_recipe.rating == 5
+    assert len(actual_recipe.ingredients) == 4
+    assert "pasta" in actual_recipe.ingredients
+
+def test_get_recipe_returns_none_when_recipe_not_found():
+    """Test that get_recipe returns None for non-existent recipes."""
+    test_db = RecipeDatabase()
+
+    result = test_db.get_recipe("nonexistent_recipe")
+
+    assert result is None
+
+def test_get_recipe_raises_error_for_invalid_input():
+    """Test that get_recipe validates input parameters."""
+    test_db = RecipeDatabase()
+
+    with pytest.raises(ValueError, match="Recipe name cannot be empty"):
+        test_db.get_recipe("")
+
+    with pytest.raises(TypeError, match="Recipe name must be a string"):
+        test_db.get_recipe(None)
+```
+
+**Sources:**
+- [Unmasking the Flaws: Why AI-Generated Unit Tests Fall Short](https://shekhar14.medium.com/unmasking-the-flaws-why-ai-generated-unit-tests-fall-short-in-real-codebases-71e394581a8e)
+- [Unit Test Writing with AI vs. Manual Methods: A Deep Dive](https://zencoder.ai/blog/ai-vs-manual-unit-testing)
+- [4 AI Testing Pitfalls and How to Solve Them](https://medium.com/@aiotests/4-ai-testing-pitfalls-and-how-aio-tests-solves-them-55243ef67187)
+- [Choosing LLMs to generate high-quality unit tests](https://research.redhat.com/blog/2025/04/21/choosing-llms-to-generate-high-quality-unit-tests-for-code/)
+
+---
+
 ## Architecture & Design Patterns
 
 ### Repository Pattern

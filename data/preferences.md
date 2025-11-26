@@ -4,59 +4,67 @@ Last updated: 2025-11-26
 
 ---
 
+## Favorite Meal Types (What We Cook Most)
+- **Soups** (hearty, warming, great for leftovers!)
+- **Asian cuisine** (stir-fries, curries, noodle dishes)
+- **Salads** (filling, fresh, varied)
+- **Roasted vegetables** (simple, flavorful)
+- **Beans & legumes** (lentils, chickpeas, black beans)
+
 ## Cuisines We Love
-- Italian (pasta, risotto, anything with garlic)
-- Asian (Chinese, Japanese, Thai - all good!)
-- American comfort food (casseroles, one-pan meals)
+- Asian (Chinese, Japanese, Thai, Vietnamese, Korean)
+- Mediterranean (Greek, Italian - pasta, risotto)
+- Middle Eastern (hummus, falafel, mezze)
+- Mexican (beans, rice, veggie tacos, burritos)
 
 ## Cuisines We Like
-- Mexican (tacos, burritos, but not too spicy)
-- Mediterranean (Greek salads, hummus)
-
-## Cuisines - Neutral/Rarely
-- Indian (we like it but don't cook it often)
-- French (seems intimidating)
-- Middle Eastern
+- Indian (curries, dals, but don't cook often)
+- Ethiopian (lentils, veggie dishes)
+- American comfort food (adapted vegetarian versions)
 
 ---
 
 ## Dietary Restrictions & Allergies
-- No allergies
-- No dietary restrictions
-- Wife dislikes cilantro (tastes like soap to her)
-- Prefer chicken and fish over red meat
-- Trying to eat more vegetables
+- **VEGETARIAN** - no meat, poultry, or fish
+- No other allergies or restrictions
 
 ---
 
 ## Cooking Preferences
+- **Frequency:** Cook 3-4 times per week
 - **Weeknight meals:** 30 minutes or less preferred
 - **Weekend:** Can do more complex recipes (up to 1 hour)
-- **Favorite style:** One-pan/one-pot meals (easy cleanup!)
-- **Leftovers:** We love recipes that reheat well
-- **Servings:** Usually cook for 2, sometimes make extra for leftovers
+- **Favorite style:** One-pot meals, soups, sheet pan roasted veggies
+- **Leftovers:** We love recipes that reheat well (especially soups!)
+- **Servings:** Usually cook for 2, often make extra for leftovers
 
 ---
 
 ## Ingredient Notes
-- Always keep garlic and onions in stock
-- Buy fresh vegetables weekly
-- Prefer fresh herbs over dried when budget allows
-- Keep chicken breast as go-to protein
-- Wife loves anything with lemon
+- Always keep: garlic, onions, ginger
+- Love: lentils, chickpeas, beans (all kinds)
+- Fresh vegetables: buy weekly
+- Prefer fresh herbs when possible (basil, cilantro, parsley)
+- Keep variety of grains: rice, quinoa, pasta, couscous
+- Asian pantry staples: soy sauce, sesame oil, rice vinegar
 
 ---
 
 ## Shopping Habits
-- Weekly grocery trips (usually Sundays)
-- Budget: ~$100-150/week for 2 people
-- Shop at: Trader Joe's and local grocery store
+- **Pattern:** Weekly grocery trips + top-up shops as needed
+- **Budget:** ~$100-150/week for 2 people
+- **Pain point:** Matching what we want to eat with what we actually have in the pantry
 - Buy organic when on sale
 
 ---
 
-## Meal Frequency Preferences
-- Chicken: 2-3 times per week
-- Fish/Seafood: Once per week
-- Vegetarian: 1-2 times per week
-- Red meat: Rarely (maybe once every 2 weeks)
+## Device Usage
+- Primary devices: iPhone and iPad
+- Want mobile-friendly interface for on-the-go access
+
+---
+
+## Special Features We Want
+- **Photo recipe import**: Take a photo of a recipe to add it to collection
+- **Smart ingredient matching**: Suggest meals based on what's actually in the pantry
+- **Flexible planning**: Not rigid weekly plans, more spontaneous cooking

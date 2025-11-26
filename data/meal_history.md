@@ -7,42 +7,52 @@ Log of meals we've cooked.
 ## November 2025
 
 ### Monday, 2025-11-25
-**Chicken Stir Fry** ⭐⭐⭐⭐⭐
+**Coconut Curry Lentil Soup** ⭐⭐⭐⭐⭐
 - Rating: 5/5
-- Notes: Perfect! Added extra veggies from the fridge (broccoli and carrots). Used brown rice for a change.
-- Ingredients used: chicken breast (1 lb), bell peppers, broccoli, carrots, soy sauce, ginger, garlic, brown rice
+- Notes: Perfect! Added extra spinach and served with naan bread. Made a big batch for leftovers.
+- Ingredients used: red lentils (1 cup), coconut milk, vegetable broth, onion, garlic, ginger, spinach, curry powder, cumin
 
 ### Sunday, 2025-11-24
-**Pasta Carbonara** ⭐⭐⭐⭐
-- Rating: 4/5
-- Notes: Good but a bit heavy. Next time use less cream.
-- Ingredients used: spaghetti, eggs, bacon, parmesan, heavy cream
+**Takeout - Thai food**
+- Got takeout from our favorite Thai place
+- Ordered: Pad Thai (vegetarian), Green Curry with tofu
 
 ### Friday, 2025-11-22
-**Takeout - Thai food**
-- Too tired to cook after long work week
-- Ordered from Thai Basil restaurant
+**Ginger Garlic Stir-Fried Vegetables** ⭐⭐⭐⭐⭐
+- Rating: 5/5
+- Notes: Used broccoli, bell peppers, and snap peas. Pan-fried tempeh separately. Quick and delicious!
+- Ingredients used: broccoli, bell peppers, snap peas, tempeh, ginger, garlic, soy sauce, sesame oil, rice
 
 ### Thursday, 2025-11-21
-**One-Pan Chicken and Rice** ⭐⭐⭐⭐⭐
-- Rating: 5/5
-- Notes: Always reliable. Used chicken thighs this time - more flavorful!
-- Ingredients used: chicken thighs, white rice, chicken broth, carrots, peas, onion, garlic
+**Leftover Coconut Curry Lentil Soup** ⭐⭐⭐⭐⭐
+- From batch made earlier in the week
+- Still delicious!
 
 ### Wednesday, 2025-11-20
-**Grilled Cheese & Tomato Soup** ⭐⭐⭐⭐
-- Rating: 4/5
-- Notes: Simple comfort food. Used canned tomato soup (lazy night).
-- Ingredients used: bread, cheddar cheese, butter, canned tomato soup
+**Mediterranean Chickpea Salad** ⭐⭐⭐⭐⭐
+- Rating: 5/5
+- Notes: Perfect for a lighter meal. Made extra for lunch the next day.
+- Ingredients used: chickpeas (2 cans), cherry tomatoes, cucumber, red onion, feta, olive oil, lemon, parsley, basil
+
+### Tuesday, 2025-11-19
+**Lazy Night - Grilled Cheese & Tomato Soup**
+- Rating: 3/5
+- Used canned tomato soup
+- Quick but not very exciting
 
 ---
 
 ## October 2025
 
 ### Monday, 2025-10-28
-**Baked Cod with Lemon** ⭐⭐
-- Rating: 2/5
-- Notes: Didn't love it. Fish was dry and bland. Won't make again.
-- Moved to "not_again.md"
+**Sheet Pan Roasted Vegetables with Tahini** ⭐⭐⭐⭐⭐
+- Rating: 5/5
+- Notes: Used cauliflower, broccoli, and carrots. Tahini sauce was incredible. Served with quinoa.
+- Ingredients used: cauliflower, broccoli, carrots, olive oil, cumin, paprika, quinoa, tahini, lemon
+
+### Sunday, 2025-10-25
+**Black Bean & Sweet Potato Tacos** ⭐⭐⭐⭐⭐
+- Rating: 5/5
+- Notes: So good! The sweet potato and black bean combination is perfect. Topped with lots of avocado and cilantro.
 
 *(Earlier entries...)*

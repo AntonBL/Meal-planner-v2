@@ -4,41 +4,59 @@ Good recipes we enjoy occasionally.
 
 ---
 
-## Chicken Tacos
-**Cuisine:** Mexican
-**Last made:** 2025-11-15
+## Pasta Primavera
+**Cuisine:** Italian
+**Last made:** 2025-11-12
 **Rating:** 4/5
-**Times made:** 5
+**Times made:** 8
 
 **Ingredients:**
-- Chicken breast
-- Taco seasoning
-- Tortillas
-- Lettuce
-- Cheese
-- Salsa
-- Sour cream
-- Lime
+- Pasta (any shape)
+- Mixed vegetables (zucchini, bell peppers, broccoli, cherry tomatoes)
+- Olive oil, garlic
+- Parmesan cheese
+- Fresh basil
+- Lemon juice
 
 **Notes:**
-Good but not amazing. Maybe try different seasoning blend next time. Wife prefers soft tacos. Quick and easy weeknight option.
+Light and fresh. Good for using up vegetables. Sometimes feels like it needs more substance - could add white beans or tofu next time for more protein.
 
 ---
 
-## Garlic Butter Shrimp Pasta
-**Cuisine:** Italian
+## Tom Yum Soup
+**Cuisine:** Thai
+**Type:** Soup
 **Last made:** 2025-11-08
 **Rating:** 4/5
-**Times made:** 3
+**Times made:** 4
 
 **Ingredients:**
-- Shrimp (fresh or frozen)
-- Pasta
-- Butter
-- Garlic
-- Lemon
-- Parsley
-- Red pepper flakes
+- Vegetable broth
+- Mushrooms, tomatoes
+- Tofu
+- Lemongrass, galangal, lime leaves (if we can find them)
+- Lime juice, chili paste
+- Cilantro
 
 **Notes:**
-Tasty but shrimp can be pricey. Save for special occasions. Very quick to make (15 min). Don't overcook the shrimp.
+Delicious but requires special ingredients we don't always have (lemongrass, galangal). When we have the ingredients, it's great. Might try simplifying with just ginger and lime.
+
+---
+
+## Greek Lentil Soup
+**Cuisine:** Mediterranean
+**Type:** Soup
+**Last made:** 2025-11-05
+**Rating:** 4/5
+**Times made:** 6
+
+**Ingredients:**
+- Green lentils
+- Tomatoes (canned or fresh)
+- Onion, garlic
+- Carrots, celery
+- Bay leaves, oregano
+- Red wine vinegar
+
+**Notes:**
+Good, hearty soup. Not quite as flavorful as our coconut curry lentil soup, but still satisfying. The red wine vinegar at the end adds nice brightness.
