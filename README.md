@@ -21,7 +21,9 @@ An intelligent meal planning application powered by AI that helps you manage ing
 
 ## Documentation
 
-See [SPEC.md](./SPEC.md) for detailed product specification, architecture, and development roadmap.
+- **[SPEC.md](./SPEC.md)** - Detailed product specification, architecture, and development roadmap
+- **[agent.md](./agent.md)** - Python best practices, coding standards, and professional development guidelines
+- **[claude.md](./claude.md)** - Instructions for AI assistants working on this project
 
 ## Getting Started
 
@@ -40,6 +42,7 @@ See [SPEC.md](./SPEC.md) for detailed product specification, architecture, and d
 2. **Install dependencies**
    ```bash
    pip install -r requirements.txt
+   pip install -r requirements-dev.txt  # For development (testing, linting)
    ```
 
 3. **Set up environment variables**
@@ -89,11 +92,41 @@ meal-planner-v2/
     └── meal_history.md
 ```
 
+## Development Standards
+
+This project follows professional Python development practices:
+
+- ✅ **Type checking** with mypy (strict mode)
+- ✅ **Linting** with Ruff (replaces flake8, isort, etc.)
+- ✅ **Testing** with pytest (outcome-based, 80%+ coverage)
+- ✅ **Logging** instead of print statements (structured logging)
+- ✅ **Pre-commit hooks** for automated quality checks
+- ✅ **SOLID principles**, DRY, YAGNI, KISS
+
+See [agent.md](./agent.md) for complete coding standards and best practices.
+
+### Quality Checks
+
+```bash
+# Run linter
+ruff check lib/ app.py
+
+# Run type checker
+mypy lib/ app.py
+
+# Run tests with coverage
+pytest --cov=lib
+
+# Install pre-commit hooks
+pre-commit install
+```
+
 ## Current Status
 
 ✅ Project structure created
 ✅ Sample data files added
 ✅ Basic home dashboard implemented
+✅ Development standards and tooling configured
 🚧 Recipe generation page (coming next)
 🚧 Pantry management (coming next)
 🚧 Claude AI integration (coming next)
