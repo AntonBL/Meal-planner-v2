@@ -160,6 +160,62 @@ def save_recipe_feedback(
         return False
 
 
+def update_pantry_after_cooking(recipe: dict) -> bool:
+    """Update pantry by removing/reducing ingredients used in recipe.
+
+    This is a simple implementation that marks items as potentially used.
+    A more sophisticated version would use LLM to intelligently update quantities.
+
+    Args:
+        recipe: Recipe dictionary with ingredients
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        # Get all ingredients from recipe
+        ingredients = []
+
+        if recipe.get('ingredients_available'):
+            ingredients.extend([i.strip().lower() for i in recipe['ingredients_available'].split(',')])
+
+        if recipe.get('ingredients_needed'):
+            ingredients.extend([i.strip().lower() for i in recipe['ingredients_needed'].split(',')])
+
+        if not ingredients:
+            logger.warning("No ingredients to update pantry with")
+            return True
+
+        # Add note to both pantry files about items used
+        today = datetime.now().strftime("%Y-%m-%d")
+        note = f"\n<!-- Used in {recipe['name']} on {today}: {', '.join(ingredients)} -->\n"
+
+        # Add to staples file
+        staples_path = get_data_file_path("staples")
+        staples_content = staples_path.read_text(encoding="utf-8")
+        staples_path.write_text(staples_content + note, encoding="utf-8")
+
+        # Add to fresh file
+        fresh_path = get_data_file_path("fresh")
+        fresh_content = fresh_path.read_text(encoding="utf-8")
+        fresh_path.write_text(fresh_content + note, encoding="utf-8")
+
+        logger.info(
+            "Added usage note to pantry files",
+            extra={"recipe_name": recipe['name'], "ingredient_count": len(ingredients)}
+        )
+
+        return True
+
+    except Exception as e:
+        logger.error(
+            "Failed to update pantry after cooking",
+            extra={"recipe_name": recipe.get('name'), "error": str(e)},
+            exc_info=True
+        )
+        return False
+
+
 # ============================================================================
 # PAGE CONFIGURATION
 # ============================================================================
@@ -380,12 +436,8 @@ if "generated_recipes" in st.session_state:
 
                 if success:
                     st.success("✅ Feedback saved! Meal logged to history.")
-                    # Clear modal state
-                    st.session_state['show_feedback_modal'] = False
-                    if 'cooking_recipe' in st.session_state:
-                        del st.session_state['cooking_recipe']
-                    if 'cooking_recipe_idx' in st.session_state:
-                        del st.session_state['cooking_recipe_idx']
+                    # Set flag to show pantry update prompt
+                    st.session_state['feedback_saved_show_pantry_prompt'] = True
                     st.rerun()
                 else:
                     st.error("❌ Failed to save feedback. Please try again.")
@@ -398,6 +450,43 @@ if "generated_recipes" in st.session_state:
                 if 'cooking_recipe_idx' in st.session_state:
                     del st.session_state['cooking_recipe_idx']
                 st.rerun()
+
+        # Show pantry update prompt after feedback is saved
+        if st.session_state.get('feedback_saved_show_pantry_prompt', False):
+            st.markdown("---")
+            st.info("🤖 **Smart Pantry Update**\n\nWould you like me to update your pantry by marking the ingredients you used?")
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                if st.button("✅ Yes, Update Pantry", key="update_pantry_yes", use_container_width=True):
+                    # Call pantry update function
+                    update_success = update_pantry_after_cooking(recipe)
+
+                    if update_success:
+                        st.success("✅ Pantry updated!")
+                    else:
+                        st.warning("⚠️ Could not update pantry automatically. You can do it manually.")
+
+                    # Clear all modal state
+                    st.session_state['show_feedback_modal'] = False
+                    st.session_state['feedback_saved_show_pantry_prompt'] = False
+                    if 'cooking_recipe' in st.session_state:
+                        del st.session_state['cooking_recipe']
+                    if 'cooking_recipe_idx' in st.session_state:
+                        del st.session_state['cooking_recipe_idx']
+                    st.rerun()
+
+            with col2:
+                if st.button("❌ No Thanks", key="update_pantry_no", use_container_width=True):
+                    # Clear all modal state
+                    st.session_state['show_feedback_modal'] = False
+                    st.session_state['feedback_saved_show_pantry_prompt'] = False
+                    if 'cooking_recipe' in st.session_state:
+                        del st.session_state['cooking_recipe']
+                    if 'cooking_recipe_idx' in st.session_state:
+                        del st.session_state['cooking_recipe_idx']
+                    st.rerun()
 
         st.markdown("---")
 
