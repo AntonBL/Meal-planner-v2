@@ -3,8 +3,13 @@ AI Recipe Planner - Main Application
 A Streamlit app for intelligent meal planning and pantry management.
 """
 
+from dotenv import load_dotenv
+load_dotenv()
+
 import streamlit as st
 from pathlib import Path
+from datetime import datetime, timedelta
+from lib.auth import require_authentication
 
 # Page configuration
 st.set_page_config(
@@ -13,6 +18,14 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# ============================================================================
+# Authentication
+# ============================================================================
+# Authentication is encapsulated in lib/auth.py
+# To disable auth, set ENABLE_AUTH = False in lib/auth.py
+
+name, username = require_authentication()
 
 # Title
 st.title("🏠 AI Recipe Planner")
@@ -29,8 +42,44 @@ def count_items_in_file(file_path):
 
 def get_expiring_soon():
     """Get count of items expiring soon (next 3 days)."""
-    # TODO: Implement actual date checking
-    return 3
+    try:
+        fresh_content = Path("data/pantry/fresh.md").read_text()
+
+        # Parse expiry dates
+        lines = fresh_content.split('\n')
+        expiring_count = 0
+        today = datetime.now().date()
+        threshold = today + timedelta(days=3)
+
+        for line in lines:
+            if not line.strip().startswith('-'):
+                continue
+
+            # Look for expiry date
+            if 'Expires:' in line or 'Use by:' in line:
+                # Extract date (format: YYYY-MM-DD or ~YYYY-MM-DD)
+                parts = line.split('Expires:') if 'Expires:' in line else line.split('Use by:')
+                if len(parts) > 1:
+                    date_str = parts[1].split('-')[0].strip().replace('~', '').strip()
+
+                    try:
+                        # Try to parse date
+                        if len(date_str) >= 10:  # YYYY-MM-DD
+                            expiry_date = datetime.strptime(date_str[:10], '%Y-%m-%d').date()
+
+                            # Check if within threshold
+                            if today <= expiry_date <= threshold:
+                                expiring_count += 1
+                    except ValueError:
+                        # Invalid date format, skip
+                        continue
+
+        return expiring_count
+
+    except FileNotFoundError:
+        return 0
+    except Exception:
+        return 0
 
 # Stats Dashboard
 st.markdown("### 📊 Dashboard")
