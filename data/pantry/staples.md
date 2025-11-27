@@ -3,6 +3,8 @@
 Last updated: 2025-11-26
 
 ## Grains & Pasta
+- Olive Oil - 2 bottles - Added: 2025-11-27
+
 - White rice - 2 lbs - Added: 2025-11-15
 - Brown rice - 1 lb - Added: 2025-11-10
 - Quinoa - 1 lb - Added: 2025-11-18
