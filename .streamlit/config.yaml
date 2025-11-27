@@ -1,0 +1,12 @@
+cookie:
+  expiry_days: 30
+  key: meal_planner_secret_key_a9fc6a257a3c3ff125aeafcf65ae9061
+  name: meal_planner_auth
+credentials:
+  usernames:
+    roger:
+      email: roger@example.com
+      name: Roger
+      password: $2b$12$x9/WujUW65W3vY.YGzWAYuRlNWBePaUG7qHE98XufLDu35BNf78W2
+preauthorized:
+  emails: []
