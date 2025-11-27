@@ -9,6 +9,7 @@ An intelligent meal planning application powered by AI that helps you manage ing
 - 📸 **Photo Recognition**: Upload photos of groceries to automatically update your inventory
 - 💚 **Preference Learning**: The AI learns your taste preferences over time
 - 📅 **Meal Planning**: Plan your weekly meals and generate shopping lists
+- 🔒 **Secure Authentication**: Built-in login system with session management
 - ✅ **Simple Interface**: Intuitive yes/no buttons and easy navigation
 
 ## Tech Stack
@@ -48,7 +49,17 @@ An intelligent meal planning application powered by AI that helps you manage ing
 3. **Set up environment variables**
    ```bash
    cp .env.example .env
-   # Edit .env and add your ANTHROPIC_API_KEY
+   # Edit .env and add your credentials:
+   # - ANTHROPIC_API_KEY (required for AI features)
+   # - AUTH_USERNAME (for web login)
+   # - AUTH_PASSWORD (for web login)
+   ```
+
+   Example `.env` file:
+   ```bash
+   ANTHROPIC_API_KEY=sk-ant-your-key-here
+   AUTH_USERNAME=your_username
+   AUTH_PASSWORD=your_secure_password
    ```
 
 4. **Run the app**
@@ -74,10 +85,12 @@ meal-planner-v2/
 │   ├── update_pantry.py
 │   └── meal_history.py
 │
-├── lib/                   # Core logic (coming soon)
+├── lib/                   # Core logic
+│   ├── auth.py            # Authentication & session management
 │   ├── llm_agents.py      # Claude API interactions
 │   ├── file_manager.py    # Markdown file operations
-│   └── vision.py          # Image processing
+│   ├── exceptions.py      # Custom exceptions
+│   └── logging_config.py  # Logging configuration
 │
 └── data/                  # All user data (markdown files)
     ├── pantry/
@@ -105,7 +118,28 @@ This project follows professional Python development practices:
 
 See [agent.md](./agent.md) for complete coding standards and best practices.
 
-### Quality Checks
+### Quick Commands
+
+Use the included Makefile for common operations:
+
+```bash
+# Development
+make install       # Install dependencies
+make lint          # Run linter
+make format        # Format code
+make test          # Run tests with coverage
+make clean         # Clean cache files
+
+# Production (if deployed)
+make restart       # Restart app and check logs
+make status        # Check service status
+make logs          # View error logs
+
+# Help
+make help          # Show all commands
+```
+
+### Quality Checks (Manual)
 
 ```bash
 # Run linter
@@ -127,9 +161,11 @@ pre-commit install
 ✅ Sample data files added
 ✅ Basic home dashboard implemented
 ✅ Development standards and tooling configured
-🚧 Recipe generation page (coming next)
-🚧 Pantry management (coming next)
-🚧 Claude AI integration (coming next)
+✅ Secure authentication with session management
+✅ Recipe generation page with Claude AI
+✅ Claude AI integration (Claude Haiku 4.5)
+🚧 Pantry management (in progress)
+🚧 Meal history tracking (in progress)
 
 ## License
 

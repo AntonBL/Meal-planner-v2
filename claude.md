@@ -120,6 +120,7 @@ print("Recipe generated")
 - [ ] Run tests: `pytest --cov=lib`
 - [ ] Review against checklist in agent.md
 - [ ] Update documentation if needed
+- [ ] **Check logs after restart** (see Deployment Operations below)
 
 ### 4. Code Review Checklist
 
@@ -388,7 +389,95 @@ When in doubt, ask yourself:
 
 ---
 
+## Deployment Operations
+
+### After Every Code Change and Restart
+
+**ALWAYS check logs before confirming success:**
+
+```bash
+# Easiest way: Use Makefile (does everything automatically)
+make restart
+
+# This will:
+# - Restart the service
+# - Wait for startup
+# - Check service status
+# - Show recent error logs
+# - Check for errors in output log
+```
+
+**Manual method (if needed):**
+
+```bash
+# Restart the service
+supervisorctl restart meal-planner
+
+# Wait a few seconds for startup
+sleep 3
+
+# Check for errors in error log
+tail -30 /var/log/meal-planner.err.log
+
+# Check for errors in output log
+tail -50 /var/log/meal-planner.out.log | grep -i -E "(error|warning|exception|traceback)"
+
+# Verify service is running
+supervisorctl status meal-planner
+
+# Test the endpoint
+curl -k -s https://localhost | head -20
+```
+
+**Never say "it's ready" without checking logs first!**
+
+### Common Log Locations
+
+- Error log: `/var/log/meal-planner.err.log`
+- Output log: `/var/log/meal-planner.out.log`
+- Service status: `supervisorctl status meal-planner`
+
+### Environment Variables
+
+Credentials are stored in `.env` file:
+- `ANTHROPIC_API_KEY` - Claude API key
+- `AUTH_USERNAME` - Login username
+- `AUTH_PASSWORD` - Login password (plaintext, hashed at runtime)
+- `AUTH_COOKIE_KEY` - Cookie encryption key (optional)
+
+After changing `.env`, restart: `supervisorctl restart meal-planner`
+
+---
+
 ## Quick Reference: Common Commands
+
+### Using Makefile (Recommended)
+
+The project includes a Makefile with convenient shortcuts:
+
+```bash
+# Production operations
+make restart        # Restart app and check logs (most common)
+make status         # Check service status
+make logs          # View recent error logs
+make logs-tail     # Follow error logs in real-time
+
+# Development
+make install       # Install dependencies with uv
+make lint          # Run linter
+make format        # Format code
+make test          # Run tests with coverage
+make clean         # Clean Python cache files
+
+# Environment
+make env-edit      # Edit .env file
+make env-show      # Show environment (passwords hidden)
+
+# Help
+make help          # Show all available commands
+```
+
+### Manual Commands
 
 ```bash
 # Linting
@@ -404,8 +493,13 @@ pytest
 pytest --cov=lib --cov-report=html
 pytest -v tests/test_services.py::test_specific_function
 
-# Running the app
+# Running the app locally
 streamlit run app.py
+
+# Production operations
+supervisorctl restart meal-planner
+supervisorctl status meal-planner
+tail -f /var/log/meal-planner.err.log
 ```
 
 ---

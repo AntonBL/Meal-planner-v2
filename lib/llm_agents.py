@@ -35,7 +35,7 @@ class ClaudeProvider:
 
         Args:
             api_key: Anthropic API key (if None, reads from ANTHROPIC_API_KEY env var)
-            model: Model to use (default: claude-3-5-sonnet-20241022)
+            model: Model to use (default: claude-haiku-4-5)
 
         Raises:
             LLMAPIError: If API key is not provided or found in environment
@@ -49,7 +49,7 @@ class ClaudeProvider:
             )
 
         self.client = anthropic.Anthropic(api_key=self.api_key)
-        self.model = model or "claude-3-5-sonnet-20241022"
+        self.model = model or "claude-haiku-4-5"
 
         logger.info(
             "Claude provider initialized",

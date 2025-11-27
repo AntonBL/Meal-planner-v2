@@ -33,13 +33,17 @@ sudo chown -R $USER:$USER Meal-planner-v2
 cd Meal-planner-v2
 git checkout claude/ai-recipe-planner-01ERzHmnGJYGqGTHucnYCyu9
 
-# 4. Set up Python environment
-python3 -m venv venv
+# 4. Set up Python environment with uv
+uv venv venv
 source venv/bin/activate
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 
 # 5. Configure environment
-echo "ANTHROPIC_API_KEY=your_key_here" > .env
+cat > .env << 'EOF'
+ANTHROPIC_API_KEY=your_key_here
+AUTH_USERNAME=your_username
+AUTH_PASSWORD=your_secure_password
+EOF
 chmod 600 .env
 
 # 6. Set up supervisor (see detailed instructions below)
@@ -142,19 +146,19 @@ git clone git@github.com:AntonBL/Meal-planner-v2.git
 # Make sure you're in the project directory
 cd /opt/Meal-planner-v2
 
-# Create virtual environment
-python3 -m venv venv
+# Install uv (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Create virtual environment with uv
+uv venv venv
 
 # Activate virtual environment
 source venv/bin/activate
 
 # You should see (venv) in your prompt now
 
-# Upgrade pip
-pip install --upgrade pip
-
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies with uv (much faster than pip)
+uv pip install -r requirements.txt
 
 # This will install:
 # - streamlit
@@ -172,10 +176,19 @@ pip install -r requirements.txt
 nano .env
 ```
 
-Add your API key (paste this content):
+Add your API key and authentication credentials (paste this content):
 
 ```bash
+# Claude API Configuration
 ANTHROPIC_API_KEY=sk-ant-your-actual-api-key-here
+
+# Authentication Configuration
+# These credentials are required to access the web interface
+AUTH_USERNAME=your_username
+AUTH_PASSWORD=your_secure_password
+
+# Optional: Cookie encryption key (will use default if not set)
+# AUTH_COOKIE_KEY=your_random_secret_key_here
 ```
 
 **To get your API key:**
@@ -183,6 +196,11 @@ ANTHROPIC_API_KEY=sk-ant-your-actual-api-key-here
 2. Sign up or log in
 3. Navigate to API Keys section
 4. Create a new key or copy existing one
+
+**Authentication Settings:**
+- `AUTH_USERNAME`: The username you'll use to log in (default: `roger`)
+- `AUTH_PASSWORD`: Your password (stored as plaintext in .env, hashed at runtime)
+- Change these to your preferred credentials
 
 Save and exit:
 - Press `Ctrl+X`
@@ -480,6 +498,43 @@ http://your-server-ip
 
 ## 🔧 Maintenance and Management
 
+### Quick Commands with Makefile
+
+The project includes a Makefile for convenient operations:
+
+```bash
+# Navigate to project directory
+cd /opt/Meal-planner-v2
+
+# Restart app and check logs automatically
+make restart
+
+# Check service status
+make status
+
+# View error logs
+make logs
+
+# Tail error logs in real-time
+make logs-tail
+
+# View output logs
+make logs-out
+
+# Edit environment variables
+make env-edit
+
+# Show all available commands
+make help
+```
+
+**The `make restart` command is especially useful** - it automatically:
+- Restarts the service
+- Waits for startup
+- Shows service status
+- Displays recent error logs
+- Checks for errors in output logs
+
 ### Update the Application
 
 When you push changes to GitHub:
@@ -494,11 +549,21 @@ cd /opt/Meal-planner-v2
 # Pull latest changes
 git pull origin claude/ai-recipe-planner-01ERzHmnGJYGqGTHucnYCyu9
 
+# Update dependencies (if requirements.txt changed)
+make install
+
+# Restart the application and check logs
+make restart
+```
+
+Or manually:
+
+```bash
 # Activate virtual environment
 source venv/bin/activate
 
 # Update dependencies (if requirements.txt changed)
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 
 # Restart the application
 sudo supervisorctl restart meal-planner
@@ -508,6 +573,16 @@ sudo supervisorctl status meal-planner
 ```
 
 ### View Logs
+
+**Using Makefile:**
+
+```bash
+make logs          # View recent error logs
+make logs-out      # View output logs
+make logs-tail     # Follow error logs in real-time
+```
+
+**Manual commands:**
 
 ```bash
 # Application logs (stdout)
@@ -527,6 +602,15 @@ sudo tail -n 100 /var/log/meal-planner.out.log
 ```
 
 ### Restart Services
+
+**Using Makefile:**
+
+```bash
+make restart       # Restart app and check logs
+make status        # Check app status
+```
+
+**Manual commands:**
 
 ```bash
 # Restart Streamlit app
@@ -617,7 +701,53 @@ ls -la /opt/Meal-planner-v2/.env
 
 Should show: `-rw------- 1 your-username your-username`
 
-### 4. Install Fail2Ban (Optional)
+### 4. Web Authentication
+
+The application includes built-in authentication to protect access to the web interface.
+
+**How it works:**
+- Login credentials are stored in the `.env` file
+- Password is hashed at runtime using bcrypt
+- Session cookies keep you logged in for 30 days
+- Failed login attempts are limited (5 max)
+
+**To change credentials:**
+
+```bash
+# Edit the .env file
+nano /opt/Meal-planner-v2/.env
+
+# Update these lines:
+AUTH_USERNAME=new_username
+AUTH_PASSWORD=new_secure_password
+
+# Restart the app
+sudo supervisorctl restart meal-planner
+```
+
+**To disable authentication** (not recommended for public servers):
+
+```bash
+# Edit the auth module
+nano /opt/Meal-planner-v2/lib/auth.py
+
+# Change line 14 from:
+ENABLE_AUTH = True
+
+# To:
+ENABLE_AUTH = False
+
+# Restart the app
+sudo supervisorctl restart meal-planner
+```
+
+**Security notes:**
+- Password is stored in plaintext in `.env` but hashed before comparison
+- Ensure `.env` has `600` permissions (owner read/write only)
+- Use a strong, unique password
+- Consider adding HTTP Basic Auth in nginx for additional security layer
+
+### 5. Install Fail2Ban (Optional)
 
 Protects against brute-force attacks:
 
