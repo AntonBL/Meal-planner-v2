@@ -3,15 +3,166 @@
 Streamlit page for generating recipe suggestions using Claude API.
 """
 
-import streamlit as st
+from dotenv import load_dotenv
+load_dotenv()
 
+import streamlit as st
+from datetime import datetime
+
+from lib.auth import require_authentication
 from lib.exceptions import DataFileNotFoundError, LLMAPIError, RecipeParsingError
 from lib.llm_agents import ClaudeProvider, RecipeGenerator
 from lib.logging_config import get_logger, setup_logging
+from lib.file_manager import get_data_file_path
 
 # Set up logging
 setup_logging("INFO")
 logger = get_logger(__name__)
+
+
+# ============================================================================
+# HELPER FUNCTIONS
+# ============================================================================
+
+def save_recipe_feedback(
+    recipe: dict,
+    rating: int,
+    make_again: str,
+    notes: str
+) -> bool:
+    """Save recipe feedback to meal history and recipe files.
+
+    Args:
+        recipe: Recipe dictionary with name, ingredients, etc.
+        rating: Star rating (1-5)
+        make_again: "Yes", "No", or "Maybe"
+        notes: User notes
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        # 1. Add to meal history
+        history_path = get_data_file_path("meal_history")
+        history_content = history_path.read_text(encoding="utf-8")
+
+        # Build meal entry
+        today = datetime.now()
+        date_str = today.strftime("%A, %Y-%m-%d")
+        stars = "⭐" * rating
+
+        new_entry = f"\n### {date_str}\n"
+        new_entry += f"**{recipe['name']}** {stars}\n"
+        new_entry += f"- Rating: {rating}/5\n"
+
+        if notes:
+            new_entry += f"- Notes: {notes}\n"
+
+        # Add ingredients
+        ingredients_list = []
+        if recipe.get('ingredients_available'):
+            ingredients_list.append(recipe['ingredients_available'])
+        if recipe.get('ingredients_needed'):
+            ingredients_list.append(recipe['ingredients_needed'])
+
+        if ingredients_list:
+            all_ingredients = ', '.join(ingredients_list)
+            new_entry += f"- Ingredients used: {all_ingredients}\n"
+
+        new_entry += "\n"
+
+        # Find where to insert (after most recent month header or at end)
+        lines = history_content.split('\n')
+
+        # Find first month header (## November 2025)
+        insert_index = -1
+        for i, line in enumerate(lines):
+            if line.startswith('## '):
+                # Insert after this line
+                insert_index = i + 1
+                break
+
+        if insert_index == -1:
+            # No month header found, create one
+            month_year = today.strftime("%B %Y")
+            new_entry = f"\n## {month_year}\n" + new_entry
+            lines.append(new_entry)
+        else:
+            # Insert after month header
+            lines.insert(insert_index, new_entry)
+
+        # Write back
+        history_path.write_text('\n'.join(lines), encoding="utf-8")
+
+        logger.info(
+            "Saved meal to history",
+            extra={"recipe_name": recipe['name'], "rating": rating}
+        )
+
+        # 2. Save to appropriate recipe file based on rating
+        if rating >= 5:
+            recipe_file = "loved_recipes"
+        elif rating >= 3:
+            recipe_file = "liked_recipes"
+        else:
+            recipe_file = "not_again_recipes"
+
+        recipe_path = get_data_file_path(recipe_file)
+        recipe_content = recipe_path.read_text(encoding="utf-8")
+
+        # Build recipe entry
+        recipe_entry = f"\n---\n\n"
+        recipe_entry += f"## {recipe['name']}\n"
+        recipe_entry += f"**Last made:** {today.strftime('%Y-%m-%d')}\n"
+        recipe_entry += f"**Rating:** {rating}/5 {stars}\n"
+
+        if recipe.get('time_minutes'):
+            recipe_entry += f"**Time:** {recipe['time_minutes']} minutes\n"
+
+        if recipe.get('difficulty'):
+            recipe_entry += f"**Difficulty:** {recipe['difficulty'].title()}\n"
+
+        recipe_entry += "\n**Ingredients:**\n"
+
+        # Combine all ingredients
+        if recipe.get('ingredients_available'):
+            for item in recipe['ingredients_available'].split(','):
+                recipe_entry += f"- {item.strip()}\n"
+
+        if recipe.get('ingredients_needed'):
+            for item in recipe['ingredients_needed'].split(','):
+                recipe_entry += f"- {item.strip()}\n"
+
+        if notes:
+            recipe_entry += f"\n**Notes:** {notes}\n"
+
+        if make_again:
+            recipe_entry += f"\n**Make again:** {make_again}\n"
+
+        recipe_entry += "\n"
+
+        # Append to recipe file
+        recipe_path.write_text(recipe_content + recipe_entry, encoding="utf-8")
+
+        logger.info(
+            "Saved recipe to file",
+            extra={"recipe_name": recipe['name'], "file": recipe_file}
+        )
+
+        return True
+
+    except Exception as e:
+        logger.error(
+            "Failed to save recipe feedback",
+            extra={"recipe_name": recipe.get('name'), "error": str(e)},
+            exc_info=True
+        )
+        return False
+
+
+# ============================================================================
+# PAGE CONFIGURATION
+# ============================================================================
 
 # Page configuration
 st.set_page_config(
@@ -19,6 +170,9 @@ st.set_page_config(
     page_icon="🎲",
     layout="wide",
 )
+
+# Authentication
+require_authentication()
 
 # Title
 st.title("🎲 Recipe Generator")
@@ -174,6 +328,79 @@ if st.button("✨ Generate Recipe Suggestions", type="primary", use_container_wi
 # Display results if available
 if "generated_recipes" in st.session_state:
     st.markdown("---")
+
+    # Display feedback modal if triggered
+    if st.session_state.get('show_feedback_modal', False):
+        recipe = st.session_state.get('cooking_recipe', {})
+
+        st.markdown(f"## 🎉 You cooked: {recipe.get('name', 'Unknown')}")
+        st.markdown("**How was it? Please rate your experience:**")
+
+        with st.form("recipe_feedback_form"):
+            # Star rating
+            rating = st.radio(
+                "Rating:",
+                options=[1, 2, 3, 4, 5],
+                format_func=lambda x: "⭐" * x,
+                horizontal=True,
+                index=4  # Default to 5 stars
+            )
+
+            # Make again?
+            make_again = st.radio(
+                "Would you make this again?",
+                options=["Yes", "No", "Maybe"],
+                horizontal=True
+            )
+
+            # Notes
+            notes = st.text_area(
+                "Notes (optional):",
+                placeholder="What did you think? Any changes you'd make?",
+                height=100
+            )
+
+            # Submit buttons
+            col1, col2 = st.columns(2)
+
+            with col1:
+                submit = st.form_submit_button("✅ Save Rating", use_container_width=True, type="primary")
+
+            with col2:
+                cancel = st.form_submit_button("❌ Cancel", use_container_width=True)
+
+            if submit:
+                # Save the feedback
+                success = save_recipe_feedback(
+                    recipe=recipe,
+                    rating=rating,
+                    make_again=make_again,
+                    notes=notes
+                )
+
+                if success:
+                    st.success("✅ Feedback saved! Meal logged to history.")
+                    # Clear modal state
+                    st.session_state['show_feedback_modal'] = False
+                    if 'cooking_recipe' in st.session_state:
+                        del st.session_state['cooking_recipe']
+                    if 'cooking_recipe_idx' in st.session_state:
+                        del st.session_state['cooking_recipe_idx']
+                    st.rerun()
+                else:
+                    st.error("❌ Failed to save feedback. Please try again.")
+
+            if cancel:
+                # Clear modal state
+                st.session_state['show_feedback_modal'] = False
+                if 'cooking_recipe' in st.session_state:
+                    del st.session_state['cooking_recipe']
+                if 'cooking_recipe_idx' in st.session_state:
+                    del st.session_state['cooking_recipe_idx']
+                st.rerun()
+
+        st.markdown("---")
+
     st.markdown("## 🍽️ Recipe Suggestions")
 
     params = st.session_state.get("generation_params", {})
@@ -222,12 +449,15 @@ if "generated_recipes" in st.session_state:
 
             with btn_col1:
                 if st.button("👨‍🍳 Cook This", key=f"cook_{idx}"):
-                    st.success(f"Great choice! Enjoy making {recipe['name']}!")
-                    # TODO: Implement meal logging functionality
+                    # Store selected recipe in session state for feedback
+                    st.session_state['cooking_recipe'] = recipe
+                    st.session_state['cooking_recipe_idx'] = idx
+                    st.session_state['show_feedback_modal'] = True
                     logger.info(
                         "User selected recipe to cook",
                         extra={"recipe_name": recipe["name"]},
                     )
+                    st.rerun()
 
             with btn_col2:
                 if st.button("❌ Not Interested", key=f"pass_{idx}"):
