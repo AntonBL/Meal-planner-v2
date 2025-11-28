@@ -103,7 +103,7 @@ st.markdown("---")
 # Main Actions
 st.markdown("### 🎯 Quick Actions")
 
-col1, col2, col3 = st.columns(3)
+col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     if st.button("🎲 Generate Recipes", use_container_width=True, type="primary"):
@@ -111,12 +111,17 @@ with col1:
     st.caption("Get AI-powered recipe suggestions based on your pantry")
 
 with col2:
+    if st.button("📅 Weekly Planner", use_container_width=True):
+        st.switch_page("pages/weekly_planner.py")
+    st.caption("Plan up to 7 meals for the week")
+
+with col3:
     if st.button("📝 Update Pantry", use_container_width=True):
         st.switch_page("pages/update_pantry.py")
     st.caption("Add items manually or via photo upload")
 
-with col3:
-    if st.button("📅 Meal History", use_container_width=True):
+with col4:
+    if st.button("📜 Meal History", use_container_width=True):
         st.switch_page("pages/meal_history.py")
     st.caption("View past meals and ratings")
 
@@ -167,8 +172,9 @@ with st.sidebar:
     st.markdown("Use the buttons above or navigate using these links:")
     st.page_link("app.py", label="🏠 Home", icon="🏠")
     st.page_link("pages/generate_recipes.py", label="🎲 Generate Recipes", icon="🎲")
+    st.page_link("pages/weekly_planner.py", label="📅 Weekly Planner", icon="📅")
     st.page_link("pages/update_pantry.py", label="📝 Update Pantry", icon="📝")
-    st.page_link("pages/meal_history.py", label="📅 Meal History", icon="📅")
+    st.page_link("pages/meal_history.py", label="📜 Meal History", icon="📜")
 
     st.markdown("---")
     st.markdown("### ℹ️ About")
