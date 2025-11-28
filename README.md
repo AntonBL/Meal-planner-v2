@@ -5,12 +5,13 @@ An intelligent meal planning application powered by AI that helps you manage ing
 ## Features
 
 - 🤖 **AI-Powered Recipe Suggestions**: Get personalized recipe recommendations based on available ingredients
-- 📦 **Smart Pantry Management**: Track pantry staples and fresh ingredients
+- 📦 **Smart Pantry Management**: Track pantry staples and fresh ingredients with AI-powered chat interface
 - 📸 **Photo Recognition**: Upload photos of groceries to automatically update your inventory
+- 🛒 **Intelligent Shopping List**: Add ingredients from recipes, mark items as bought to auto-add to pantry, or remove items you don't need
+- 📅 **Weekly Meal Planning**: Plan up to 7 meals for the week with automatic shopping list generation
 - 💚 **Preference Learning**: The AI learns your taste preferences over time
-- 📅 **Meal Planning**: Plan your weekly meals and generate shopping lists
 - 🔒 **Secure Authentication**: Built-in login system with session management
-- ✅ **Simple Interface**: Intuitive yes/no buttons and easy navigation
+- ✅ **Simple Interface**: Intuitive buttons and easy navigation
 
 ## Tech Stack
 
@@ -80,10 +81,13 @@ meal-planner-v2/
 ├── .env.example          # Example environment file
 ├── .gitignore
 │
-├── pages/                 # Streamlit pages (coming soon)
-│   ├── generate_recipes.py
-│   ├── pantry.py
-│   └── meal_history.py
+├── pages/                 # Streamlit pages
+│   ├── generate_recipes.py  # AI recipe suggestions
+│   ├── pantry.py            # AI-powered pantry management
+│   ├── shopping_list.py     # Shopping list with buy/remove
+│   ├── weekly_planner.py    # Weekly meal planning
+│   ├── meal_history.py      # Past meals and ratings
+│   └── cooking_mode.py      # Interactive cooking assistant
 │
 ├── lib/                   # Core logic
 │   ├── auth.py            # Authentication & session management
@@ -157,15 +161,26 @@ pre-commit install
 
 ## Current Status
 
-✅ Project structure created
-✅ Sample data files added
-✅ Basic home dashboard implemented
-✅ Development standards and tooling configured
-✅ Secure authentication with session management
-✅ Recipe generation page with Claude AI
-✅ Claude AI integration (Claude Haiku 4.5)
-🚧 Pantry management (in progress)
-🚧 Meal history tracking (in progress)
+### Completed Features ✅
+- Project structure and development standards
+- Secure authentication with session management
+- **Recipe Generation**: AI-powered recipe suggestions based on pantry
+- **Pantry Management**: AI chat interface for adding/removing items
+- **Photo Recognition**: Upload photos to detect and add groceries
+- **Weekly Meal Planner**: Plan up to 7 meals with drag-and-drop
+- **Shopping List**: Add ingredients from recipes with smart categorization
+  - Mark items as bought → auto-adds to pantry
+  - Remove items you don't need
+  - Automatic staple vs fresh categorization
+- **Meal History**: Track past meals with ratings
+- **Cooking Mode**: Interactive AI assistant while cooking
+- Claude Haiku 4.5 integration throughout
+
+### In Development 🚧
+- Expiry tracking and alerts
+- Advanced preference learning
+- Recipe import from URLs
+- Nutrition information
 
 ## License
 
