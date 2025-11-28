@@ -60,3 +60,30 @@ Delicious but requires special ingredients we don't always have (lemongrass, gal
 
 **Notes:**
 Good, hearty soup. Not quite as flavorful as our coconut curry lentil soup, but still satisfying. The red wine vinegar at the end adds nice brightness.
+
+---
+
+## Crispy Tofu & Vegetable Fried Rice
+**Last made:** 2025-11-28
+**Rating:** 3/5 ⭐⭐⭐
+**Time:** 25 minutes
+**Difficulty:** Easy
+
+**Ingredients:**
+- Extra-firm tofu
+- white rice
+- soy sauce
+- sesame oil
+- garlic
+- ginger root
+- onions (yellow)
+- carrots
+- bell peppers
+- cilantro
+- limes
+- olive oil
+- salt
+- black pepper
+
+**Make again:** Yes
+

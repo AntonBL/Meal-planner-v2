@@ -6,6 +6,27 @@ Log of meals we've cooked.
 
 ## November 2025
 
+### Friday, 2025-11-28
+**Spaghetti Aglio e Olio with Crispy Tofu & Spinach** ⭐⭐⭐⭐⭐
+- Rating: 5/5
+- Ingredients used: Spaghetti, olive oil, garlic, red pepper flakes, salt, black pepper, extra-firm tofu, spinach, parmesan cheese, lemon
+
+
+
+### Friday, 2025-11-28
+**Crispy Tofu & Vegetable Fried Rice** ⭐⭐⭐
+- Rating: 3/5
+- Ingredients used: Extra-firm tofu, white rice, soy sauce, sesame oil, garlic, ginger root, onions (yellow), carrots, bell peppers, cilantro, limes, olive oil, salt, black pepper
+
+
+
+### Thursday, 2025-11-27
+**Thai Red Curry with Tofu and Vegetables** ⭐⭐⭐⭐⭐
+- Rating: 5/5
+- Ingredients used: Extra-firm tofu, coconut milk, vegetable broth, onions, garlic, ginger root, bell peppers, carrots, broccoli, zucchini, basil, soy sauce, rice vinegar, sesame oil, olive oil, curry powder, turmeric, cumin, white rice, rice noodles, Thai red curry paste, fish sauce (or additional soy sauce as substitute)
+
+
+
 ### Monday, 2025-11-25
 **Coconut Curry Lentil Soup** ⭐⭐⭐⭐⭐
 - Rating: 5/5

@@ -3,13 +3,13 @@
 Last updated: 2025-11-26
 
 ## Proteins (Vegetarian)
+
 - Cheese - 1 - Added: 2025-11-27
 
 
 - Tomatoes - 1 - Added: 2025-11-27
 
 - Extra-firm tofu - 2 blocks - Added: 2025-11-24 - Use by: 2025-12-08
-- Tempeh - 1 package - Added: 2025-11-25 - Use by: 2025-12-05
 - Eggs - 10 remaining - Added: 2025-11-23 - Expires: 2025-12-15
 
 ## Dairy & Alternatives

@@ -99,3 +99,61 @@ So easy! Just chop, toss, roast at 425°F for 25-30 minutes. The tahini sauce ma
 
 **Notes:**
 Hearty and satisfying! Roast the sweet potatoes while warming the beans. Top with avocado, cilantro, and a squeeze of lime. Can meal prep the sweet potatoes and beans ahead of time.
+
+---
+
+## Thai Red Curry with Tofu and Vegetables
+**Last made:** 2025-11-27
+**Rating:** 5/5 ⭐⭐⭐⭐⭐
+**Time:** 35 minutes
+**Difficulty:** Easy
+
+**Ingredients:**
+- Extra-firm tofu
+- coconut milk
+- vegetable broth
+- onions
+- garlic
+- ginger root
+- bell peppers
+- carrots
+- broccoli
+- zucchini
+- basil
+- soy sauce
+- rice vinegar
+- sesame oil
+- olive oil
+- curry powder
+- turmeric
+- cumin
+- white rice
+- rice noodles
+- Thai red curry paste
+- fish sauce (or additional soy sauce as substitute)
+
+**Make again:** Maybe
+
+
+---
+
+## Spaghetti Aglio e Olio with Crispy Tofu & Spinach
+**Last made:** 2025-11-28
+**Rating:** 5/5 ⭐⭐⭐⭐⭐
+**Time:** 25 minutes
+**Difficulty:** Easy
+
+**Ingredients:**
+- Spaghetti
+- olive oil
+- garlic
+- red pepper flakes
+- salt
+- black pepper
+- extra-firm tofu
+- spinach
+- parmesan cheese
+- lemon
+
+**Make again:** No
+
