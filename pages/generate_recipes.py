@@ -14,6 +14,7 @@ from lib.exceptions import DataFileNotFoundError, LLMAPIError, RecipeParsingErro
 from lib.llm_agents import ClaudeProvider, RecipeGenerator
 from lib.logging_config import get_logger, setup_logging
 from lib.file_manager import get_data_file_path
+from lib.weekly_plan_manager import add_recipe_to_plan
 
 # Set up logging
 setup_logging("INFO")
@@ -120,7 +121,7 @@ def save_recipe_feedback(
             recipe_entry += f"**Time:** {recipe['time_minutes']} minutes\n"
 
         if recipe.get('difficulty'):
-            recipe_entry += f"**Difficulty:** {recipe['difficulty'].title()}\n"
+            recipe_entry += f"**Difficulty:** {(recipe['difficulty'] or 'unknown').title()}\n"
 
         recipe_entry += "\n**Ingredients:**\n"
 
@@ -211,6 +212,54 @@ def update_pantry_after_cooking(recipe: dict) -> bool:
         logger.error(
             "Failed to update pantry after cooking",
             extra={"recipe_name": recipe.get('name'), "error": str(e)},
+            exc_info=True
+        )
+        return False
+
+
+def add_ingredients_to_shopping_list(recipe_name: str, ingredients: str) -> bool:
+    """Add ingredients to shopping list file.
+
+    Args:
+        recipe_name: Name of the recipe
+        ingredients: Comma-separated list of ingredients needed
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        shopping_path = get_data_file_path("shopping_list")
+        content = shopping_path.read_text(encoding="utf-8")
+
+        # Build entry for this recipe
+        today = datetime.now().strftime("%Y-%m-%d")
+        entry = f"\n## For: {recipe_name} (Added: {today})\n"
+
+        # Add each ingredient as a bullet point
+        for item in ingredients.split(','):
+            item = item.strip()
+            if item:
+                entry += f"- {item}\n"
+
+        entry += "\n"
+
+        # Append to shopping list file
+        shopping_path.write_text(content + entry, encoding="utf-8")
+
+        logger.info(
+            "Added ingredients to shopping list",
+            extra={
+                "recipe_name": recipe_name,
+                "ingredient_count": len([i for i in ingredients.split(',') if i.strip()])
+            }
+        )
+
+        return True
+
+    except Exception as e:
+        logger.error(
+            "Failed to add to shopping list",
+            extra={"recipe_name": recipe_name, "error": str(e)},
             exc_info=True
         )
         return False
@@ -501,7 +550,7 @@ if "generated_recipes" in st.session_state:
 
     for idx, recipe in enumerate(recipes, 1):
         with st.expander(
-            f"**{idx}. {recipe['name']}** ({recipe.get('time_minutes', '?')} min • {recipe.get('difficulty', 'medium').title()})",
+            f"**{idx}. {recipe['name']}** ({recipe.get('time_minutes', '?')} min • {(recipe.get('difficulty') or 'medium').title()})",
             expanded=(idx == 1),  # Expand first recipe by default
         ):
             # Description
@@ -540,7 +589,7 @@ if "generated_recipes" in st.session_state:
 
             # Action buttons
             st.markdown("---")
-            btn_col1, btn_col2, btn_col3 = st.columns(3)
+            btn_col1, btn_col2, btn_col3, btn_col4 = st.columns(4)
 
             with btn_col1:
                 if st.button("👨‍🍳 Cook This", key=f"cook_{idx}"):
@@ -557,6 +606,24 @@ if "generated_recipes" in st.session_state:
                     st.switch_page("pages/cooking_mode.py")
 
             with btn_col2:
+                if st.button("📅 Add to Plan", key=f"plan_{idx}"):
+                    # Prepare recipe for weekly planner
+                    plan_recipe = {
+                        'name': recipe['name'],
+                        'source': 'Generated',
+                        'time_minutes': recipe.get('time_minutes'),
+                        'difficulty': recipe.get('difficulty'),
+                    }
+
+                    if add_recipe_to_plan(plan_recipe):
+                        st.success(f"✅ Added to weekly plan!")
+                        logger.info(
+                            "Added generated recipe to weekly plan",
+                            extra={"recipe_name": recipe["name"]},
+                        )
+                    # Note: add_recipe_to_plan shows its own warnings/errors
+
+            with btn_col3:
                 if st.button("❌ Not Interested", key=f"pass_{idx}"):
                     st.info("Noted! We'll suggest different recipes next time.")
                     # TODO: Implement preference learning
@@ -565,15 +632,23 @@ if "generated_recipes" in st.session_state:
                         extra={"recipe_name": recipe["name"]},
                     )
 
-            with btn_col3:
-                if st.button("🛒 Add to Shopping List", key=f"shop_{idx}"):
+            with btn_col4:
+                if st.button("🛒 Shopping List", key=f"shop_{idx}"):
                     if needed and needed.strip():
-                        st.success("Added ingredients to shopping list!")
-                        # TODO: Implement shopping list update
-                        logger.info(
-                            "User added ingredients to shopping list",
-                            extra={"recipe_name": recipe["name"]},
+                        # Add ingredients to shopping list
+                        success = add_ingredients_to_shopping_list(
+                            recipe_name=recipe['name'],
+                            ingredients=needed
                         )
+
+                        if success:
+                            st.success("✅ Added ingredients to shopping list!")
+                            logger.info(
+                                "User added ingredients to shopping list",
+                                extra={"recipe_name": recipe["name"]},
+                            )
+                        else:
+                            st.error("❌ Failed to add to shopping list. Check logs.")
                     else:
                         st.info("No ingredients to add - you have everything!")
 

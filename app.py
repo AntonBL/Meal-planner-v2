@@ -125,6 +125,14 @@ with col4:
         st.switch_page("pages/meal_history.py")
     st.caption("View past meals and ratings")
 
+# Second row of actions
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    if st.button("🛒 Shopping List", use_container_width=True):
+        st.switch_page("pages/shopping_list.py")
+    st.caption("View ingredients to buy for recipes")
+
 # Separator
 st.markdown("---")
 
@@ -161,7 +169,7 @@ st.markdown("---")
 # Footer
 st.markdown("### 💡 Tips")
 st.info("""
-- **Running low on ingredients?** Check the shopping list in Update Pantry
+- **Running low on ingredients?** Check the Shopping List for items to buy
 - **Can't decide what to cook?** Try the Recipe Generator with different cuisine options
 - **Have groceries?** Upload a photo to quickly update your pantry
 """)
@@ -174,6 +182,7 @@ with st.sidebar:
     st.page_link("pages/generate_recipes.py", label="🎲 Generate Recipes", icon="🎲")
     st.page_link("pages/weekly_planner.py", label="📅 Weekly Planner", icon="📅")
     st.page_link("pages/update_pantry.py", label="📝 Update Pantry", icon="📝")
+    st.page_link("pages/shopping_list.py", label="🛒 Shopping List", icon="🛒")
     st.page_link("pages/meal_history.py", label="📜 Meal History", icon="📜")
 
     st.markdown("---")

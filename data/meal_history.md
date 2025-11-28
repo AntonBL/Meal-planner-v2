@@ -7,6 +7,13 @@ Log of meals we've cooked.
 ## November 2025
 
 ### Friday, 2025-11-28
+**Ginger Garlic Stir-Fried Vegetables** ⭐⭐⭐⭐⭐
+- Rating: 5/5
+- Ingredients used: Mixed vegetables (broccoli, bell peppers, carrots, snap peas), Tofu or tempeh (cubed and pan-fried), Fresh ginger and garlic, Soy sauce, sesame oil, rice vinegar, Served over rice or rice noodles
+
+
+
+### Friday, 2025-11-28
 **Spaghetti Aglio e Olio with Crispy Tofu & Spinach** ⭐⭐⭐⭐⭐
 - Rating: 5/5
 - Ingredients used: Spaghetti, olive oil, garlic, red pepper flakes, salt, black pepper, extra-firm tofu, spinach, parmesan cheese, lemon

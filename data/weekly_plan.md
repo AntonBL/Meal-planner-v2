@@ -4,7 +4,17 @@ Last updated: 2025-11-27
 
 ## Current Plan
 
-*No meals planned yet. Click "Add Meal" to start planning!*
+### 2. Ginger Garlic Stir-Fried Vegetables
+**Source:** Loved
+**Added:** 2025-11-28
+
+
+
+
+### 1. Coconut Curry Lentil Soup
+**Source:** Loved
+**Added:** 2025-11-28
+
 
 <!-- Instructions:
 - Select up to 7 meals for the week

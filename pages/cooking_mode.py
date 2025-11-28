@@ -119,7 +119,7 @@ def save_recipe_feedback(
             recipe_entry += f"**Time:** {recipe['time_minutes']} minutes\n"
 
         if recipe.get('difficulty'):
-            recipe_entry += f"**Difficulty:** {recipe['difficulty'].title()}\n"
+            recipe_entry += f"**Difficulty:** {(recipe['difficulty'] or 'unknown').title()}\n"
 
         recipe_entry += "\n**Ingredients:**\n"
 
@@ -202,7 +202,7 @@ col1, col2 = st.columns(2)
 with col1:
     st.metric("⏱️ Time", f"{recipe.get('time_minutes', '?')} min")
 with col2:
-    st.metric("📊 Difficulty", recipe.get('difficulty', 'medium').title())
+    st.metric("📊 Difficulty", (recipe.get('difficulty') or 'medium').title())
 
 # Recipe description
 if recipe.get('description'):
