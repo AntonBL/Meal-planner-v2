@@ -1,7 +1,7 @@
 # START HERE - Engineering Onboarding Guide
 ## Phase 1: GROUP 1 & GROUP 2 Implementation
 
-**For:** Next engineer implementing Update Pantry and Meal History pages
+**For:** Next engineer implementing Pantry and Meal History pages
 **Time Required:** 1.5-2 hours
 **Difficulty:** Beginner-Intermediate
 **Last Updated:** 2025-11-27
@@ -11,7 +11,7 @@
 ## 🎯 Your Mission
 
 You're going to fix the two critical navigation errors in the app by creating:
-1. **Update Pantry Page** (`pages/update_pantry.py`) - 45 minutes
+1. **Pantry Page** (`pages/pantry.py`) - 45 minutes
 2. **Meal History Page** (`pages/meal_history.py`) - 30 minutes
 
 After you're done:
@@ -33,14 +33,14 @@ After you're done:
 - ✅ All data files exist in `data/` directory
 
 ### What's Broken (Your Job)
-- ❌ Clicking "Update Pantry" from home → 404 error (file doesn't exist)
+- ❌ Clicking "Pantry" from home → 404 error (file doesn't exist)
 - ❌ Clicking "Meal History" from home → 404 error (file doesn't exist)
 - ❌ Sidebar navigation to these pages fails
 
 ### Current Error Messages
 If you access the app now, clicking these buttons shows:
 ```
-Could not find page: `pages/update_pantry.py`.
+Could not find page: `pages/pantry.py`.
 Must be the file path relative to the main script...
 ```
 
@@ -86,7 +86,7 @@ ls -la pages/
 # Should show:
 # generate_recipes.py  <- exists
 # __init__.py         <- exists
-# (update_pantry.py and meal_history.py are MISSING - you'll create them)
+# (pantry.py and meal_history.py are MISSING - you'll create them)
 ```
 
 ### 4. Access the App in Browser
@@ -97,15 +97,15 @@ ls -la pages/
 
 You should see the home dashboard with buttons for:
 - 🎲 Generate Recipes (works)
-- 📝 Update Pantry (broken - your job to fix)
+- 📝 Pantry (broken - your job to fix)
 - 📅 Meal History (broken - your job to fix)
 
 ---
 
-## 🚀 GROUP 1: Create Update Pantry Page
+## 🚀 GROUP 1: Create Pantry Page
 
 **Time:** 45 minutes
-**File:** `pages/update_pantry.py`
+**File:** `pages/pantry.py`
 
 ---
 
@@ -116,13 +116,13 @@ You should see the home dashboard with buttons for:
 cd /root/Meal-planner-v2
 
 # Create the new file
-nano pages/update_pantry.py
+nano pages/pantry.py
 ```
 
 **Paste this complete starter code:**
 
 ```python
-"""Update Pantry Page for AI Recipe Planner.
+"""Pantry Page for AI Recipe Planner.
 
 Allows users to manually add, view, edit, and remove pantry items.
 Supports both pantry staples and fresh items with expiry tracking.
@@ -146,13 +146,13 @@ logger = get_logger(__name__)
 
 # Page configuration
 st.set_page_config(
-    page_title="Update Pantry - AI Recipe Planner",
+    page_title="Pantry - AI Recipe Planner",
     page_icon="📝",
     layout="wide",
 )
 
 # Title
-st.title("📝 Update Pantry")
+st.title("📝 Pantry")
 st.markdown("*Manage your pantry staples and fresh items*")
 
 
@@ -502,7 +502,7 @@ if st.button("🏠 Back to Home", use_container_width=True):
 
 ---
 
-### STEP 2: Test Update Pantry Page (10 minutes)
+### STEP 2: Test Pantry Page (10 minutes)
 
 ```bash
 # Restart the application to pick up the new file
@@ -517,7 +517,7 @@ tail -20 /var/log/meal-planner.err.log
 
 **In Browser:**
 1. Go to `https://50.116.63.56`
-2. Click "Update Pantry" button
+2. Click "Pantry" button
 3. **Expected:** Page loads without error
 4. **You should see:** Three tabs (Add Items, View Pantry, Manage Items)
 
@@ -558,7 +558,7 @@ cat data/pantry/fresh.md | grep "Milk"
 **Problem: Page not found error still appears**
 ```bash
 # Check file was created
-ls -la pages/update_pantry.py
+ls -la pages/pantry.py
 
 # Should show file exists
 # If not, you may be in wrong directory
@@ -865,7 +865,7 @@ If no meals exist yet, you should see:
 
 **Complete Navigation Test:**
 1. Start at home page (`https://50.116.63.56`)
-2. Click "Update Pantry" → should work ✅
+2. Click "Pantry" → should work ✅
 3. Click "Back to Home" → should return to home ✅
 4. Click "Meal History" → should work ✅
 5. Click "Back to Home" → should return to home ✅
@@ -889,7 +889,7 @@ ls -la pages/
 # Should now show:
 # - generate_recipes.py
 # - meal_history.py      <- NEW!
-# - update_pantry.py     <- NEW!
+# - pantry.py     <- NEW!
 # - __init__.py
 ```
 
@@ -899,9 +899,9 @@ ls -la pages/
 
 You're done with GROUP 1 & 2 when ALL of these are true:
 
-- [ ] File `pages/update_pantry.py` exists and has ~350+ lines
+- [ ] File `pages/pantry.py` exists and has ~350+ lines
 - [ ] File `pages/meal_history.py` exists and has ~200+ lines
-- [ ] No errors when clicking "Update Pantry" from home
+- [ ] No errors when clicking "Pantry" from home
 - [ ] No errors when clicking "Meal History" from home
 - [ ] Can add a pantry staple successfully
 - [ ] Can add a fresh item with expiry date
@@ -1013,10 +1013,10 @@ Once you've successfully completed these tasks:
 3. **Git Commit (Optional but Recommended):**
    ```bash
    cd /root/Meal-planner-v2
-   git add pages/update_pantry.py pages/meal_history.py
-   git commit -m "Add Update Pantry and Meal History pages
+   git add pages/pantry.py pages/meal_history.py
+   git commit -m "Add Pantry and Meal History pages
 
-   - Created pages/update_pantry.py with add items and view pantry functionality
+   - Created pages/pantry.py with add items and view pantry functionality
    - Created pages/meal_history.py with meal viewing and filtering
    - Fixed navigation errors from home dashboard
    - All core navigation now working
@@ -1103,8 +1103,8 @@ If you follow this guide linearly:
 | Task | Time |
 |------|------|
 | Prerequisites & Setup | 10 min |
-| Create Update Pantry File | 5 min |
-| Test Update Pantry | 10 min |
+| Create Pantry File | 5 min |
+| Test Pantry | 10 min |
 | Troubleshoot (if needed) | 10-20 min |
 | Create Meal History File | 5 min |
 | Test Meal History | 10 min |

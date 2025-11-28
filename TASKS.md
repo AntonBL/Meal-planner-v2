@@ -82,20 +82,20 @@ Each task is broken down into:
 
 ---
 
-## GROUP 1: Update Pantry Page (Foundation)
+## GROUP 1: Pantry Page (Foundation)
 **Estimated Time:** 45 minutes
 **Priority:** CRITICAL (Blocking navigation errors)
 
-### Task 1.1: Create Update Pantry Page File
-**File:** `pages/update_pantry.py`
+### Task 1.1: Create Pantry Page File
+**File:** `pages/pantry.py`
 **Time:** 5 minutes
 **Dependencies:** None
 
 **Steps:**
-1. Create new file `pages/update_pantry.py`
+1. Create new file `pages/pantry.py`
 2. Add module docstring:
    ```python
-   """Update Pantry Page for AI Recipe Planner.
+   """Pantry Page for AI Recipe Planner.
 
    Allows users to manually add, view, edit, and remove pantry items.
    Supports both pantry staples and fresh items with expiry tracking.
@@ -125,26 +125,26 @@ Each task is broken down into:
 6. Configure page:
    ```python
    st.set_page_config(
-       page_title="Update Pantry - AI Recipe Planner",
+       page_title="Pantry - AI Recipe Planner",
        page_icon="📝",
        layout="wide",
    )
    ```
 7. Add title and description:
    ```python
-   st.title("📝 Update Pantry")
+   st.title("📝 Pantry")
    st.markdown("*Manage your pantry staples and fresh items*")
    ```
 
 **Testing:**
-- Access `https://50.116.63.56` and click "Update Pantry"
+- Access `https://50.116.63.56` and click "Pantry"
 - Should load without errors (even if empty)
 - Check logs: `tail -f /var/log/meal-planner.out.log`
 
 ---
 
 ### Task 1.2: Add Manual Entry Form (Pantry Staples)
-**File:** `pages/update_pantry.py`
+**File:** `pages/pantry.py`
 **Time:** 15 minutes
 **Dependencies:** Task 1.1
 
@@ -246,7 +246,7 @@ Each task is broken down into:
 ---
 
 ### Task 1.3: Create Add Item Backend Function
-**File:** `pages/update_pantry.py` (helper function section)
+**File:** `pages/pantry.py` (helper function section)
 **Time:** 15 minutes
 **Dependencies:** Task 1.2
 
@@ -346,7 +346,7 @@ Each task is broken down into:
 ---
 
 ### Task 1.4: Create View Pantry Tab
-**File:** `pages/update_pantry.py`
+**File:** `pages/pantry.py`
 **Time:** 10 minutes
 **Dependencies:** Task 1.1
 
@@ -685,12 +685,12 @@ Each task is broken down into:
 ---
 
 ### Task 2.3: Add "Back to Home" Navigation
-**File:** `pages/update_pantry.py` and `pages/meal_history.py`
+**File:** `pages/pantry.py` and `pages/meal_history.py`
 **Time:** 5 minutes
 **Dependencies:** All previous page tasks
 
 **Steps:**
-1. At the bottom of `pages/update_pantry.py`, add:
+1. At the bottom of `pages/pantry.py`, add:
    ```python
    # Navigation
    st.markdown("---")
@@ -991,7 +991,7 @@ Each task is broken down into:
 **Estimated Time:** 30 minutes
 **Priority:** MEDIUM (Nice to have for MVP)
 
-### Task 4.1: Add "Update Pantry?" Prompt After Cooking
+### Task 4.1: Add "Pantry?" Prompt After Cooking
 **File:** `pages/generate_recipes.py`
 **Time:** 15 minutes
 **Dependencies:** Task 3.2
@@ -1016,7 +1016,7 @@ Each task is broken down into:
            col1, col2 = st.columns(2)
 
            with col1:
-               if st.button("✅ Yes, Update Pantry", key="update_pantry_yes", use_container_width=True):
+               if st.button("✅ Yes, Pantry", key="update_pantry_yes", use_container_width=True):
                    # Call pantry update function
                    update_success = update_pantry_after_cooking(recipe)
 
@@ -1117,7 +1117,7 @@ Each task is broken down into:
 - Handle partial usage (e.g., used half a bottle)
 
 **Testing:**
-- Cook a recipe and click "Yes, Update Pantry"
+- Cook a recipe and click "Yes, Pantry"
 - Check pantry files for comment with usage note
 - Verify ingredients are listed correctly
 
@@ -1144,12 +1144,12 @@ Each task is broken down into:
    - [ ] Add notes
    - [ ] Submit feedback
    - [ ] See pantry update prompt
-   - [ ] Click "Yes, Update Pantry"
+   - [ ] Click "Yes, Pantry"
    - [ ] Check meal history shows new meal
    - [ ] Check loved.md has recipe saved
 
 2. **Pantry Management Flow:**
-   - [ ] Go to "Update Pantry"
+   - [ ] Go to "Pantry"
    - [ ] Add pantry staple (Rice, 2 lbs)
    - [ ] Add fresh item (Milk, 1 gallon, expiry: tomorrow)
    - [ ] Switch to "View Pantry" tab
@@ -1178,7 +1178,7 @@ Each task is broken down into:
 ### Task 5.2: Fix Dashboard "Expiring Soon" Counter
 **File:** `app.py`
 **Time:** 10 minutes
-**Dependencies:** Update Pantry page complete
+**Dependencies:** Pantry page complete
 
 **Steps:**
 1. Replace the hardcoded `get_expiring_soon()` function in `app.py`:
@@ -1253,7 +1253,7 @@ Each task is broken down into:
 - [ ] API errors show actionable troubleshooting
 
 **Files to Review:**
-- `pages/update_pantry.py`
+- `pages/pantry.py`
 - `pages/meal_history.py`
 - `pages/generate_recipes.py`
 - `app.py`
@@ -1450,8 +1450,8 @@ Only list items you can clearly identify. Be practical and specific."""
 
 ---
 
-### Task 6.2: Add Photo Upload Tab to Update Pantry
-**File:** `pages/update_pantry.py`
+### Task 6.2: Add Photo Upload Tab to Pantry
+**File:** `pages/pantry.py`
 **Time:** 40 minutes
 
 **Steps:**
@@ -1741,8 +1741,8 @@ Only list items you can clearly identify. Be practical and specific."""
 
 ---
 
-### Task 7.2: Add Shopping List View to Update Pantry
-**File:** `pages/update_pantry.py`
+### Task 7.2: Add Shopping List View to Pantry
+**File:** `pages/pantry.py`
 **Time:** 25 minutes
 
 **Steps:**
@@ -1833,7 +1833,7 @@ Only list items you can clearly identify. Be practical and specific."""
 **Priority:** MEDIUM
 
 ### Task 8.1: Add Expiry Warnings to View Pantry
-**File:** `pages/update_pantry.py`
+**File:** `pages/pantry.py`
 **Time:** 20 minutes
 
 **Steps:**
@@ -2042,7 +2042,7 @@ ruff check --fix lib/ pages/ app.py
 ## Quick Reference
 
 **Critical Path (MVP - Phase 1):**
-1. Create update_pantry.py (GROUP 1)
+1. Create pantry.py (GROUP 1)
 2. Create meal_history.py (GROUP 2)
 3. Add recipe feedback (GROUP 3)
 4. Test end-to-end (GROUP 5)

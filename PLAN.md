@@ -65,7 +65,7 @@ systemctl restart nginx
 - ✅ Structured logging
 
 **Missing (Causing Errors):**
-- ❌ `pages/update_pantry.py` (referenced but doesn't exist)
+- ❌ `pages/pantry.py` (referenced but doesn't exist)
 - ❌ `pages/meal_history.py` (referenced but doesn't exist)
 - ❌ Recipe feedback system
 - ❌ Photo upload (Vision API)
@@ -78,7 +78,7 @@ systemctl restart nginx
 
 ### Critical (Blocking Navigation)
 1. **Missing Pages** - Home dashboard links to non-existent pages
-   - Impact: Users see errors when clicking "Update Pantry" or "Meal History"
+   - Impact: Users see errors when clicking "Pantry" or "Meal History"
    - Priority: HIGH
    - Fix: Create stub pages with basic functionality
 
@@ -104,8 +104,8 @@ systemctl restart nginx
 
 #### Tasks:
 
-**1.1 Create Update Pantry Page** (45 min)
-- [ ] Create `pages/update_pantry.py`
+**1.1 Create Pantry Page** (45 min)
+- [ ] Create `pages/pantry.py`
 - [ ] Implement manual entry form (item name, quantity, category)
 - [ ] Add dropdown for category (Pantry Staple / Fresh Item)
 - [ ] Add date picker for fresh items (expiry date)
@@ -182,7 +182,7 @@ systemctl restart nginx
 #### Tasks:
 
 **2.1 Photo Upload - Vision API** (90 min)
-- [ ] Add file uploader to Update Pantry page
+- [ ] Add file uploader to Pantry page
 - [ ] Implement Claude Vision integration
 - [ ] Send image + prompt to Claude API
 - [ ] Parse detected items from response
@@ -195,7 +195,7 @@ systemctl restart nginx
 - [ ] Add "Add to Shopping List" button on recipes
 - [ ] Aggregate missing ingredients
 - [ ] Save to `data/pantry/shopping_list.md`
-- [ ] Show shopping list on Update Pantry page
+- [ ] Show shopping list on Pantry page
 - [ ] Allow marking items as purchased
 - [ ] Auto-move purchased items to pantry
 
@@ -307,7 +307,7 @@ Meal-planner-v2/
 ├── pages/                      # Streamlit pages
 │   ├── generate_recipes.py    # ✅ Recipe generation
 │   ├── cooking_mode.py        # ❌ TODO: Phase 1.6
-│   ├── update_pantry.py       # ❌ TODO: Phase 1
+│   ├── pantry.py       # ❌ TODO: Phase 1
 │   └── meal_history.py        # ❌ TODO: Phase 1
 │
 ├── lib/                        # Core logic
@@ -412,7 +412,7 @@ tail -f /var/log/meal-planner.out.log
 - ✅ Claude Haiku 4.5 working
 
 **To start Phase 1:**
-1. Create `pages/update_pantry.py` (see task 1.1)
+1. Create `pages/pantry.py` (see task 1.1)
 2. Create `pages/meal_history.py` (see task 1.2)
 3. Test navigation works
 4. Add recipe feedback system (task 1.3)
@@ -435,7 +435,7 @@ tail -f /var/log/meal-planner.out.log
 ## 🎯 Next Actions
 
 **Immediate (This Week):**
-- [ ] Create update_pantry.py page
+- [ ] Create pantry.py page
 - [ ] Create meal_history.py page
 - [ ] Add recipe feedback system
 - [ ] Test complete user flow

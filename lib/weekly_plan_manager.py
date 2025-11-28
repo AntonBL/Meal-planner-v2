@@ -13,6 +13,131 @@ from lib.logging_config import get_logger
 logger = get_logger(__name__)
 
 
+# ============================================================================
+# SHOPPING LIST HELPERS
+# ============================================================================
+
+def add_ingredients_to_shopping_list(recipe_name: str, ingredients: str) -> bool:
+    """Add ingredients to shopping list when recipe is added to plan.
+
+    Args:
+        recipe_name: Name of the recipe
+        ingredients: Comma-separated list of ingredients needed
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        # Skip if no ingredients needed
+        if not ingredients or not ingredients.strip():
+            return True
+
+        shopping_path = get_data_file_path("shopping_list")
+        content = shopping_path.read_text(encoding="utf-8")
+
+        # Build entry for this recipe
+        today = datetime.now().strftime("%Y-%m-%d")
+        entry = f"\n## For: {recipe_name} (Added: {today})\n"
+
+        # Add each ingredient as a bullet point
+        for item in ingredients.split(','):
+            item = item.strip()
+            if item:
+                entry += f"- {item}\n"
+
+        entry += "\n"
+
+        # Append to shopping list file
+        shopping_path.write_text(content + entry, encoding="utf-8")
+
+        logger.info(
+            "Added ingredients to shopping list",
+            extra={
+                "recipe_name": recipe_name,
+                "ingredient_count": len([i for i in ingredients.split(',') if i.strip()])
+            }
+        )
+
+        return True
+
+    except Exception as e:
+        logger.error(
+            "Failed to add to shopping list",
+            extra={"recipe_name": recipe_name, "error": str(e)},
+            exc_info=True
+        )
+        return False
+
+
+def remove_recipe_from_shopping_list(recipe_name: str) -> bool:
+    """Remove a recipe's ingredients from shopping list.
+
+    Args:
+        recipe_name: Name of the recipe
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        shopping_path = get_data_file_path("shopping_list")
+        content = shopping_path.read_text(encoding="utf-8")
+
+        lines = content.split('\n')
+        new_lines = []
+        skip_section = False
+
+        for line in lines:
+            line_stripped = line.strip()
+
+            # Check if this is a recipe header we want to remove
+            if line_stripped.startswith('##') and 'For:' in line_stripped:
+                # Extract recipe name from header
+                recipe_part = line_stripped.replace('##', '').strip()
+                if '(Added:' in recipe_part:
+                    recipe_part = recipe_part.split('For:')[1].strip()
+                    current_recipe = recipe_part.split('(Added:')[0].strip()
+                else:
+                    current_recipe = recipe_part.replace('For:', '').strip()
+
+                # If this is the recipe we want to remove, skip this section
+                if current_recipe == recipe_name:
+                    skip_section = True
+                    continue
+                else:
+                    skip_section = False
+                    new_lines.append(line)
+
+            # Check if we're at a new section (any ## header)
+            elif line_stripped.startswith('##'):
+                skip_section = False
+                new_lines.append(line)
+
+            # Skip lines in the section we're removing
+            elif skip_section:
+                continue
+
+            else:
+                new_lines.append(line)
+
+        # Write back
+        shopping_path.write_text('\n'.join(new_lines), encoding="utf-8")
+
+        logger.info(
+            "Removed recipe from shopping list",
+            extra={"recipe_name": recipe_name}
+        )
+
+        return True
+
+    except Exception as e:
+        logger.error(
+            "Failed to remove from shopping list",
+            extra={"recipe_name": recipe_name, "error": str(e)},
+            exc_info=True
+        )
+        return False
+
+
 def load_current_plan() -> list[dict]:
     """Load the current weekly meal plan.
 
@@ -167,6 +292,13 @@ def add_recipe_to_plan(recipe: dict) -> bool:
             "Added recipe to weekly plan",
             extra={"recipe_name": recipe['name'], "plan_size": len(current_plan) + 1}
         )
+
+        # Add needed ingredients to shopping list
+        if recipe.get('ingredients_needed'):
+            add_ingredients_to_shopping_list(
+                recipe['name'],
+                recipe['ingredients_needed']
+            )
 
         # Clear Streamlit cache if available
         try:

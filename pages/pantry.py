@@ -1,4 +1,4 @@
-"""Update Pantry Page - AI-Powered Pantry Management.
+"""Pantry Page - AI-Powered Pantry Management.
 
 Users chat with AI to add, update, or remove pantry items.
 The AI reads and writes directly to pantry markdown files.
@@ -22,15 +22,15 @@ setup_logging("INFO")
 logger = get_logger(__name__)
 
 st.set_page_config(
-    page_title="Update Pantry - AI Recipe Planner",
-    page_icon="📝",
+    page_title="Pantry - AI Recipe Planner",
+    page_icon="🥫",
     layout="wide",
 )
 
 # Authentication
 require_authentication()
 
-st.title("📝 Update Pantry")
+st.title("🥫 Pantry")
 st.markdown("*Chat with AI to manage your pantry items*")
 
 # Initialize session state for chat

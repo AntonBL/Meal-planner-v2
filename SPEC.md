@@ -486,8 +486,8 @@ with col3:
 if st.button("🎲 Generate Recipes", use_container_width=True):
     st.switch_page("pages/generate_recipes.py")
 
-if st.button("📝 Update Pantry", use_container_width=True):
-    st.switch_page("pages/update_pantry.py")
+if st.button("📝 Pantry", use_container_width=True):
+    st.switch_page("pages/pantry.py")
 
 if st.button("📅 View Meal History", use_container_width=True):
     st.switch_page("pages/meal_history.py")
@@ -545,7 +545,7 @@ if st.button("✨ Get Recipe Suggestions", type="primary"):
 
 #### 3. Pantry Update
 ```python
-st.title("📝 Update Pantry")
+st.title("📝 Pantry")
 
 tab1, tab2, tab3 = st.tabs(["📸 Photo Upload", "✏️ Manual Entry", "🗑️ Remove Items"])
 
@@ -649,7 +649,7 @@ meal-planner/
 ├── pages/                 # Streamlit multi-page app
 │   ├── generate_recipes.py
 │   ├── cooking_mode.py    # Active recipe with Q&A chat
-│   ├── update_pantry.py
+│   ├── pantry.py
 │   ├── meal_history.py
 │   └── preferences.py
 │
@@ -994,8 +994,8 @@ elif authentication_status == False:
 10. After cooking, app asks for rating
 11. User gives 5 stars + notes → moved to loved.md
 
-### Flow 2: Update Pantry with Photo
-1. User clicks "Update Pantry" → Photo Upload tab
+### Flow 2: Pantry with Photo
+1. User clicks "Pantry" → Photo Upload tab
 2. Takes picture of grocery bags
 3. Clicks "Detect Items"
 4. Vision AI processes → shows detected items

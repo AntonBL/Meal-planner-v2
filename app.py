@@ -116,8 +116,8 @@ with col2:
     st.caption("Plan up to 7 meals for the week")
 
 with col3:
-    if st.button("📝 Update Pantry", use_container_width=True):
-        st.switch_page("pages/update_pantry.py")
+    if st.button("🥫 Pantry", use_container_width=True):
+        st.switch_page("pages/pantry.py")
     st.caption("Add items manually or via photo upload")
 
 with col4:
@@ -181,7 +181,7 @@ with st.sidebar:
     st.page_link("app.py", label="🏠 Home", icon="🏠")
     st.page_link("pages/generate_recipes.py", label="🎲 Generate Recipes", icon="🎲")
     st.page_link("pages/weekly_planner.py", label="📅 Weekly Planner", icon="📅")
-    st.page_link("pages/update_pantry.py", label="📝 Update Pantry", icon="📝")
+    st.page_link("pages/pantry.py", label="🥫 Pantry", icon="🥫")
     st.page_link("pages/shopping_list.py", label="🛒 Shopping List", icon="🛒")
     st.page_link("pages/meal_history.py", label="📜 Meal History", icon="📜")
 

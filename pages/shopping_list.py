@@ -1,6 +1,7 @@
 """Shopping List Page - View and manage shopping list.
 
 Shows ingredients added from recipe suggestions, grouped by recipe.
+Users can mark items as bought (adds to pantry) or remove from list.
 """
 
 from dotenv import load_dotenv
@@ -16,6 +17,170 @@ from lib.logging_config import get_logger, setup_logging
 
 setup_logging("INFO")
 logger = get_logger(__name__)
+
+
+# ============================================================================
+# HELPER FUNCTIONS
+# ============================================================================
+
+def categorize_ingredient(ingredient_name: str) -> str:
+    """Categorize ingredient as 'staple' or 'fresh' based on keywords.
+
+    Args:
+        ingredient_name: Name of the ingredient
+
+    Returns:
+        'staple' or 'fresh'
+    """
+    ingredient_lower = ingredient_name.lower()
+
+    # Fresh item keywords
+    fresh_keywords = [
+        'milk', 'cheese', 'yogurt', 'cream', 'butter',
+        'egg', 'eggs',
+        'lettuce', 'spinach', 'kale', 'arugula', 'greens',
+        'tomato', 'tomatoes', 'cucumber', 'pepper', 'peppers',
+        'onion', 'onions', 'garlic', 'ginger',
+        'carrot', 'carrots', 'celery', 'broccoli', 'cauliflower',
+        'mushroom', 'mushrooms',
+        'potato', 'potatoes', 'sweet potato',
+        'avocado', 'avocados',
+        'apple', 'apples', 'banana', 'bananas', 'orange', 'oranges',
+        'lemon', 'lemons', 'lime', 'limes',
+        'fresh', 'tofu', 'tempeh'
+    ]
+
+    # Check if any fresh keyword is in the ingredient
+    for keyword in fresh_keywords:
+        if keyword in ingredient_lower:
+            return 'fresh'
+
+    # Default to staple
+    return 'staple'
+
+
+def add_item_to_pantry(item_name: str, category: str) -> bool:
+    """Add an item to the appropriate pantry file.
+
+    Args:
+        item_name: Name of the item
+        category: 'staple' or 'fresh'
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        # Determine which file
+        if category == 'fresh':
+            file_path = get_data_file_path("fresh")
+        else:
+            file_path = get_data_file_path("staples")
+
+        # Read current content
+        current_content = file_path.read_text(encoding="utf-8")
+
+        # Build new item line
+        today = datetime.now().strftime("%Y-%m-%d")
+        new_line = f"- {item_name} - Added: {today} (from shopping list)\n"
+
+        # Find first section header and insert after it
+        lines = current_content.split('\n')
+        insert_index = -1
+
+        for i, line in enumerate(lines):
+            if line.startswith('##'):
+                insert_index = i + 1
+                break
+
+        if insert_index == -1:
+            lines.append(new_line)
+        else:
+            lines.insert(insert_index, new_line)
+
+        # Write back
+        file_path.write_text('\n'.join(lines), encoding="utf-8")
+
+        logger.info(
+            "Added shopping item to pantry",
+            extra={"item": item_name, "category": category}
+        )
+
+        return True
+
+    except Exception as e:
+        logger.error(
+            "Failed to add item to pantry",
+            extra={"item": item_name, "error": str(e)},
+            exc_info=True
+        )
+        return False
+
+
+def remove_items_from_shopping_list(recipe_name: str, items_to_remove: list) -> bool:
+    """Remove specific items from shopping list for a given recipe.
+
+    Args:
+        recipe_name: Name of the recipe
+        items_to_remove: List of item names to remove
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        shopping_path = get_data_file_path("shopping_list")
+        content = shopping_path.read_text(encoding="utf-8")
+
+        lines = content.split('\n')
+        new_lines = []
+        current_recipe = None
+
+        for line in lines:
+            line_stripped = line.strip()
+
+            # Track current recipe section
+            if line_stripped.startswith('##'):
+                if 'For:' in line_stripped:
+                    recipe_part = line_stripped.replace('##', '').strip()
+                    if '(Added:' in recipe_part:
+                        recipe_part = recipe_part.split('For:')[1].strip()
+                        current_recipe = recipe_part.split('(Added:')[0].strip()
+                    else:
+                        current_recipe = recipe_part.replace('For:', '').strip()
+                new_lines.append(line)
+
+            # Check if this is an item to remove
+            elif line_stripped.startswith('-') and current_recipe == recipe_name:
+                item_text = line_stripped[1:].strip()
+                if item_text not in items_to_remove:
+                    new_lines.append(line)
+                else:
+                    logger.info(f"Removing item from shopping list: {item_text}")
+
+            else:
+                new_lines.append(line)
+
+        # Write back
+        shopping_path.write_text('\n'.join(new_lines), encoding="utf-8")
+
+        logger.info(
+            "Removed items from shopping list",
+            extra={"recipe": recipe_name, "count": len(items_to_remove)}
+        )
+
+        return True
+
+    except Exception as e:
+        logger.error(
+            "Failed to remove items from shopping list",
+            extra={"recipe": recipe_name, "error": str(e)},
+            exc_info=True
+        )
+        return False
+
+
+# ============================================================================
+# PAGE CONFIGURATION
+# ============================================================================
 
 st.set_page_config(
     page_title="Shopping List - AI Recipe Planner",
@@ -95,16 +260,57 @@ try:
             with st.expander(f"📋 **{recipe_name}**", expanded=True):
                 items_list = list(items_group)
 
-                for item in items_list:
-                    st.checkbox(
+                # Display checkboxes for each item
+                checked_items = []
+                for idx, item in enumerate(items_list):
+                    is_checked = st.checkbox(
                         item['item'],
-                        key=f"shop_item_{recipe_name}_{item['item']}",
-                        help="Check off items as you purchase them"
+                        key=f"shop_item_{recipe_name}_{idx}",
+                        help="Check items you've purchased"
                     )
+                    if is_checked:
+                        checked_items.append(item['item'])
 
                 st.caption(f"*{len(items_list)} items for this recipe*")
 
-        # Actions
+                # Action buttons for this recipe section
+                if checked_items:
+                    st.markdown("---")
+                    col1, col2 = st.columns(2)
+
+                    with col1:
+                        if st.button(
+                            f"✅ Bought → Add to Pantry ({len(checked_items)})",
+                            key=f"buy_{recipe_name}",
+                            use_container_width=True,
+                            type="primary"
+                        ):
+                            # Add checked items to pantry
+                            success_count = 0
+                            for item_name in checked_items:
+                                category = categorize_ingredient(item_name)
+                                if add_item_to_pantry(item_name, category):
+                                    success_count += 1
+
+                            # Remove from shopping list
+                            remove_items_from_shopping_list(recipe_name, checked_items)
+
+                            st.success(f"✅ Added {success_count} items to pantry!")
+                            st.rerun()
+
+                    with col2:
+                        if st.button(
+                            f"🗑️ Remove ({len(checked_items)})",
+                            key=f"remove_{recipe_name}",
+                            use_container_width=True,
+                            type="secondary"
+                        ):
+                            # Just remove from shopping list without adding to pantry
+                            remove_items_from_shopping_list(recipe_name, checked_items)
+                            st.success(f"🗑️ Removed {len(checked_items)} items from list")
+                            st.rerun()
+
+        # Global actions
         st.markdown("---")
 
         col1, col2, col3 = st.columns([1, 1, 1])
@@ -159,5 +365,5 @@ with col2:
         st.switch_page("pages/generate_recipes.py")
 
 with col3:
-    if st.button("📝 Update Pantry", use_container_width=True):
-        st.switch_page("pages/update_pantry.py")
+    if st.button("🥫 Pantry", use_container_width=True):
+        st.switch_page("pages/pantry.py")

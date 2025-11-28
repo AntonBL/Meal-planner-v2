@@ -82,7 +82,7 @@ meal-planner-v2/
 │
 ├── pages/                 # Streamlit pages (coming soon)
 │   ├── generate_recipes.py
-│   ├── update_pantry.py
+│   ├── pantry.py
 │   └── meal_history.py
 │
 ├── lib/                   # Core logic
