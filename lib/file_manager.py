@@ -26,6 +26,7 @@ DataFileType = Literal[
     "not_again_recipes",
     "preferences",
     "meal_history",
+    "weekly_plan",
 ]
 
 
@@ -55,6 +56,7 @@ def get_data_file_path(file_type: DataFileType) -> Path:
         "not_again_recipes": "data/recipes/not_again.md",
         "preferences": "data/preferences.md",
         "meal_history": "data/meal_history.md",
+        "weekly_plan": "data/weekly_plan.md",
     }
 
     if file_type not in file_map:
