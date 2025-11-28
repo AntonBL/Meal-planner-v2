@@ -16,6 +16,7 @@ from lib.llm_agents import ClaudeProvider
 from lib.file_manager import load_data_file, get_data_file_path
 from lib.exceptions import LLMAPIError
 from lib.logging_config import get_logger, setup_logging
+from lib.vision import detect_items_from_image
 
 setup_logging("INFO")
 logger = get_logger(__name__)
@@ -75,6 +76,64 @@ def delete_pantry_item(file_path, line_number):
     except Exception as e:
         logger.error(f"Failed to delete pantry item: {e}", exc_info=True)
         return False
+
+# Photo Upload Section
+st.markdown("---")
+st.markdown("### 📸 Quick Add: Upload Photo")
+st.markdown("*Upload a photo of groceries, receipt, or your pantry to auto-detect items*")
+
+uploaded_file = st.file_uploader(
+    "Choose an image",
+    type=['jpg', 'jpeg', 'png', 'gif', 'webp'],
+    help="Supported formats: JPG, PNG, GIF, WebP",
+    key="pantry_photo_upload"
+)
+
+if uploaded_file:
+    col1, col2 = st.columns([1, 1])
+
+    with col1:
+        st.image(uploaded_file, caption="Uploaded Image", use_container_width=True)
+
+    with col2:
+        if st.button("🔍 Detect Items with AI", type="primary", use_container_width=True):
+            with st.spinner("🤖 Analyzing image... This may take 10-15 seconds"):
+                try:
+                    # Reset file pointer
+                    uploaded_file.seek(0)
+
+                    # Detect items using vision
+                    detected_items = detect_items_from_image(uploaded_file, llm)
+
+                    if detected_items:
+                        # Build a natural language prompt from detected items
+                        item_descriptions = []
+                        for item in detected_items:
+                            item_descriptions.append(f"{item['name']} ({item['quantity']})")
+
+                        items_text = ", ".join(item_descriptions)
+                        auto_prompt = f"Add {items_text}"
+
+                        st.success(f"✅ Detected {len(detected_items)} items!")
+                        st.info(f"📝 Auto-prompt: \"{auto_prompt}\"")
+                        st.markdown("*The AI will process this in the chat below*")
+
+                        # Add to chat as if user typed it
+                        st.session_state.pantry_messages.append({"role": "user", "content": auto_prompt})
+
+                        # Trigger processing by setting a flag
+                        st.session_state['process_vision_prompt'] = auto_prompt
+
+                        st.rerun()
+                    else:
+                        st.warning("⚠️ No items detected. Try a clearer photo or add items manually using the chat below.")
+
+                except LLMAPIError as e:
+                    st.error(f"❌ Vision API error: {e}")
+                    logger.error("Vision detection failed", exc_info=True)
+                except Exception as e:
+                    st.error(f"❌ Unexpected error: {e}")
+                    logger.error("Photo upload error", exc_info=True)
 
 # Show current pantry in main content area
 st.markdown("---")
@@ -143,12 +202,23 @@ for message in st.session_state.pantry_messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
+# Check if there's a vision prompt to process automatically
+vision_prompt = st.session_state.pop('process_vision_prompt', None)
+
 # Chat input
 if prompt := st.chat_input("What would you like to add, remove, or update?"):
-    # Add user message to chat
-    st.session_state.pantry_messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
+    process_prompt = prompt
+elif vision_prompt:
+    process_prompt = vision_prompt
+else:
+    process_prompt = None
+
+if process_prompt:
+    # Add user message to chat (if from manual input, not vision)
+    if not vision_prompt:
+        st.session_state.pantry_messages.append({"role": "user", "content": process_prompt})
+        with st.chat_message("user"):
+            st.markdown(process_prompt)
 
     # Load current pantry data
     try:
@@ -160,7 +230,7 @@ if prompt := st.chat_input("What would you like to add, remove, or update?"):
         # Build AI prompt to interpret the request
         ai_prompt = f"""You are a pantry management assistant. Interpret what the user wants to do with their pantry.
 
-USER REQUEST: "{prompt}"
+USER REQUEST: "{process_prompt}"
 
 Analyze the request and respond in EXACTLY this format (nothing else):
 
@@ -185,7 +255,7 @@ ACTION: remove
 ITEMS:
 - Item: Milk | Quantity: any | Category: fresh | Expiry: none
 
-Now interpret: "{prompt}"
+Now interpret: "{process_prompt}"
 """
 
         # Get AI response
