@@ -382,18 +382,33 @@ Log of meals we've cooked.
 ## Key Features
 
 ### 1. Recipe Generation
-- **Input**: Select cuisine preferences with checkboxes
+- **Input**:
+  - Select cuisine preferences with checkboxes
+  - Optional free-form text for additional preferences (e.g., "spicy", "quick", "low carb")
 - **Process**: LLM reads all data files and analyzes:
   - Available ingredients (staples + fresh)
   - User preferences and dietary restrictions
   - Recent meal history (for variety)
   - Recipe ratings and notes
+  - Additional free-form preferences from user input
 - **Output**: 3-5 recipe suggestions with:
   - Recipe name & description
   - Ingredients needed (✅ available vs. ⚠️ need to buy)
   - Step-by-step cooking instructions
   - Difficulty & time estimate
   - Why this recipe was suggested
+  - **Expandable chat interface** for each recipe
+- **Conversational Refinement**:
+  - **Per-Recipe Chat**: Each recipe has a dedicated chat section
+  - **Real-Time Modifications**: Ask to modify recipes (e.g., "make it spicier", "use different vegetables")
+  - **Conversation History**: Full chat history maintained for each recipe
+  - **In-Place Updates**: Recipes update directly based on chat conversation
+  - **Example Requests**:
+    - "Make this less spicy"
+    - "What if I don't have bell peppers?"
+    - "Can you make this in 20 minutes instead?"
+    - "Use mushrooms instead of tofu"
+    - "Make this oil-free"
 - **Actions**:
   - **"Cook This"**: Starts interactive cooking mode with AI assistant
   - **"Add to Plan"**: Adds to weekly planner (auto-syncs shopping list)
@@ -1098,18 +1113,19 @@ elif authentication_status == False:
 
 ## Sample User Flows
 
-### Flow 1: Generate a Recipe
+### Flow 1: Generate and Refine a Recipe
 1. User opens app → sees dashboard
 2. Clicks "Generate Recipes"
 3. Selects cuisines: Italian ✓, Asian ✓
-4. Clicks "Get Suggestions"
-5. LLM reads all data files (pantry, preferences, history)
-6. Shows 4 recipe options with ✅ available / ⚠️ needed ingredients
-7. User clicks "Cook This" on Pasta Primavera
-8. System prompts: "Mark ingredients as used?" → Yes
-9. LLM updates pantry files, adds to meal_history.md
-10. After cooking, app asks for rating
-11. User gives 5 stars + notes → moved to loved.md
+4. Adds preference: "spicy and quick"
+5. Clicks "Get Suggestions"
+6. LLM reads all data files (pantry, preferences, history) + additional preferences
+7. Shows 4 spicy, quick recipe options with ✅ available / ⚠️ needed ingredients
+8. User expands chat on "Spicy Sesame Noodles"
+9. User types: "make this less spicy, I want mild heat"
+10. AI responds and updates recipe with milder seasoning in-place
+11. User satisfied with refined recipe, clicks "Add to Plan"
+12. Recipe added to weekly planner, ingredients added to shopping list
 
 ### Flow 2: Pantry with Photo
 1. User clicks "Pantry" → Photo Upload tab

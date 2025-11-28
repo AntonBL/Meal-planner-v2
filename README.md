@@ -5,6 +5,7 @@ An intelligent meal planning application powered by AI that helps you manage ing
 ## Features
 
 - 🤖 **AI-Powered Recipe Suggestions**: Get personalized recipe recommendations based on available ingredients
+- 💬 **Conversational Recipe Generation**: Add free-form preferences and chat with each recipe to refine it in real-time
 - 📦 **Smart Pantry Management**: Track pantry staples and fresh ingredients with AI-powered chat interface
 - 📸 **Photo Recognition**: Upload photos of groceries to automatically update your inventory
 - 🛒 **Intelligent Shopping List**: Automatically syncs with weekly meal plan - ingredients added when you plan meals, removed when you delete them
@@ -77,29 +78,47 @@ An intelligent meal planning application powered by AI that helps you manage ing
 
 The app provides a complete meal planning workflow with automatic data synchronization:
 
-### 1. **Plan Your Week** 📅
+### 1. **Generate Personalized Recipes** 🤖
+
+#### Free-Form Preferences
+- Add custom preferences when generating recipes
+- Examples: "spicy", "under 30 minutes", "one pot meal", "low carb", "high protein"
+- The AI incorporates your preferences into all suggested recipes
+
+#### Per-Recipe Chat
+- Each generated recipe has a chat interface for real-time refinement
+- Have a back-and-forth conversation to modify recipes:
+  - "Make this spicier"
+  - "What if I don't have bell peppers?"
+  - "Can you make this in 20 minutes instead?"
+  - "Use mushrooms instead of tofu"
+  - "Make this oil-free"
+- Recipes update in-place based on your conversation
+- Full chat history maintained for each recipe
+
+### 2. **Plan Your Week** 📅
 - Add meals to your weekly planner (up to 7 meals)
 - Choose from generated recipes or your saved favorites
 - **Automatic sync**: Needed ingredients are automatically added to your shopping list
 
-### 2. **Shop for Ingredients** 🛒
+### 3. **Shop for Ingredients** 🛒
 - View your shopping list with all ingredients from planned meals
 - Mark items as "Bought" to automatically add them to your pantry
 - Remove items you don't need
 - **Automatic sync**: Removing a meal from your plan removes its ingredients from the shopping list
 
-### 3. **Cook with AI Assistance** 👨‍🍳
+### 4. **Cook with AI Assistance** 👨‍🍳
 - Start cooking mode for any recipe
 - Ask questions while cooking (substitutions, timing, techniques)
 - AI assistant remembers your conversation (last 10 messages)
 - Get step-by-step cooking instructions
 
-### 4. **Rate Your Meal** ⭐
+### 5. **Rate Your Meal** ⭐
 - When finished cooking, rate the recipe (1-5 stars)
 - Add notes about what worked or what to change
 - Meals are automatically logged to your history
 
-### 5. **Update Your Pantry** 🥫
+### 6. **Update Your Pantry** 🥫
 - **Smart pantry updates**: After rating, choose to update your pantry
 - **Intelligent removal**: Fresh items and consumables are removed
 - **Staples preserved**: Oil, spices, sauces, and shelf-stable items stay in your pantry
@@ -108,19 +127,25 @@ The app provides a complete meal planning workflow with automatic data synchroni
 ### Complete Workflow Example:
 
 ```
-1. Add "Garlic Butter Pasta" to weekly plan
+1. Generate recipes with preference: "spicy and quick"
+   → AI suggests 4 spicy recipes under 30 minutes
+
+2. Chat with a recipe: "make this less spicy, I want mild heat"
+   → Recipe updates in-place with milder seasoning
+
+3. Add refined "Spicy Garlic Noodles" to weekly plan
    → Ingredients automatically added to shopping list
 
-2. Go shopping, mark "garlic" and "parmesan" as bought
+4. Go shopping, mark "garlic" and "chili flakes" as bought
    → Items automatically moved to pantry
 
-3. Start cooking mode, ask "Can I use regular pasta instead of linguine?"
+5. Start cooking mode, ask "Can I use regular pasta instead of rice noodles?"
    → AI provides helpful answer
 
-4. Finish cooking, rate 5 stars
+6. Finish cooking, rate 5 stars
    → Meal logged to history
 
-5. Update pantry: removes garlic & parmesan, keeps butter, oil, salt, pepper
+7. Update pantry: removes garlic & chili flakes, keeps soy sauce, oil, salt
    → Pantry stays accurate for next recipe generation
 ```
 
@@ -221,15 +246,20 @@ pre-commit install
 - Project structure and development standards
 - Secure authentication with session management
 - **Recipe Generation**: AI-powered recipe suggestions based on pantry
+  - Free-form preference input (e.g., "spicy", "quick", "low carb")
+  - Per-recipe chat for real-time refinement
+  - Conversation history maintained for each recipe
+  - Recipes update in-place based on chat
 - **Pantry Management**: AI chat interface for adding/removing items
 - **Photo Recognition**: Upload photos to detect and add groceries
-- **Weekly Meal Planner**: Plan up to 7 meals with drag-and-drop
+- **Weekly Meal Planner**: Plan up to 7 meals with automatic shopping list sync
 - **Shopping List**: Add ingredients from recipes with smart categorization
   - Mark items as bought → auto-adds to pantry
   - Remove items you don't need
   - Automatic staple vs fresh categorization
 - **Meal History**: Track past meals with ratings
 - **Cooking Mode**: Interactive AI assistant while cooking
+- **Smart Pantry Updates**: After cooking, intelligently removes consumables while preserving staples
 - Claude Haiku 4.5 integration throughout
 
 ### In Development 🚧

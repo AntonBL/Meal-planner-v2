@@ -6,6 +6,32 @@ All notable changes to the AI Recipe Planner will be documented in this file.
 
 ### Added - 2025-11-28
 
+#### Conversational Recipe Generation
+- **Free-Form Preference Input**: Added text input field for custom preferences during recipe generation
+  - Users can specify requirements like "spicy", "quick", "low carb", "one pot meal", etc.
+  - Preferences are incorporated into AI prompt for all generated recipes
+  - Simple, unobtrusive single-line input field below meal type selector
+
+- **Per-Recipe Chat Interface**: Added expandable chat section to each generated recipe
+  - **Real-Time Refinement**: Modify recipes through natural conversation
+  - **Conversation History**: Full chat history maintained per recipe in session state
+  - **In-Place Updates**: Recipes update directly based on conversation (no duplicates)
+  - **Smart Context**: AI maintains context of original recipe and conversation history
+  - **Example Use Cases**:
+    - Adjust spice levels ("make this spicier" / "make this milder")
+    - Ingredient substitutions ("what if I don't have bell peppers?")
+    - Time constraints ("can you make this in 20 minutes?")
+    - Dietary modifications ("make this oil-free", "add more protein")
+    - Ingredient swaps ("use mushrooms instead of tofu")
+
+- **New LLM Agent Methods**:
+  - `RecipeGenerator.refine_recipe()` - Handles chat-based recipe refinement
+  - `_build_refinement_prompt()` - Constructs prompts with conversation context
+  - `_parse_single_recipe()` - Parses refined recipe responses
+  - Added `additional_context` parameter to `suggest_recipes()`
+
+### Added - 2025-11-28 (Earlier)
+
 #### Weekly Planner & Shopping List Integration
 - **Automatic Shopping List Sync**: Adding meals to weekly planner now automatically adds needed ingredients to shopping list
 - **Bidirectional Sync**: Removing meals from weekly planner automatically removes their ingredients from shopping list
@@ -37,7 +63,32 @@ All notable changes to the AI Recipe Planner will be documented in this file.
 - Modified cooking mode and recipe generation feedback flows to include pantry update prompt
 - Enhanced shopping list format to group ingredients by recipe
 
-### Technical Details
+### Technical Details - Conversational Features
+- **Architecture**:
+  - Protocol-based design with dependency injection (LLMProvider protocol)
+  - Session state management for per-recipe chat history
+  - Unique keys per recipe (`recipe_chat_{idx}`) for parallel conversations
+  - In-place recipe updates without creating duplicates
+
+- **UI/UX**:
+  - Expandable chat section (hidden by default, user opt-in)
+  - Text input with placeholder examples
+  - Visual chat history with user/assistant message distinction
+  - Real-time recipe refresh on update
+
+- **Error Handling**:
+  - Comprehensive try/catch for LLMAPIError, RecipeParsingError
+  - User-friendly error messages
+  - Structured logging with context
+
+- **Files Modified (Conversational)**:
+  - `lib/llm_agents.py` - Added refine_recipe() and helper methods
+  - `pages/generate_recipes.py` - Added chat UI and integration
+  - `README.md` - Added conversational features documentation
+  - `SPEC.md` - Updated Key Features and Sample User Flows
+  - `CHANGELOG.md` - Documented new features
+
+### Technical Details - Weekly Planner & Pantry Updates (Earlier)
 - **New Functions**:
   - `add_ingredients_to_shopping_list()` - Adds recipe ingredients to shopping list
   - `remove_recipe_from_shopping_list()` - Removes recipe section from shopping list
