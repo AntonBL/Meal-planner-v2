@@ -142,11 +142,23 @@ systemctl restart nginx
 - [ ] Update `data/pantry/staples.md` and `fresh.md`
 - [ ] Show "Pantry updated" confirmation
 
-**1.5 Testing & Bug Fixes** (30 min)
+**1.5 Cooking Mode with AI Chat** (60 min)
+- [ ] Create `pages/cooking_mode.py`
+- [ ] Display active recipe with full details
+- [ ] Implement chat interface (message input + history)
+- [ ] Store chat messages in session state
+- [ ] Integrate with Claude API for Q&A
+- [ ] Pass recipe context in each API call
+- [ ] Add "✅ Finished Cooking" button to exit to rating
+- [ ] Add "Clear Chat" button
+- [ ] Show helpful prompts (e.g., "Ask me anything about this recipe!")
+
+**1.6 Testing & Bug Fixes** (30 min)
 - [ ] Test all navigation works
 - [ ] Test recipe generation end-to-end
 - [ ] Test pantry add/remove
 - [ ] Test meal history logging
+- [ ] Test cooking mode chat interactions
 - [ ] Fix expiring soon counter (parse dates)
 - [ ] Check error handling
 
@@ -154,7 +166,9 @@ systemctl restart nginx
 - ✅ Can navigate entire app without errors
 - ✅ Can generate recipes based on pantry
 - ✅ Can add items to pantry manually
-- ✅ Can cook a recipe and rate it
+- ✅ Can enter cooking mode with a recipe
+- ✅ Can ask questions about recipe and get AI responses
+- ✅ Can finish cooking and rate recipe
 - ✅ Pantry auto-updates after cooking
 - ✅ Meal history shows past meals
 
@@ -292,6 +306,7 @@ Meal-planner-v2/
 │
 ├── pages/                      # Streamlit pages
 │   ├── generate_recipes.py    # ✅ Recipe generation
+│   ├── cooking_mode.py        # ❌ TODO: Phase 1.6
 │   ├── update_pantry.py       # ❌ TODO: Phase 1
 │   └── meal_history.py        # ❌ TODO: Phase 1
 │

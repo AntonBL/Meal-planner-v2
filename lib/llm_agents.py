@@ -244,6 +244,7 @@ IMPORTANT REQUIREMENTS:
    - List ingredients in two groups: AVAILABLE (already have) and NEEDED (must buy)
    - Estimated time in minutes
    - Difficulty (easy/medium/hard)
+   - Step-by-step cooking instructions (clear and concise)
    - Why you're suggesting it (brief reason)
 
 4. Format your response EXACTLY like this for EACH recipe:
@@ -255,6 +256,11 @@ AVAILABLE: [comma-separated list of ingredients already in pantry]
 NEEDED: [comma-separated list of ingredients to buy, or "None" if have everything]
 TIME: [number only, e.g., 30]
 DIFFICULTY: [easy/medium/hard]
+INSTRUCTIONS:
+1. [First step]
+2. [Second step]
+3. [Third step]
+[Continue with all steps needed]
 REASON: [Why suggesting this recipe]
 ---END---
 
@@ -294,6 +300,8 @@ Please provide exactly {num_suggestions} recipes in this format."""
 
                 # Parse fields
                 recipe: dict[str, str] = {}
+                instructions_lines = []
+                in_instructions = False
 
                 for line in content.split("\n"):
                     line = line.strip()
@@ -313,8 +321,19 @@ Please provide exactly {num_suggestions} recipes in this format."""
                         recipe["time_minutes"] = line.replace("TIME:", "").strip()
                     elif line.startswith("DIFFICULTY:"):
                         recipe["difficulty"] = line.replace("DIFFICULTY:", "").strip()
+                    elif line.startswith("INSTRUCTIONS:"):
+                        in_instructions = True
+                        # Continue to collect instruction lines
                     elif line.startswith("REASON:"):
+                        in_instructions = False
                         recipe["reason"] = line.replace("REASON:", "").strip()
+                    elif in_instructions:
+                        # Collect instruction lines
+                        instructions_lines.append(line)
+
+                # Join instructions into a single string
+                if instructions_lines:
+                    recipe["instructions"] = "\n".join(instructions_lines)
 
                 # Validate required fields
                 required_fields = [

@@ -528,6 +528,12 @@ if "generated_recipes" in st.session_state:
                 else:
                     st.success("**You have everything!**")
 
+            # Cooking instructions
+            if "instructions" in recipe and recipe["instructions"]:
+                st.markdown("---")
+                st.markdown("**📝 Cooking Instructions:**")
+                st.markdown(recipe["instructions"])
+
             # Reason for suggestion
             if "reason" in recipe:
                 st.info(f"**Why this recipe:** {recipe['reason']}")
@@ -538,15 +544,17 @@ if "generated_recipes" in st.session_state:
 
             with btn_col1:
                 if st.button("👨‍🍳 Cook This", key=f"cook_{idx}"):
-                    # Store selected recipe in session state for feedback
-                    st.session_state['cooking_recipe'] = recipe
-                    st.session_state['cooking_recipe_idx'] = idx
-                    st.session_state['show_feedback_modal'] = True
+                    # Store selected recipe in session state for cooking mode
+                    st.session_state['active_recipe'] = recipe
+                    st.session_state['active_recipe_idx'] = idx
+                    # Clear any existing chat history for new recipe
+                    st.session_state['cooking_chat_history'] = []
                     logger.info(
                         "User selected recipe to cook",
                         extra={"recipe_name": recipe["name"]},
                     )
-                    st.rerun()
+                    # Navigate to cooking mode
+                    st.switch_page("pages/cooking_mode.py")
 
             with btn_col2:
                 if st.button("❌ Not Interested", key=f"pass_{idx}"):

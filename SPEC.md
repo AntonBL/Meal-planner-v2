@@ -431,7 +431,20 @@ After marking a meal as "cooked":
   - Updates preferences.md if patterns detected
   - Learns ingredient preferences
 
-### 4. Meal Planning
+### 4. Cooking Mode (Interactive Recipe Assistant)
+When actively cooking a recipe:
+- View the full recipe you're currently making
+- Ask questions about the recipe in real-time
+- Get AI assistance with:
+  - Ingredient substitutions ("Can I use butter instead of oil?")
+  - Technique clarification ("How do I know when it's done?")
+  - Timing questions ("Can I prep this ahead?")
+  - Troubleshooting ("My sauce is too thick, what should I do?")
+- Chat history persists during cooking session
+- Easy access to original recipe details
+- One-click return to rate and save recipe
+
+### 5. Meal Planning
 - View upcoming meals
 - Suggest meals for the week
 - Generate shopping list for planned meals
@@ -635,6 +648,7 @@ meal-planner/
 │
 ├── pages/                 # Streamlit multi-page app
 │   ├── generate_recipes.py
+│   ├── cooking_mode.py    # Active recipe with Q&A chat
 │   ├── update_pantry.py
 │   ├── meal_history.py
 │   └── preferences.py
@@ -994,7 +1008,21 @@ elif authentication_status == False:
 7. Clicks "Confirm & Add to Pantry"
 8. Items appended to fresh.md with today's date
 
-### Flow 3: Weekly Meal Planning
+### Flow 3: Cooking with AI Assistant
+1. User generates recipe suggestions
+2. Clicks "👨‍🍳 Cook This" on Pasta Primavera
+3. Enters Cooking Mode - sees full recipe displayed
+4. While cooking, has questions:
+   - Types: "Can I use vegetable oil instead of olive oil?"
+   - AI responds: "Yes! Vegetable oil works fine for this recipe..."
+   - Types: "How do I know when the pasta is al dente?"
+   - AI explains with recipe context
+5. Continues cooking with AI assistance available
+6. When done, clicks "✅ Finished Cooking"
+7. Rates recipe and adds notes
+8. Recipe saved to appropriate file (loved/liked/not_again)
+
+### Flow 4: Weekly Meal Planning
 1. User wants to plan the week
 2. Clicks "Generate Recipes" multiple times with different cuisine preferences
 3. For each liked recipe, clicks "Add to Shopping List"
