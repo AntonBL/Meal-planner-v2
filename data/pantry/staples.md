@@ -3,6 +3,12 @@
 Last updated: 2025-11-26
 
 ## Grains & Pasta
+- Dried Herbs/Spices (Assorted) - 3 jars - Added: 2025-11-28
+
+- Pizza Seasoning - 2 jars - Added: 2025-11-28
+
+- 1 can) - Added: 2025-11-28 (from shopping list)
+
 - Olive Oil - 2 bottles - Added: 2025-11-27
 
 - Brown rice - 1 lb - Added: 2025-11-10

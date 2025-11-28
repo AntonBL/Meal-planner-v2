@@ -178,3 +178,24 @@ Hearty and satisfying! Roast the sweet potatoes while warming the beans. Top wit
 
 **Make again:** Yes
 
+
+---
+
+## Ginger Garlic Stir-Fried Vegetables
+**Last made:** 2025-11-28
+**Rating:** 5/5 ⭐⭐⭐⭐⭐
+
+**Ingredients:**
+- Mixed vegetables (broccoli
+- bell peppers
+- carrots
+- snap peas)
+- Tofu or tempeh (cubed and pan-fried)
+- Fresh ginger and garlic
+- Soy sauce
+- sesame oil
+- rice vinegar
+- Served over rice or rice noodles
+
+**Make again:** Yes
+

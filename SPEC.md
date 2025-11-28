@@ -391,16 +391,25 @@ Log of meals we've cooked.
 - **Output**: 3-5 recipe suggestions with:
   - Recipe name & description
   - Ingredients needed (✅ available vs. ⚠️ need to buy)
+  - Step-by-step cooking instructions
   - Difficulty & time estimate
   - Why this recipe was suggested
 - **Actions**:
-  - **"Cook This"**: Marks ingredients as used, prompts for rating after
+  - **"Cook This"**: Starts interactive cooking mode with AI assistant
+  - **"Add to Plan"**: Adds to weekly planner (auto-syncs shopping list)
   - **"Not Interested"**: LLM learns to avoid similar suggestions
-  - **"Add to Shopping List"**: Adds missing ingredients
+  - **"Shopping List"**: Adds missing ingredients to shopping list
 
 ### 2. Pantry Management
 
-#### Manual Entry
+#### AI Conversational Interface
+- **Natural language pantry updates**: Chat with AI to add/remove items
+- **Contextual understanding**: "Add 2 lbs of chicken" or "We're out of milk"
+- **Smart categorization**: AI automatically categorizes items as staples or fresh
+- **Bulk operations**: "Add everything from my shopping list"
+- **Item validation**: AI confirms items before adding to prevent errors
+
+#### Manual Entry (Legacy)
 - Simple form: Item name, quantity, category (staples/fresh/shopping)
 - Quick-add common items (milk, eggs, chicken, etc.)
 - Bulk entry: Paste shopping list, LLM parses and adds
@@ -414,11 +423,14 @@ Log of meals we've cooked.
 - User confirms/edits before adding
 - Automatically categorizes as staple vs. fresh
 - Adds expiry estimates for fresh items
+- **Interactive confirmation**: Review and edit detected items before adding
 
 #### Smart Features
 - **Expiry warnings**: "3 items expiring in 2 days"
 - **Low stock alerts**: "Butter running low"
 - **Shopping list generation**: Based on planned meals
+- **Auto-update after cooking**: Smart removal of consumables, preservation of staples
+- **Usage logging**: Comments track when items were used and what was cooked
 
 ### 3. Recipe Feedback System
 After marking a meal as "cooked":
@@ -431,7 +443,17 @@ After marking a meal as "cooked":
   - Updates preferences.md if patterns detected
   - Learns ingredient preferences
 
-### 4. Cooking Mode (Interactive Recipe Assistant)
+### 4. Shopping List Management
+- **Automatic sync with weekly planner**: Add meal → ingredients added, remove meal → ingredients removed
+- **Buy actions**: Mark items as "Bought" to automatically add to pantry
+- **Remove actions**: Delete items you don't need
+- **Smart categorization**: Auto-categorizes bought items as staples or fresh
+- **Recipe grouping**: Ingredients grouped by recipe with labels "For: [Recipe Name]"
+- **Manual additions**: Add individual items or bulk paste from external lists
+- **Consolidated view**: See all needed ingredients across planned meals
+- **Prevents duplicates**: Same ingredient across multiple recipes shown once with combined quantity
+
+### 5. Cooking Mode (Interactive Recipe Assistant)
 When actively cooking a recipe:
 - View the full recipe you're currently making
 - Ask questions about the recipe in real-time
@@ -440,15 +462,33 @@ When actively cooking a recipe:
   - Technique clarification ("How do I know when it's done?")
   - Timing questions ("Can I prep this ahead?")
   - Troubleshooting ("My sauce is too thick, what should I do?")
-- Chat history persists during cooking session
+- Chat history persists during cooking session (last 10 messages)
 - Easy access to original recipe details
-- One-click return to rate and save recipe
+- **After Cooking Workflow**:
+  1. Click "Finished Cooking" button
+  2. Rate recipe (1-5 stars) and add notes
+  3. **Smart Pantry Update Prompt**: Choose to auto-update pantry
+     - Removes consumable ingredients (fresh items, proteins, vegetables)
+     - Preserves staples (oil, soy sauce, spices, shelf-stable items)
+     - Logs what was removed vs. kept
+  4. Meal logged to history
+  5. Return to home
 
-### 5. Meal Planning
-- View upcoming meals
-- Suggest meals for the week
-- Generate shopping list for planned meals
+### 6. Weekly Meal Planning
+- **Plan up to 7 meals** for the week
+- Add meals from:
+  - Generated recipe suggestions
+  - Saved recipes (loved/liked collections)
+- **Automatic Shopping List Sync**:
+  - Adding a meal → Ingredients automatically added to shopping list
+  - Removing a meal → Ingredients automatically removed from shopping list
+  - Prevents duplicate entries for same ingredient across meals
+- **View plan overview**:
+  - Total cooking time
+  - Difficulty breakdown
+  - Ingredient consolidation
 - Track variety (avoid repetition)
+- Archive past week's plans to history
 
 ---
 
@@ -951,31 +991,108 @@ elif authentication_status == False:
 
 ## Development Phases
 
-### Phase 1: MVP (Week 1)
+### Phase 1: MVP (Week 1) ✅ COMPLETED
 - [x] Create folder structure and sample data files
-- [ ] Basic Streamlit app with navigation
-- [ ] Recipe generation page (LLM integration)
-- [ ] Manual pantry entry
-- [ ] Display pantry contents
+- [x] Basic Streamlit app with navigation
+- [x] Recipe generation page (LLM integration)
+- [x] Manual pantry entry
+- [x] Display pantry contents
 
-### Phase 2: Core Features (Week 2)
-- [ ] Photo upload for pantry (Vision API)
-- [ ] Recipe feedback system
-- [ ] Meal history logging
-- [ ] Smart pantry updates (LLM removes used items)
+### Phase 2: Core Features (Week 2) ✅ COMPLETED
+- [x] Photo upload for pantry (Vision API)
+- [x] Recipe feedback system
+- [x] Meal history logging
+- [x] Smart pantry updates (removes used items, preserves staples)
 
-### Phase 3: Enhancements (Week 3)
-- [ ] Shopping list management
-- [ ] Expiry tracking and alerts
-- [ ] Preference learning
-- [ ] Better UI/UX polish
+### Phase 3: Enhancements (Week 3) ✅ COMPLETED
+- [x] Shopping list management with buy/remove actions
+- [x] Bidirectional shopping list sync with weekly planner
+- [x] Preference learning (loved/liked/not_again recipes)
+- [x] Better UI/UX polish (renamed pages, improved navigation)
+- [ ] Expiry tracking and alerts (partial - basic tracking exists)
 
-### Phase 4: Polish (Week 4+)
-- [ ] Authentication (2 users)
+### Phase 4: Polish (Week 4+) ✅ COMPLETED
+- [x] Authentication (session-based with streamlit-authenticator)
+- [x] Error handling and validation
+- [x] Mobile-responsive design (Streamlit built-in)
+- [x] User testing and refinement
+- [ ] Deploy to Streamlit Cloud (ready for deployment)
+
+### Phase 5: Advanced Features (Completed Nov 2025)
+- [x] Interactive Cooking Mode with AI chat assistant
+- [x] Weekly meal planning (up to 7 meals)
+- [x] Auto-sync between weekly plan and shopping list
+- [x] Smart pantry updates with staple preservation
+- [x] AI-powered pantry management with conversational interface
+- [x] Photo recognition for grocery uploads
+- [x] Recipe rating and history tracking
+
+---
+
+## Current Status & Roadmap
+
+### ✅ Completed Features (As of November 2025)
+
+**Core Functionality:**
+- ✅ AI-powered recipe generation based on available ingredients
+- ✅ Intelligent pantry management (manual, AI chat, photo upload)
+- ✅ Weekly meal planning with up to 7 meals
+- ✅ Interactive cooking mode with AI assistant
+- ✅ Recipe rating and feedback system
+- ✅ Meal history tracking
+
+**Advanced Features:**
+- ✅ Bidirectional shopping list sync with weekly planner
+- ✅ Smart pantry updates after cooking (preserves staples)
+- ✅ Photo recognition for grocery uploads (Claude Vision)
+- ✅ Session-based authentication
+- ✅ Preference learning (loved/liked/not_again recipes)
+- ✅ Buy/remove actions on shopping list
+
+**Technical Infrastructure:**
+- ✅ Markdown-based data storage (human-readable)
+- ✅ Shared library for weekly plan management
+- ✅ Error handling and validation
+- ✅ Mobile-responsive design
+- ✅ Professional Python standards (type hints, logging, testing)
+
+### 🚧 In Progress
+
+- 🔄 **Enhanced expiry tracking**: Currently tracks expiry dates, need alerts and notifications
+- 🔄 **Deployment to Streamlit Cloud**: App is ready, needs deployment configuration
+
+### 📋 Future Enhancements (Priority Order)
+
+**High Priority:**
+1. **Expiry alerts and notifications** - Alert users when items are about to expire
+2. **Advanced preference learning** - Better pattern detection for cuisine preferences
+3. **Recipe scaling** - Automatically adjust servings (2 → 4 people)
+4. **Nutrition information** - Add calories, macros to recipes
+
+**Medium Priority:**
+5. **Recipe import from URLs** - Parse and save recipes from websites
+6. **Meal prep suggestions** - Batch cooking recommendations
+7. **Leftover management** - Track and suggest uses for leftovers
+8. **Budget tracking** - Track spending and cost per meal
+9. **Voice input** - "Add milk to shopping list" hands-free
+
+**Low Priority / Nice-to-Have:**
+10. **Barcode scanning** - Scan products to add to pantry
+11. **Integration with grocery delivery** - One-click ordering
+12. **Recipe recommendations based on weather** - Comfort food on rainy days
+13. **Social features** - Share recipes with friends/family
+14. **Meal plan templates** - Pre-made weekly plans (e.g., "Meal Prep Monday")
+
+### 🎯 Next Milestone: Version 2.0
+
+**Target Features:**
+- [ ] Complete expiry tracking with alerts
+- [ ] Recipe scaling functionality
+- [ ] Nutrition information display
+- [ ] Recipe import from URLs
 - [ ] Deploy to Streamlit Cloud
-- [ ] Error handling
-- [ ] Mobile-responsive design
-- [ ] User testing and refinement
+
+**Estimated Timeline:** 2-3 weeks
 
 ---
 
@@ -1011,26 +1128,41 @@ elif authentication_status == False:
 ### Flow 3: Cooking with AI Assistant
 1. User generates recipe suggestions
 2. Clicks "👨‍🍳 Cook This" on Pasta Primavera
-3. Enters Cooking Mode - sees full recipe displayed
+3. Enters Cooking Mode - sees full recipe with step-by-step instructions
 4. While cooking, has questions:
    - Types: "Can I use vegetable oil instead of olive oil?"
    - AI responds: "Yes! Vegetable oil works fine for this recipe..."
    - Types: "How do I know when the pasta is al dente?"
-   - AI explains with recipe context
+   - AI explains with recipe context (remembers last 10 messages)
 5. Continues cooking with AI assistance available
 6. When done, clicks "✅ Finished Cooking"
-7. Rates recipe and adds notes
-8. Recipe saved to appropriate file (loved/liked/not_again)
+7. Rates recipe (1-5 stars) and adds notes
+8. **Pantry Update Prompt appears**: "Update your pantry?"
+9. Clicks "✅ Yes, Update Pantry"
+   - System removes: bell peppers, zucchini, cherry tomatoes (consumables)
+   - System keeps: olive oil, garlic powder, salt, pepper (staples)
+10. Recipe saved to appropriate file (loved/liked/not_again)
+11. Returns to home
 
-### Flow 4: Weekly Meal Planning
+### Flow 4: Weekly Meal Planning with Auto-Sync
 1. User wants to plan the week
-2. Clicks "Generate Recipes" multiple times with different cuisine preferences
-3. For each liked recipe, clicks "Add to Shopping List"
-4. LLM aggregates all needed ingredients
-5. User views shopping_list.md
-6. Goes grocery shopping with the list
-7. After shopping, uploads photo of groceries
-8. Pantry automatically updated
+2. Goes to Weekly Planner page
+3. Clicks "➕ Add Meals" tab
+4. Browses saved recipes and generated recipes
+5. Clicks "➕ Add to Plan" on 5 different recipes
+   - **Each recipe's needed ingredients automatically added to shopping list**
+6. Views "📅 Current Plan" - sees all 5 meals scheduled
+7. Realizes they don't want Recipe #3
+8. Clicks "🗑️" to remove it
+   - **Recipe's ingredients automatically removed from shopping list**
+9. Goes to Shopping List page
+   - Sees consolidated ingredients from remaining 4 recipes
+   - Each section labeled "For: [Recipe Name]"
+10. Goes grocery shopping with the list
+11. After shopping, marks items as "Bought"
+    - Items automatically moved to pantry
+12. Throughout the week, cooks each meal using Cooking Mode
+13. After each meal, pantry automatically updated (if chosen)
 
 ---
 

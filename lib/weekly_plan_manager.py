@@ -392,6 +392,9 @@ def remove_meal_from_plan(index: int) -> bool:
             extra={"meal_name": removed_meal['name'], "new_plan_size": len(current_plan)}
         )
 
+        # Remove ingredients from shopping list
+        remove_recipe_from_shopping_list(removed_meal['name'])
+
         # Clear cache
         try:
             st.cache_data.clear()

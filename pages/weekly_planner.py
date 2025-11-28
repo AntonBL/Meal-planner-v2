@@ -277,7 +277,14 @@ with tab2:
                             use_container_width=True,
                             type="secondary" if in_plan else "primary"
                         ):
-                            if add_recipe_to_plan(recipe):
+                            # Prepare recipe with ingredients for shopping list
+                            plan_recipe = recipe.copy()
+
+                            # Convert ingredients list to comma-separated string for shopping list
+                            if 'ingredients' in recipe and isinstance(recipe['ingredients'], list):
+                                plan_recipe['ingredients_needed'] = ', '.join(recipe['ingredients'])
+
+                            if add_recipe_to_plan(plan_recipe):
                                 st.success(f"✅ Added {recipe['name']}")
                                 st.rerun()
 

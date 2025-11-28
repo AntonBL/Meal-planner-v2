@@ -4,6 +4,13 @@ Last updated: 2025-11-27
 
 ## Current Plan
 
+### 3. Penne Pasta with Chickpea Marinara & Crispy Tofu
+**Source:** Generated
+**Time:** 25 minutes
+**Difficulty:** Easy
+**Added:** 2025-11-28
+
+
 ### 2. Ginger Garlic Stir-Fried Vegetables
 **Source:** Loved
 **Added:** 2025-11-28

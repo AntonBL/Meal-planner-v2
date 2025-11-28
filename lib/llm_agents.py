@@ -123,6 +123,7 @@ class RecipeGenerator:
         cuisines: list[str],
         meal_type: str = "Dinner",
         num_suggestions: int = 4,
+        additional_context: str | None = None,
     ) -> list[dict[str, str]]:
         """Generate recipe suggestions based on available ingredients and preferences.
 
@@ -130,6 +131,7 @@ class RecipeGenerator:
             cuisines: List of preferred cuisines (e.g., ['Italian', 'Asian'])
             meal_type: Type of meal (Dinner, Lunch, Quick & Easy)
             num_suggestions: Number of recipes to suggest (default: 4)
+            additional_context: Optional free-form text with extra preferences (e.g., "spicy", "low carb")
 
         Returns:
             List of recipe dictionaries with keys:
@@ -170,6 +172,7 @@ class RecipeGenerator:
             meal_type=meal_type,
             num_suggestions=num_suggestions,
             context=context,
+            additional_context=additional_context,
         )
 
         # Generate suggestions
@@ -197,6 +200,7 @@ class RecipeGenerator:
         meal_type: str,
         num_suggestions: int,
         context: dict[str, str],
+        additional_context: str | None = None,
     ) -> str:
         """Build LLM prompt for recipe generation.
 
@@ -205,6 +209,7 @@ class RecipeGenerator:
             meal_type: Type of meal
             num_suggestions: Number of recipes to suggest
             context: Dictionary of context data from files
+            additional_context: Optional free-form text with extra preferences
 
         Returns:
             Formatted prompt string
@@ -228,7 +233,8 @@ RECENT MEALS (for variety):
 
 REQUEST:
 - Cuisines: {', '.join(cuisines)}
-- Meal type: {meal_type}
+- Meal type: {meal_type}{f"""
+- Additional preferences: {additional_context}""" if additional_context else ""}
 
 IMPORTANT REQUIREMENTS:
 1. ALL RECIPES MUST BE VEGETARIAN (no meat, poultry, or fish)
@@ -372,3 +378,201 @@ Please provide exactly {num_suggestions} recipes in this format."""
                 exc_info=True,
             )
             raise RecipeParsingError(f"Failed to parse recipes: {e}") from e
+
+    def refine_recipe(
+        self,
+        recipe: dict[str, str],
+        user_message: str,
+        chat_history: list[dict[str, str]] | None = None,
+    ) -> dict[str, str]:
+        """Refine a recipe based on user feedback via chat.
+
+        Args:
+            recipe: The current recipe dictionary
+            user_message: New message from user (e.g., "make this less spicy")
+            chat_history: Previous chat messages for this recipe (optional)
+
+        Returns:
+            Updated recipe dictionary
+
+        Raises:
+            LLMAPIError: If API call fails
+            RecipeParsingError: If response cannot be parsed
+        """
+        logger.info(
+            "Refining recipe via chat",
+            extra={"recipe_name": recipe.get("name"), "message": user_message},
+        )
+
+        # Build conversation history
+        if chat_history is None:
+            chat_history = []
+
+        # Build prompt
+        prompt = self._build_refinement_prompt(recipe, user_message, chat_history)
+
+        # Generate refinement
+        try:
+            response = self.llm.generate(prompt, max_tokens=2000)
+            updated_recipe = self._parse_single_recipe(response)
+
+            # Preserve recipe ID if it exists
+            if "id" in recipe:
+                updated_recipe["id"] = recipe["id"]
+
+            logger.info(
+                "Recipe refined successfully",
+                extra={"recipe_name": updated_recipe.get("name")},
+            )
+
+            return updated_recipe
+
+        except LLMAPIError:
+            logger.error("Failed to refine recipe - API error")
+            raise
+        except RecipeParsingError:
+            logger.error("Failed to parse refined recipe response")
+            raise
+
+    def _build_refinement_prompt(
+        self,
+        recipe: dict[str, str],
+        user_message: str,
+        chat_history: list[dict[str, str]],
+    ) -> str:
+        """Build prompt for recipe refinement.
+
+        Args:
+            recipe: Current recipe
+            user_message: New user message
+            chat_history: Previous chat messages
+
+        Returns:
+            Formatted prompt string
+        """
+        # Build conversation context
+        conversation = ""
+        for msg in chat_history:
+            role = msg.get("role", "user")
+            content = msg.get("content", "")
+            conversation += f"{role.upper()}: {content}\n"
+
+        prompt = f"""You are helping refine a recipe based on user feedback. The user wants to adjust the recipe below.
+
+CURRENT RECIPE:
+Name: {recipe.get('name', 'Unknown')}
+Description: {recipe.get('description', '')}
+Available Ingredients: {recipe.get('ingredients_available', '')}
+Needed Ingredients: {recipe.get('ingredients_needed', '')}
+Time: {recipe.get('time_minutes', '')} minutes
+Difficulty: {recipe.get('difficulty', '')}
+Instructions:
+{recipe.get('instructions', '')}
+
+{f'''PREVIOUS CONVERSATION:
+{conversation}''' if conversation else ''}
+
+USER REQUEST:
+{user_message}
+
+INSTRUCTIONS:
+1. Modify the recipe according to the user's request
+2. Keep it VEGETARIAN (no meat, poultry, or fish)
+3. Update all relevant fields (ingredients, instructions, time, etc.)
+4. Maintain the same quality and clarity
+
+Format your response EXACTLY like this:
+
+---RECIPE---
+NAME: [Recipe Name]
+DESCRIPTION: [1-2 sentence description]
+AVAILABLE: [comma-separated list of ingredients already in pantry]
+NEEDED: [comma-separated list of ingredients to buy, or "None" if have everything]
+TIME: [number only, e.g., 30]
+DIFFICULTY: [easy/medium/hard]
+INSTRUCTIONS:
+1. [First step]
+2. [Second step]
+3. [Third step]
+[Continue with all steps needed]
+REASON: [Brief note about the changes made based on user request]
+---END---
+
+Provide exactly ONE recipe in this format."""
+
+        return prompt
+
+    def _parse_single_recipe(self, response: str) -> dict[str, str]:
+        """Parse a single recipe from LLM response.
+
+        Args:
+            response: Raw response from LLM
+
+        Returns:
+            Parsed recipe dictionary
+
+        Raises:
+            RecipeParsingError: If response format is invalid
+        """
+        logger.debug("Parsing single recipe response", extra={"response_length": len(response)})
+
+        try:
+            # Use existing parsing logic but expect only one recipe
+            if "---RECIPE---" not in response or "---END---" not in response:
+                raise RecipeParsingError("Response missing recipe markers")
+
+            # Extract content between markers
+            start = response.find("---RECIPE---") + len("---RECIPE---")
+            end = response.find("---END---")
+            content = response[start:end].strip()
+
+            # Parse fields
+            recipe: dict[str, str] = {}
+            instructions_lines = []
+            in_instructions = False
+
+            for line in content.split("\n"):
+                line = line.strip()
+                if not line:
+                    continue
+
+                if line.startswith("NAME:"):
+                    recipe["name"] = line.replace("NAME:", "").strip()
+                elif line.startswith("DESCRIPTION:"):
+                    recipe["description"] = line.replace("DESCRIPTION:", "").strip()
+                elif line.startswith("AVAILABLE:"):
+                    recipe["ingredients_available"] = line.replace("AVAILABLE:", "").strip()
+                elif line.startswith("NEEDED:"):
+                    needed = line.replace("NEEDED:", "").strip()
+                    recipe["ingredients_needed"] = needed if needed.lower() != "none" else ""
+                elif line.startswith("TIME:"):
+                    recipe["time_minutes"] = line.replace("TIME:", "").strip()
+                elif line.startswith("DIFFICULTY:"):
+                    recipe["difficulty"] = line.replace("DIFFICULTY:", "").strip()
+                elif line.startswith("INSTRUCTIONS:"):
+                    in_instructions = True
+                elif line.startswith("REASON:"):
+                    in_instructions = False
+                    recipe["reason"] = line.replace("REASON:", "").strip()
+                elif in_instructions:
+                    instructions_lines.append(line)
+
+            # Join instructions
+            if instructions_lines:
+                recipe["instructions"] = "\n".join(instructions_lines)
+
+            # Validate required fields
+            required_fields = ["name", "description", "ingredients_available", "time_minutes", "difficulty"]
+            if not all(field in recipe for field in required_fields):
+                missing = [f for f in required_fields if f not in recipe]
+                raise RecipeParsingError(f"Recipe missing required fields: {missing}")
+
+            return recipe
+
+        except Exception as e:
+            logger.error(
+                "Failed to parse single recipe",
+                extra={"error": str(e)},
+                exc_info=True,
+            )
+            raise RecipeParsingError(f"Failed to parse recipe: {e}") from e

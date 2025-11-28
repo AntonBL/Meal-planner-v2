@@ -161,11 +161,59 @@ def save_recipe_feedback(
         return False
 
 
-def update_pantry_after_cooking(recipe: dict) -> bool:
-    """Update pantry by removing/reducing ingredients used in recipe.
+def is_staple_ingredient(ingredient_name: str) -> bool:
+    """Check if an ingredient is a staple that shouldn't be removed after one use.
 
-    This is a simple implementation that marks items as potentially used.
-    A more sophisticated version would use LLM to intelligently update quantities.
+    Args:
+        ingredient_name: Name of the ingredient
+
+    Returns:
+        True if it's a staple (keep), False if consumable (remove)
+    """
+    ingredient_lower = ingredient_name.lower()
+
+    # Staple keywords - these items are NOT removed after cooking
+    staple_keywords = [
+        # Oils and fats
+        'oil', 'olive oil', 'vegetable oil', 'canola oil', 'sesame oil',
+        'coconut oil', 'butter', 'ghee',
+
+        # Sauces and condiments
+        'soy sauce', 'tamari', 'vinegar', 'hot sauce', 'sriracha',
+        'ketchup', 'mustard', 'mayo', 'mayonnaise',
+
+        # Spices and herbs (dried)
+        'salt', 'pepper', 'cumin', 'paprika', 'oregano', 'basil',
+        'thyme', 'rosemary', 'cinnamon', 'ginger powder', 'garlic powder',
+        'onion powder', 'chili powder', 'curry powder', 'turmeric',
+        'coriander', 'cayenne', 'nutmeg', 'cloves',
+
+        # Baking and cooking basics
+        'flour', 'sugar', 'brown sugar', 'baking soda', 'baking powder',
+        'yeast', 'cornstarch', 'vanilla extract',
+
+        # Grains and pasta (dried/shelf-stable)
+        'rice', 'pasta', 'noodles', 'quinoa', 'couscous', 'lentils',
+        'beans', 'chickpeas',
+
+        # Other shelf-stable items
+        'stock', 'broth', 'tomato paste', 'tomato sauce', 'canned tomatoes',
+        'honey', 'maple syrup', 'peanut butter', 'tahini',
+    ]
+
+    # Check if any staple keyword matches
+    for keyword in staple_keywords:
+        if keyword in ingredient_lower:
+            return True
+
+    return False
+
+
+def update_pantry_after_cooking(recipe: dict) -> bool:
+    """Update pantry by removing consumable ingredients used in recipe.
+
+    Staples like oil, soy sauce, and spices are kept in pantry.
+    Fresh items and consumables are removed.
 
     Args:
         recipe: Recipe dictionary with ingredients
@@ -178,32 +226,73 @@ def update_pantry_after_cooking(recipe: dict) -> bool:
         ingredients = []
 
         if recipe.get('ingredients_available'):
-            ingredients.extend([i.strip().lower() for i in recipe['ingredients_available'].split(',')])
+            ingredients.extend([i.strip() for i in recipe['ingredients_available'].split(',')])
 
         if recipe.get('ingredients_needed'):
-            ingredients.extend([i.strip().lower() for i in recipe['ingredients_needed'].split(',')])
+            ingredients.extend([i.strip() for i in recipe['ingredients_needed'].split(',')])
 
         if not ingredients:
             logger.warning("No ingredients to update pantry with")
             return True
 
-        # Add note to both pantry files about items used
-        today = datetime.now().strftime("%Y-%m-%d")
-        note = f"\n<!-- Used in {recipe['name']} on {today}: {', '.join(ingredients)} -->\n"
+        # Categorize ingredients
+        items_to_remove = []
+        staples_kept = []
 
-        # Add to staples file
+        for ingredient in ingredients:
+            if is_staple_ingredient(ingredient):
+                staples_kept.append(ingredient)
+            else:
+                items_to_remove.append(ingredient)
+
+        # Remove consumable items from pantry files
+        removed_count = 0
+
+        for file_name in ['staples', 'fresh']:
+            file_path = get_data_file_path(file_name)
+            content = file_path.read_text(encoding="utf-8")
+            lines = content.split('\n')
+            new_lines = []
+
+            for line in lines:
+                line_stripped = line.strip().lower()
+
+                # Check if this line contains an ingredient to remove
+                should_remove = False
+                for item in items_to_remove:
+                    if line_stripped.startswith('-') and item.lower() in line_stripped:
+                        should_remove = True
+                        removed_count += 1
+                        logger.info(f"Removing from pantry: {item}")
+                        break
+
+                if not should_remove:
+                    new_lines.append(line)
+
+            # Write back
+            file_path.write_text('\n'.join(new_lines), encoding="utf-8")
+
+        # Add usage note
+        today = datetime.now().strftime("%Y-%m-%d")
+        note = f"\n<!-- Cooked {recipe['name']} on {today}"
+        if staples_kept:
+            note += f" | Staples used (not removed): {', '.join(staples_kept)}"
+        if items_to_remove:
+            note += f" | Removed: {', '.join(items_to_remove)}"
+        note += " -->\n"
+
+        # Add note to staples file
         staples_path = get_data_file_path("staples")
         staples_content = staples_path.read_text(encoding="utf-8")
         staples_path.write_text(staples_content + note, encoding="utf-8")
 
-        # Add to fresh file
-        fresh_path = get_data_file_path("fresh")
-        fresh_content = fresh_path.read_text(encoding="utf-8")
-        fresh_path.write_text(fresh_content + note, encoding="utf-8")
-
         logger.info(
-            "Added usage note to pantry files",
-            extra={"recipe_name": recipe['name'], "ingredient_count": len(ingredients)}
+            "Updated pantry after cooking",
+            extra={
+                "recipe_name": recipe['name'],
+                "removed_count": removed_count,
+                "staples_kept": len(staples_kept)
+            }
         )
 
         return True
@@ -354,6 +443,13 @@ num_recipes = st.slider(
     help="How many recipe suggestions do you want?",
 )
 
+# Additional preferences (free-form text)
+additional_prefs = st.text_input(
+    "Additional preferences (optional)",
+    placeholder="e.g., 'make it spicy', 'low carb', 'under 30 minutes', 'one pot meal'",
+    help="Add any specific requirements or preferences for your recipes",
+)
+
 # Generate button
 st.markdown("---")
 
@@ -383,6 +479,7 @@ if st.button("✨ Generate Recipe Suggestions", type="primary", use_container_wi
                     cuisines=selected_cuisines,
                     meal_type=meal_type,
                     num_suggestions=num_recipes,
+                    additional_context=additional_prefs if additional_prefs else None,
                 )
 
                 # Store in session state
@@ -503,7 +600,7 @@ if "generated_recipes" in st.session_state:
         # Show pantry update prompt after feedback is saved
         if st.session_state.get('feedback_saved_show_pantry_prompt', False):
             st.markdown("---")
-            st.info("🤖 **Smart Pantry Update**\n\nWould you like me to update your pantry by marking the ingredients you used?")
+            st.info("🥫 **Smart Pantry Update**\n\nWould you like to update your pantry by removing the ingredients you used?\n\nWe'll keep staples like oil and spices, but remove fresh items and consumables.")
 
             col1, col2 = st.columns(2)
 
@@ -587,6 +684,89 @@ if "generated_recipes" in st.session_state:
             if "reason" in recipe:
                 st.info(f"**Why this recipe:** {recipe['reason']}")
 
+            # Chat interface for recipe refinement
+            st.markdown("---")
+            with st.expander("💬 Chat to modify this recipe"):
+                st.markdown("*Ask to make changes like 'make it spicier', 'use different vegetables', 'make it faster', etc.*")
+
+                # Initialize chat history for this recipe if not exists
+                chat_key = f"recipe_chat_{idx}"
+                if chat_key not in st.session_state:
+                    st.session_state[chat_key] = []
+
+                # Display chat history
+                if st.session_state[chat_key]:
+                    st.markdown("**Conversation:**")
+                    for msg in st.session_state[chat_key]:
+                        role = msg.get("role", "user")
+                        content = msg.get("content", "")
+                        if role == "user":
+                            st.markdown(f"**You:** {content}")
+                        else:
+                            st.markdown(f"**Assistant:** {content}")
+                    st.markdown("---")
+
+                # Chat input
+                chat_input = st.text_input(
+                    "Your message",
+                    key=f"chat_input_{idx}",
+                    placeholder="e.g., 'make this spicier' or 'what if I don't have bell peppers?'",
+                    label_visibility="collapsed"
+                )
+
+                if st.button("Send", key=f"send_chat_{idx}", type="primary"):
+                    if chat_input and chat_input.strip():
+                        with st.spinner("🤖 Refining recipe..."):
+                            try:
+                                # Initialize provider and generator
+                                provider = ClaudeProvider()
+                                generator = RecipeGenerator(provider)
+
+                                # Add user message to chat history
+                                st.session_state[chat_key].append({
+                                    "role": "user",
+                                    "content": chat_input
+                                })
+
+                                # Call refine_recipe
+                                updated_recipe = generator.refine_recipe(
+                                    recipe=recipe,
+                                    user_message=chat_input,
+                                    chat_history=st.session_state[chat_key][:-1]  # Exclude the message we just added
+                                )
+
+                                # Add assistant response to chat history
+                                st.session_state[chat_key].append({
+                                    "role": "assistant",
+                                    "content": f"Updated the recipe as requested. Changes: {updated_recipe.get('reason', 'Recipe modified')}"
+                                })
+
+                                # Update the recipe in the generated_recipes list
+                                st.session_state["generated_recipes"][idx - 1] = updated_recipe
+
+                                logger.info(
+                                    "Recipe refined via chat",
+                                    extra={
+                                        "recipe_name": recipe["name"],
+                                        "user_message": chat_input
+                                    }
+                                )
+
+                                st.success("✅ Recipe updated!")
+                                st.rerun()
+
+                            except LLMAPIError as e:
+                                st.error(f"❌ API Error: {str(e)}")
+                                logger.error("LLM API error during recipe refinement", exc_info=True)
+                            except RecipeParsingError as e:
+                                st.error(f"❌ Parsing Error: {str(e)}")
+                                logger.error("Recipe parsing error during refinement", exc_info=True)
+                            except Exception as e:
+                                st.error(f"❌ Unexpected Error: {str(e)}")
+                                logger.error("Unexpected error during recipe refinement", exc_info=True)
+                    else:
+                        st.warning("Please enter a message!")
+
             # Action buttons
             st.markdown("---")
             btn_col1, btn_col2, btn_col3, btn_col4 = st.columns(4)
@@ -613,6 +793,7 @@ if "generated_recipes" in st.session_state:
                         'source': 'Generated',
                         'time_minutes': recipe.get('time_minutes'),
                         'difficulty': recipe.get('difficulty'),
+                        'ingredients_needed': recipe.get('ingredients_needed', ''),
                     }
 
                     if add_recipe_to_plan(plan_recipe):

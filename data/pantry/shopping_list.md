@@ -12,3 +12,6 @@ Generated: 2025-11-26
 - Salsa
 - Avocados
 - Bananas
+
+## For: Penne Pasta with Chickpea Marinara & Crispy Tofu (Added: 2025-11-28)
+

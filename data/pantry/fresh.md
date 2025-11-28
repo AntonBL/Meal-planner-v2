@@ -3,6 +3,8 @@
 Last updated: 2025-11-26
 
 ## Proteins (Vegetarian)
+- Canned tomatoes (crushed or whole - Added: 2025-11-28 (from shopping list)
+
 
 - Cheese - 1 - Added: 2025-11-27
 

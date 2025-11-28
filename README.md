@@ -7,8 +7,10 @@ An intelligent meal planning application powered by AI that helps you manage ing
 - 🤖 **AI-Powered Recipe Suggestions**: Get personalized recipe recommendations based on available ingredients
 - 📦 **Smart Pantry Management**: Track pantry staples and fresh ingredients with AI-powered chat interface
 - 📸 **Photo Recognition**: Upload photos of groceries to automatically update your inventory
-- 🛒 **Intelligent Shopping List**: Add ingredients from recipes, mark items as bought to auto-add to pantry, or remove items you don't need
-- 📅 **Weekly Meal Planning**: Plan up to 7 meals for the week with automatic shopping list generation
+- 🛒 **Intelligent Shopping List**: Automatically syncs with weekly meal plan - ingredients added when you plan meals, removed when you delete them
+- 📅 **Weekly Meal Planning**: Plan up to 7 meals for the week with automatic shopping list integration
+- 👨‍🍳 **Interactive Cooking Mode**: Cook with AI assistance - ask questions, get help, and automatically update your pantry when done
+- 🥫 **Auto Pantry Updates**: After cooking, smart removal of used ingredients while preserving staples like oil and spices
 - 💚 **Preference Learning**: The AI learns your taste preferences over time
 - 🔒 **Secure Authentication**: Built-in login system with session management
 - ✅ **Simple Interface**: Intuitive buttons and easy navigation
@@ -71,6 +73,57 @@ An intelligent meal planning application powered by AI that helps you manage ing
 5. **Open your browser**
    - The app will automatically open at `http://localhost:8501`
 
+## How It Works
+
+The app provides a complete meal planning workflow with automatic data synchronization:
+
+### 1. **Plan Your Week** 📅
+- Add meals to your weekly planner (up to 7 meals)
+- Choose from generated recipes or your saved favorites
+- **Automatic sync**: Needed ingredients are automatically added to your shopping list
+
+### 2. **Shop for Ingredients** 🛒
+- View your shopping list with all ingredients from planned meals
+- Mark items as "Bought" to automatically add them to your pantry
+- Remove items you don't need
+- **Automatic sync**: Removing a meal from your plan removes its ingredients from the shopping list
+
+### 3. **Cook with AI Assistance** 👨‍🍳
+- Start cooking mode for any recipe
+- Ask questions while cooking (substitutions, timing, techniques)
+- AI assistant remembers your conversation (last 10 messages)
+- Get step-by-step cooking instructions
+
+### 4. **Rate Your Meal** ⭐
+- When finished cooking, rate the recipe (1-5 stars)
+- Add notes about what worked or what to change
+- Meals are automatically logged to your history
+
+### 5. **Update Your Pantry** 🥫
+- **Smart pantry updates**: After rating, choose to update your pantry
+- **Intelligent removal**: Fresh items and consumables are removed
+- **Staples preserved**: Oil, spices, sauces, and shelf-stable items stay in your pantry
+- Keeps your pantry accurate without manual tracking
+
+### Complete Workflow Example:
+
+```
+1. Add "Garlic Butter Pasta" to weekly plan
+   → Ingredients automatically added to shopping list
+
+2. Go shopping, mark "garlic" and "parmesan" as bought
+   → Items automatically moved to pantry
+
+3. Start cooking mode, ask "Can I use regular pasta instead of linguine?"
+   → AI provides helpful answer
+
+4. Finish cooking, rate 5 stars
+   → Meal logged to history
+
+5. Update pantry: removes garlic & parmesan, keeps butter, oil, salt, pepper
+   → Pantry stays accurate for next recipe generation
+```
+
 ## Project Structure
 
 ```
@@ -90,11 +143,14 @@ meal-planner-v2/
 │   └── cooking_mode.py      # Interactive cooking assistant
 │
 ├── lib/                   # Core logic
-│   ├── auth.py            # Authentication & session management
-│   ├── llm_agents.py      # Claude API interactions
-│   ├── file_manager.py    # Markdown file operations
-│   ├── exceptions.py      # Custom exceptions
-│   └── logging_config.py  # Logging configuration
+│   ├── auth.py                 # Authentication & session management
+│   ├── llm_agents.py           # Claude API interactions
+│   ├── file_manager.py         # Markdown file operations
+│   ├── weekly_plan_manager.py  # Weekly plan & shopping list sync
+│   ├── vision.py               # Photo recognition with Claude Vision
+│   ├── recipe_parser.py        # Recipe parsing utilities
+│   ├── exceptions.py           # Custom exceptions
+│   └── logging_config.py       # Logging configuration
 │
 └── data/                  # All user data (markdown files)
     ├── pantry/

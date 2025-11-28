@@ -23,6 +23,151 @@ logger = get_logger(__name__)
 # HELPER FUNCTIONS
 # ============================================================================
 
+def is_staple_ingredient(ingredient_name: str) -> bool:
+    """Check if an ingredient is a staple that shouldn't be removed after one use.
+
+    Args:
+        ingredient_name: Name of the ingredient
+
+    Returns:
+        True if it's a staple (keep), False if consumable (remove)
+    """
+    ingredient_lower = ingredient_name.lower()
+
+    # Staple keywords - these items are NOT removed after cooking
+    staple_keywords = [
+        # Oils and fats
+        'oil', 'olive oil', 'vegetable oil', 'canola oil', 'sesame oil',
+        'coconut oil', 'butter', 'ghee',
+
+        # Sauces and condiments
+        'soy sauce', 'tamari', 'vinegar', 'hot sauce', 'sriracha',
+        'ketchup', 'mustard', 'mayo', 'mayonnaise',
+
+        # Spices and herbs (dried)
+        'salt', 'pepper', 'cumin', 'paprika', 'oregano', 'basil',
+        'thyme', 'rosemary', 'cinnamon', 'ginger powder', 'garlic powder',
+        'onion powder', 'chili powder', 'curry powder', 'turmeric',
+        'coriander', 'cayenne', 'nutmeg', 'cloves',
+
+        # Baking and cooking basics
+        'flour', 'sugar', 'brown sugar', 'baking soda', 'baking powder',
+        'yeast', 'cornstarch', 'vanilla extract',
+
+        # Grains and pasta (dried/shelf-stable)
+        'rice', 'pasta', 'noodles', 'quinoa', 'couscous', 'lentils',
+        'beans', 'chickpeas',
+
+        # Other shelf-stable items
+        'stock', 'broth', 'tomato paste', 'tomato sauce', 'canned tomatoes',
+        'honey', 'maple syrup', 'peanut butter', 'tahini',
+    ]
+
+    # Check if any staple keyword matches
+    for keyword in staple_keywords:
+        if keyword in ingredient_lower:
+            return True
+
+    return False
+
+
+def update_pantry_after_cooking(recipe: dict) -> bool:
+    """Update pantry by removing consumable ingredients used in recipe.
+
+    Staples like oil, soy sauce, and spices are kept in pantry.
+    Fresh items and consumables are removed.
+
+    Args:
+        recipe: Recipe dictionary with ingredients
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        # Get all ingredients from recipe
+        ingredients = []
+
+        if recipe.get('ingredients_available'):
+            ingredients.extend([i.strip() for i in recipe['ingredients_available'].split(',')])
+
+        if recipe.get('ingredients_needed'):
+            ingredients.extend([i.strip() for i in recipe['ingredients_needed'].split(',')])
+
+        if not ingredients:
+            logger.warning("No ingredients to update pantry with")
+            return True
+
+        # Categorize ingredients
+        items_to_remove = []
+        staples_kept = []
+
+        for ingredient in ingredients:
+            if is_staple_ingredient(ingredient):
+                staples_kept.append(ingredient)
+            else:
+                items_to_remove.append(ingredient)
+
+        # Remove consumable items from pantry files
+        removed_count = 0
+
+        for file_name in ['staples', 'fresh']:
+            file_path = get_data_file_path(file_name)
+            content = file_path.read_text(encoding="utf-8")
+            lines = content.split('\n')
+            new_lines = []
+
+            for line in lines:
+                line_stripped = line.strip().lower()
+
+                # Check if this line contains an ingredient to remove
+                should_remove = False
+                for item in items_to_remove:
+                    if line_stripped.startswith('-') and item.lower() in line_stripped:
+                        should_remove = True
+                        removed_count += 1
+                        logger.info(f"Removing from pantry: {item}")
+                        break
+
+                if not should_remove:
+                    new_lines.append(line)
+
+            # Write back
+            file_path.write_text('\n'.join(new_lines), encoding="utf-8")
+
+        # Add usage note
+        today = datetime.now().strftime("%Y-%m-%d")
+        note = f"\n<!-- Cooked {recipe['name']} on {today}"
+        if staples_kept:
+            note += f" | Staples used (not removed): {', '.join(staples_kept)}"
+        if items_to_remove:
+            note += f" | Removed: {', '.join(items_to_remove)}"
+        note += " -->\n"
+
+        # Add note to staples file
+        staples_path = get_data_file_path("staples")
+        staples_content = staples_path.read_text(encoding="utf-8")
+        staples_path.write_text(staples_content + note, encoding="utf-8")
+
+        logger.info(
+            "Updated pantry after cooking",
+            extra={
+                "recipe_name": recipe['name'],
+                "removed_count": removed_count,
+                "staples_kept": len(staples_kept)
+            }
+        )
+
+        return True
+
+    except Exception as e:
+        logger.error(
+            "Failed to update pantry after cooking",
+            extra={"recipe_name": recipe.get('name'), "error": str(e)},
+            exc_info=True
+        )
+        return False
+
+
 def save_recipe_feedback(
     recipe: dict,
     rating: int,
@@ -412,18 +557,10 @@ if st.session_state.get('show_cooking_feedback', False):
 
             if success:
                 st.success("✅ Feedback saved! Meal logged to history.")
-                # Clear modal state
+                # Set flag to show pantry update prompt
                 st.session_state['show_cooking_feedback'] = False
-                # Clear active recipe
-                if 'active_recipe' in st.session_state:
-                    del st.session_state['active_recipe']
-                if 'cooking_chat_history' in st.session_state:
-                    del st.session_state['cooking_chat_history']
-                logger.info("Feedback saved, redirecting to home")
-                # Short delay to show success message
-                import time
-                time.sleep(1)
-                st.switch_page("app.py")
+                st.session_state['feedback_saved_show_pantry_prompt'] = True
+                st.rerun()
             else:
                 st.error("❌ Failed to save feedback. Please try again.")
 
@@ -432,6 +569,49 @@ if st.session_state.get('show_cooking_feedback', False):
             st.session_state['show_cooking_feedback'] = False
             logger.info("Feedback cancelled")
             st.rerun()
+
+# Show pantry update prompt after feedback is saved
+elif st.session_state.get('feedback_saved_show_pantry_prompt', False):
+    st.markdown("---")
+    st.markdown("## 🥫 Update Pantry")
+    st.info("**Would you like to update your pantry by removing the ingredients you used?**\n\n"
+            "We'll keep staples like oil and spices, but remove fresh items and consumables.")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("✅ Yes, Update Pantry", key="update_pantry_yes", use_container_width=True, type="primary"):
+            # Call pantry update function
+            update_success = update_pantry_after_cooking(recipe)
+
+            if update_success:
+                st.success("✅ Pantry updated!")
+                logger.info("Pantry updated after cooking", extra={"recipe_name": recipe['name']})
+            else:
+                st.warning("⚠️ Could not update pantry automatically. You can do it manually in the Pantry page.")
+
+            # Clear all modal state and redirect
+            st.session_state['feedback_saved_show_pantry_prompt'] = False
+            if 'active_recipe' in st.session_state:
+                del st.session_state['active_recipe']
+            if 'cooking_chat_history' in st.session_state:
+                del st.session_state['cooking_chat_history']
+
+            import time
+            time.sleep(1.5)
+            st.switch_page("app.py")
+
+    with col2:
+        if st.button("❌ No Thanks", key="update_pantry_no", use_container_width=True):
+            # Clear all modal state and redirect
+            st.session_state['feedback_saved_show_pantry_prompt'] = False
+            if 'active_recipe' in st.session_state:
+                del st.session_state['active_recipe']
+            if 'cooking_chat_history' in st.session_state:
+                del st.session_state['cooking_chat_history']
+
+            logger.info("User declined pantry update")
+            st.switch_page("app.py")
 
 else:
     # Show normal action buttons
