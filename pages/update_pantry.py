@@ -43,21 +43,96 @@ except LLMAPIError as e:
     st.error(f"❌ Failed to initialize AI: {e}")
     st.stop()
 
-# Show current pantry in sidebar
-with st.sidebar:
-    st.markdown("### 📦 Current Pantry")
+# Helper function to parse pantry items
+def parse_pantry_items(content):
+    """Parse markdown pantry content into list of items."""
+    items = []
+    lines = content.split('\n')
 
+    for i, line in enumerate(lines):
+        if line.strip().startswith('-'):
+            # This is an item line
+            items.append({
+                'line_number': i,
+                'text': line.strip()[2:],  # Remove "- " prefix
+                'full_line': line
+            })
+
+    return items
+
+def delete_pantry_item(file_path, line_number):
+    """Delete an item from pantry file by line number."""
     try:
-        staples = load_data_file("staples")
-        fresh = load_data_file("fresh")
+        content = file_path.read_text(encoding="utf-8")
+        lines = content.split('\n')
 
-        with st.expander("🥫 Pantry Staples", expanded=False):
-            st.markdown(staples)
+        # Remove the line
+        del lines[line_number]
 
-        with st.expander("🥬 Fresh Items", expanded=False):
-            st.markdown(fresh)
+        # Write back
+        file_path.write_text('\n'.join(lines), encoding="utf-8")
+        return True
     except Exception as e:
-        st.error(f"Error loading pantry: {e}")
+        logger.error(f"Failed to delete pantry item: {e}", exc_info=True)
+        return False
+
+# Show current pantry in main content area
+st.markdown("---")
+st.markdown("### 📦 Current Pantry")
+
+try:
+    staples_path = get_data_file_path("staples")
+    fresh_path = get_data_file_path("fresh")
+    staples = load_data_file("staples")
+    fresh = load_data_file("fresh")
+
+    # Parse items
+    staples_items = parse_pantry_items(staples)
+    fresh_items = parse_pantry_items(fresh)
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        with st.expander("🥫 Pantry Staples", expanded=True):
+            if staples_items:
+                for item in staples_items:
+                    cols = st.columns([4, 1])
+                    with cols[0]:
+                        st.markdown(f"• {item['text']}")
+                    with cols[1]:
+                        if st.button("🗑️", key=f"del_staple_{item['line_number']}", help="Delete this item"):
+                            if delete_pantry_item(staples_path, item['line_number']):
+                                st.success(f"Deleted!")
+                                logger.info(f"Deleted staple item: {item['text']}")
+                                st.rerun()
+                            else:
+                                st.error("Failed to delete")
+            else:
+                st.info("No staple items yet")
+
+    with col2:
+        with st.expander("🥬 Fresh Items", expanded=True):
+            if fresh_items:
+                for item in fresh_items:
+                    cols = st.columns([4, 1])
+                    with cols[0]:
+                        st.markdown(f"• {item['text']}")
+                    with cols[1]:
+                        if st.button("🗑️", key=f"del_fresh_{item['line_number']}", help="Delete this item"):
+                            if delete_pantry_item(fresh_path, item['line_number']):
+                                st.success(f"Deleted!")
+                                logger.info(f"Deleted fresh item: {item['text']}")
+                                st.rerun()
+                            else:
+                                st.error("Failed to delete")
+            else:
+                st.info("No fresh items yet")
+
+except Exception as e:
+    st.error(f"Error loading pantry: {e}")
+    logger.error("Error in pantry display", exc_info=True)
+
+st.markdown("---")
 
 # Main chat interface
 st.markdown("### 💬 Chat with AI to Update Pantry")
