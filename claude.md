@@ -18,7 +18,9 @@ You are working on a professional Python application for meal planning and recip
 
 2. Understand the project architecture in **[SPEC.md](./SPEC.md)**
 
-3. Review existing code to maintain consistency
+3. Review the **[ROADMAP.md](./ROADMAP.md)** - this contains the project roadmap, version history, planned features, and priorities
+
+4. Review existing code to maintain consistency
 
 ---
 

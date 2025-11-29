@@ -394,8 +394,10 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.markdown("**Select cuisines:**")
+    cuisine_soup = st.checkbox("🍲 Soup")
     cuisine_italian = st.checkbox("🇮🇹 Italian", value=True)
-    cuisine_asian = st.checkbox("🥡 Asian", value=True)
+    cuisine_thai = st.checkbox("🇹🇭 Thai", value=True)
+    cuisine_korean = st.checkbox("🇰🇷 Korean")
     cuisine_mexican = st.checkbox("🌮 Mexican")
     cuisine_mediterranean = st.checkbox("🫒 Mediterranean")
 
@@ -403,15 +405,20 @@ with col2:
     st.markdown("&nbsp;")  # Spacing
     cuisine_middle_eastern = st.checkbox("🧆 Middle Eastern")
     cuisine_indian = st.checkbox("🍛 Indian")
+    cuisine_asian = st.checkbox("🥡 Asian (General)")
     cuisine_american = st.checkbox("🍔 American (Vegetarian)")
     cuisine_other = st.checkbox("🌍 Other")
 
 # Build cuisine list
 selected_cuisines = []
+if cuisine_soup:
+    selected_cuisines.append("Soup")
 if cuisine_italian:
     selected_cuisines.append("Italian")
-if cuisine_asian:
-    selected_cuisines.append("Asian")
+if cuisine_thai:
+    selected_cuisines.append("Thai")
+if cuisine_korean:
+    selected_cuisines.append("Korean")
 if cuisine_mexican:
     selected_cuisines.append("Mexican")
 if cuisine_mediterranean:
@@ -420,6 +427,8 @@ if cuisine_middle_eastern:
     selected_cuisines.append("Middle Eastern")
 if cuisine_indian:
     selected_cuisines.append("Indian")
+if cuisine_asian:
+    selected_cuisines.append("Asian (General)")
 if cuisine_american:
     selected_cuisines.append("American")
 if cuisine_other:

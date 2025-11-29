@@ -4,6 +4,63 @@ All notable changes to the AI Recipe Planner will be documented in this file.
 
 ## [Unreleased]
 
+### Added - 2025-11-29
+
+#### Pantry UI Improvements
+- **Enhanced Category Organization**: Pantry now displays items grouped by meaningful categories instead of just "Staples" and "Fresh"
+  - 10 distinct category sections with custom icons:
+    - 🌾 Grains & Pasta
+    - 🫘 Beans & Legumes
+    - 🫗 Oils & Condiments
+    - 🥫 Canned Goods
+    - 🌿 Spices & Herbs (Dried)
+    - 🥚 Proteins (Vegetarian)
+    - 🧈 Dairy & Alternatives
+    - 🥬 Vegetables
+    - 🌱 Fresh Herbs
+    - 🍋 Fruits
+  - Sections automatically populated from existing markdown structure in pantry files
+  - Empty sections are hidden to reduce clutter
+
+- **Improved Visual Cleanliness**:
+  - All category sections now collapse by default (`expanded=False`)
+  - Added "🗑️ Delete mode" toggle to hide/show delete buttons
+  - Clean view by default - delete buttons only appear when needed
+  - Reduces visual noise by ~20% when browsing pantry
+
+- **Fixed Auto-Scroll Issue**: Reorganized page layout to prevent unwanted scrolling
+  - Pantry inventory now displays at the top of the page
+  - Photo upload and chat interfaces moved to collapsible expanders below
+  - Page loads showing pantry contents instead of scrolling to chat input
+  - Follows "content first, actions second" UX principle
+
+#### Expanded Cuisine Options
+- **Added New Cuisines**:
+  - 🍲 **Soup** - Now available as a cuisine/meal type option (positioned at top)
+  - 🇰🇷 **Korean** - Added Korean cuisine option
+  - 🇹🇭 **Thai** - Added Thai cuisine option (defaults to checked)
+- **Reorganized Cuisine Selection**:
+  - Soup moved to top position for visibility
+  - Thai set as default selection alongside Italian
+  - "Asian" renamed to "Asian (General)" for clarity
+  - Balanced layout: 6 cuisines in left column, 5 in right column
+
+### Changed
+- **Pantry Display Logic**:
+  - New `parse_pantry_by_sections()` function replaces `parse_pantry_items()`
+  - Section-based parsing respects markdown headers in data files
+  - Dynamic icon mapping via `category_icons` dictionary
+  - Unified display for both staples and fresh items in single view
+
+- **Recipe Generation UI**:
+  - Default cuisines updated: Italian and Thai (previously Italian and Asian)
+  - Cuisine checkbox order reorganized for better UX
+
+### Technical Details
+- **Files Modified**:
+  - `pages/pantry.py` - Complete UI reorganization and section-based parsing
+  - `pages/generate_recipes.py` - Added cuisine options and reordered checkboxes
+
 ### Added - 2025-11-28
 
 #### Conversational Recipe Generation
