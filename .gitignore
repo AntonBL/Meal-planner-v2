@@ -42,3 +42,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Session data
+data/active_recipe.json
