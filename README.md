@@ -176,15 +176,17 @@ meal-planner-v2/
 │   └── cooking_mode.py      # Interactive cooking assistant
 │
 ├── lib/                   # Core logic
-│   ├── auth.py                 # Authentication & session management
-│   ├── llm_agents.py           # Claude API interactions
-│   ├── file_manager.py         # Markdown file operations
-│   ├── weekly_plan_manager.py  # Weekly plan & shopping list sync
-│   ├── active_recipe_manager.py # Active recipe persistence
-│   ├── vision.py               # Photo recognition with Claude Vision
-│   ├── recipe_parser.py        # Recipe parsing utilities
-│   ├── exceptions.py           # Custom exceptions
-│   └── logging_config.py       # Logging configuration
+│   ├── auth.py                  # Authentication & session management
+│   ├── llm_agents.py            # Claude API interactions
+│   ├── file_manager.py          # Markdown file operations
+│   ├── weekly_plan_manager.py   # Weekly plan & shopping list sync
+│   ├── active_recipe_manager.py # Active recipe session persistence
+│   ├── recipe_feedback.py       # Recipe rating & pantry updates (shared)
+│   ├── constants.py             # Application-wide constants
+│   ├── vision.py                # Photo recognition with Claude Vision
+│   ├── recipe_parser.py         # Recipe parsing utilities
+│   ├── exceptions.py            # Custom exceptions
+│   └── logging_config.py        # Logging configuration
 │
 └── data/                  # All user data (markdown files)
     ├── pantry/
@@ -212,6 +214,13 @@ This project follows professional Python development practices:
 - ✅ **Logging** instead of print statements (structured logging)
 - ✅ **Pre-commit hooks** for automated quality checks
 - ✅ **SOLID principles**, DRY, YAGNI, KISS
+- ✅ **Code organization**: Shared utilities extracted to avoid duplication
+
+### Recent Refactoring (2025-11-29)
+- Created `lib/recipe_feedback.py` to consolidate duplicated code (~300 lines removed)
+- Created `lib/constants.py` for magic strings (improved maintainability)
+- Enhanced cleanup logic for generated recipes (prevents data accumulation)
+- Improved exception handling and duplicate detection
 
 See [agent.md](./agent.md) for complete coding standards and best practices.
 
