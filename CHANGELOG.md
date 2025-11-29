@@ -4,7 +4,84 @@ All notable changes to the AI Recipe Planner will be documented in this file.
 
 ## [Unreleased]
 
-### Added - 2025-11-29
+### Added - 2025-11-29 (Latest)
+
+#### Two-Stage Conversational Recipe Chat
+- **Restructured Chat Workflow**: Split recipe modification into two separate actions
+  - **💬 Send Button**: Discuss potential changes conversationally without modifying recipe
+    - AI responds to questions and suggestions
+    - Explore ideas freely ("Can I make this spicier?", "What if I use tofu instead?")
+    - AI prompts user to click "Update Recipe" when ready to apply changes
+  - **✨ Update Recipe Button**: Apply all discussed changes at once
+    - Regenerates recipe based on full conversation history
+    - Clears chat after successful update
+  - **Benefits**: Safer UX - users can explore options before committing changes
+
+- **New LLM Method**: `RecipeGenerator.chat_about_recipe()`
+  - Conversational responses that acknowledge user requests
+  - Discusses feasibility and suggests alternatives
+  - Concise 2-3 sentence responses (max 300 tokens)
+  - Reminds users to click "Update Recipe" button to apply changes
+
+#### Active Recipe Persistence
+- **New Module**: `lib/active_recipe_manager.py`
+  - JSON-based persistent storage for currently cooking recipe
+  - Three core functions: `save_active_recipe()`, `load_active_recipe()`, `clear_active_recipe()`
+- **Session Survival**: Active recipes now persist across:
+  - Page refreshes
+  - Browser restarts
+  - Server restarts
+- **Cooking Mode Enhancement**:
+  - Automatically checks persistent storage if session state is empty
+  - Recipe restored seamlessly on page load
+  - Cleared when cooking is marked complete
+- **Integration Points**:
+  - Recipe generator's "Cook This" button
+  - Weekly planner's "Cook" button
+  - Both save to persistent storage AND session state
+
+#### Generated Recipe Storage
+- **New Recipe File Type**: `data/recipes/generated.md`
+  - Stores full recipe details for AI-generated recipes added to weekly plan
+  - Preserves ingredients, instructions, time, difficulty, and description
+  - Prevents data loss when generated recipes move from session state to plan
+- **Automatic Saving**:
+  - Triggered when generated recipe is added to weekly plan
+  - Deduplicates ingredients from "available" and "needed" lists
+  - Adds timestamp and "Why this recipe" rationale
+- **Weekly Planner Integration**:
+  - Loads generated recipes alongside loved and liked recipes
+  - Added "Generated" option to source filter dropdown
+  - Full recipe details available for cooking mode
+- **New Function**: `weekly_plan_manager.save_generated_recipe()`
+  - 92 lines of recipe formatting and storage logic
+  - Intelligent ingredient list merging
+  - Markdown formatting with sections
+
+#### Session State Initialization Fix
+- **Fixed Double-Click Bug**: Resolved issue where Send button required two clicks
+- **Root Cause**: Chat state keys initialized mid-render, consuming first button click
+- **Solution**: Pre-initialize ALL session state before rendering loop
+  - Chat history keys (`recipe_chat_{idx}`)
+  - Clear input flag keys (`clear_chat_input_{idx}`)
+- **Flag-Based Input Clearing**: Prevents "cannot modify widget after instantiation" error
+  - Set flag on one render cycle
+  - Act on flag before widget creation on next render cycle
+
+### Technical Details - Latest
+- **Files Modified**:
+  - `lib/active_recipe_manager.py` - NEW (140 lines)
+  - `lib/llm_agents.py` - Added `chat_about_recipe()` method
+  - `pages/generate_recipes.py` - Two-button chat UI, pre-initialization
+  - `lib/file_manager.py` - Added "generated_recipes" file type
+  - `lib/weekly_plan_manager.py` - Added `save_generated_recipe()`
+  - `pages/cooking_mode.py` - Persistence integration, fallback loading
+  - `pages/weekly_planner.py` - Generated recipe loading and filtering
+  - `.gitignore` - Excluded `active_recipe.json` session data
+
+- **Logging Fix**: Changed from reserved "message" field to "user_message" in logging extras
+
+### Added - 2025-11-29 (Earlier)
 
 #### Pantry UI Improvements
 - **Enhanced Category Organization**: Pantry now displays items grouped by meaningful categories instead of just "Staples" and "Fresh"
