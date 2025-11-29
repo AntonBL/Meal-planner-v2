@@ -53,25 +53,32 @@ An intelligent meal planning application powered by AI that helps you manage ing
 3. **Set up environment variables**
    ```bash
    cp .env.example .env
-   # Edit .env and add your credentials:
-   # - ANTHROPIC_API_KEY (required for AI features)
-   # - AUTH_USERNAME (for web login)
-   # - AUTH_PASSWORD (for web login)
+   # Edit .env and add your Anthropic API key
    ```
 
    Example `.env` file:
    ```bash
    ANTHROPIC_API_KEY=sk-ant-your-key-here
-   AUTH_USERNAME=your_username
-   AUTH_PASSWORD=your_secure_password
    ```
 
-4. **Run the app**
+4. **Set up authentication** (secure, local login)
+   ```bash
+   python3 scripts/setup_auth.py
+   ```
+
+   This interactive script will:
+   - Generate a secure random session key
+   - Create your username/password (password is bcrypt-hashed)
+   - Save to `.streamlit/config.yaml` (already in .gitignore)
+
+   **Security Note:** The config file is excluded from git to protect your credentials.
+
+5. **Run the app**
    ```bash
    streamlit run app.py
    ```
 
-5. **Open your browser**
+6. **Open your browser**
    - The app will automatically open at `http://localhost:8501`
 
 ## How It Works

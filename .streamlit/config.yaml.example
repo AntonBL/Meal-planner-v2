@@ -1,0 +1,12 @@
+cookie:
+  expiry_days: 30
+  key: your_secret_key_here_generate_a_random_string
+  name: meal_planner_auth
+credentials:
+  usernames:
+    your_username:
+      email: your_email@example.com
+      name: Your Name
+      password: $2b$12$hashed_password_will_be_here_after_you_run_the_hash_script
+preauthorized:
+  emails: []
