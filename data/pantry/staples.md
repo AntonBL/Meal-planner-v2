@@ -3,6 +3,8 @@
 Last updated: 2025-11-26
 
 ## Grains & Pasta
+- Korean fish sauce or additional soy sauce - Added: 2025-11-29 (from shopping list)
+
 - Dried Herbs/Spices (Assorted) - 3 jars - Added: 2025-11-28
 
 - Pizza Seasoning - 2 jars - Added: 2025-11-28
@@ -46,3 +48,5 @@ Last updated: 2025-11-26
 - Salt
 - Curry powder
 - Chinese five-spice
+
+<!-- Cooked Spicy Korean Tofu & Vegetable Soup (Sundubu-jjigae Style) on 2025-11-29 | Staples used (not removed): vegetable broth, soy sauce, sesame oil, salt, black pepper, olive oil, Gochugaru (Korean red chili flakes) or use red pepper flakes as substitute, Korean fish sauce or additional soy sauce | Removed: Extra-firm tofu (2 blocks), eggs (10), onions (yellow, 3), garlic (2 bulbs), ginger root (1 piece), carrots (2 lb bag), mushrooms cremini (8 oz), spinach (2 bags) -->

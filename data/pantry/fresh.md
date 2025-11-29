@@ -3,6 +3,8 @@
 Last updated: 2025-11-26
 
 ## Proteins (Vegetarian)
+- Gochugaru (Korean red chili flakes) or use red pepper flakes as substitute - Added: 2025-11-29 (from shopping list)
+
 - Canned tomatoes (crushed or whole - Added: 2025-11-28 (from shopping list)
 
 
@@ -23,7 +25,6 @@ Last updated: 2025-11-26
 - Feta cheese - 8 oz - Added: 2025-11-23 - Expires: 2025-12-15
 
 ## Vegetables
-- Onions (yellow) - 3 - Added: 2025-11-20
 - Onions (red) - 2 - Added: 2025-11-22
 - Garlic - 2 bulbs - Added: 2025-11-20
 - Ginger root - 1 piece - Added: 2025-11-24 - Use by: 2025-12-10

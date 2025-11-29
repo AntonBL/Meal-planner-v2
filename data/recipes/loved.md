@@ -199,3 +199,35 @@ Hearty and satisfying! Roast the sweet potatoes while warming the beans. Top wit
 
 **Make again:** Yes
 
+
+---
+
+## Spicy Korean Tofu & Vegetable Soup (Sundubu-jjigae Style)
+**Last made:** 2025-11-29
+**Rating:** 5/5 ⭐⭐⭐⭐⭐
+**Time:** 25 minutes
+**Difficulty:** Easy
+
+**Ingredients:**
+- Extra-firm tofu (2 blocks)
+- eggs (10)
+- onions (yellow
+- 3)
+- garlic (2 bulbs)
+- ginger root (1 piece)
+- carrots (2 lb bag)
+- mushrooms cremini (8 oz)
+- spinach (2 bags)
+- vegetable broth
+- soy sauce
+- sesame oil
+- salt
+- black pepper
+- olive oil
+- Gochugaru (Korean red chili flakes) or use red pepper flakes as substitute
+- Korean fish sauce or additional soy sauce
+
+**Notes:** Maybe use cheese
+
+**Make again:** Yes
+

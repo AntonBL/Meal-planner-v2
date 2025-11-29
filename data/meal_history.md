@@ -6,6 +6,14 @@ Log of meals we've cooked.
 
 ## November 2025
 
+### Saturday, 2025-11-29
+**Spicy Korean Tofu & Vegetable Soup (Sundubu-jjigae Style)** ⭐⭐⭐⭐⭐
+- Rating: 5/5
+- Notes: Maybe use cheese
+- Ingredients used: Extra-firm tofu (2 blocks), eggs (10), onions (yellow, 3), garlic (2 bulbs), ginger root (1 piece), carrots (2 lb bag), mushrooms cremini (8 oz), spinach (2 bags), vegetable broth, soy sauce, sesame oil, salt, black pepper, olive oil, Gochugaru (Korean red chili flakes) or use red pepper flakes as substitute, Korean fish sauce or additional soy sauce
+
+
+
 ### Friday, 2025-11-28
 **Ginger Garlic Stir-Fried Vegetables** ⭐⭐⭐⭐⭐
 - Rating: 5/5
