@@ -13,6 +13,7 @@ from lib.auth import require_authentication
 from lib.llm_agents import ClaudeProvider
 from lib.logging_config import get_logger, setup_logging
 from lib.file_manager import get_data_file_path
+from lib.active_recipe_manager import load_active_recipe, clear_active_recipe
 
 # Set up logging
 setup_logging("INFO")
@@ -321,15 +322,32 @@ require_authentication()
 # Title
 st.title("👨‍🍳 Cooking Mode")
 
-# Check if a recipe is active
+# Check if a recipe is active - try session state first, then persistent storage
 if 'active_recipe' not in st.session_state or st.session_state['active_recipe'] is None:
-    st.warning("⚠️ No active recipe selected!")
-    st.info("Please go to **Recipe Generator** and click '👨‍🍳 Cook This' on a recipe to start cooking mode.")
+    # Try loading from persistent storage
+    persisted_recipe = load_active_recipe()
 
-    if st.button("🎲 Go to Recipe Generator", use_container_width=True):
-        st.switch_page("pages/generate_recipes.py")
+    if persisted_recipe:
+        # Restore to session state
+        st.session_state['active_recipe'] = persisted_recipe
+        logger.info(
+            "Restored active recipe from persistent storage",
+            extra={"recipe_name": persisted_recipe.get('name')}
+        )
+    else:
+        # No recipe found anywhere
+        st.warning("⚠️ No active recipe selected!")
+        st.info("Please go to **Recipe Generator** or **Weekly Planner** and click '👨‍🍳 Cook' on a recipe to start cooking mode.")
 
-    st.stop()
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("🎲 Go to Recipe Generator", use_container_width=True):
+                st.switch_page("pages/generate_recipes.py")
+        with col2:
+            if st.button("📅 Go to Weekly Planner", use_container_width=True):
+                st.switch_page("pages/weekly_planner.py")
+
+        st.stop()
 
 # Get active recipe
 recipe = st.session_state['active_recipe']
@@ -597,6 +615,9 @@ elif st.session_state.get('feedback_saved_show_pantry_prompt', False):
             if 'cooking_chat_history' in st.session_state:
                 del st.session_state['cooking_chat_history']
 
+            # Clear persistent storage
+            clear_active_recipe()
+
             import time
             time.sleep(1.5)
             st.switch_page("app.py")
@@ -609,6 +630,9 @@ elif st.session_state.get('feedback_saved_show_pantry_prompt', False):
                 del st.session_state['active_recipe']
             if 'cooking_chat_history' in st.session_state:
                 del st.session_state['cooking_chat_history']
+
+            # Clear persistent storage
+            clear_active_recipe()
 
             logger.info("User declined pantry update")
             st.switch_page("app.py")

@@ -15,6 +15,7 @@ from lib.llm_agents import ClaudeProvider, RecipeGenerator
 from lib.logging_config import get_logger, setup_logging
 from lib.file_manager import get_data_file_path
 from lib.weekly_plan_manager import add_recipe_to_plan
+from lib.active_recipe_manager import save_active_recipe
 
 # Set up logging
 setup_logging("INFO")
@@ -654,6 +655,17 @@ if "generated_recipes" in st.session_state:
 
     recipes = st.session_state["generated_recipes"]
 
+    # Initialize chat state for all recipes BEFORE rendering to avoid first-click issues
+    for idx in range(1, len(recipes) + 1):
+        chat_key = f"recipe_chat_{idx}"
+        if chat_key not in st.session_state:
+            st.session_state[chat_key] = []
+
+        # Also initialize the clear flag to prevent first-click consumption
+        clear_input_key = f"clear_chat_input_{idx}"
+        if clear_input_key not in st.session_state:
+            st.session_state[clear_input_key] = False
+
     for idx, recipe in enumerate(recipes, 1):
         with st.expander(
             f"**{idx}. {recipe['name']}** ({recipe.get('time_minutes', '?')} min • {(recipe.get('difficulty') or 'medium').title()})",
@@ -694,87 +706,147 @@ if "generated_recipes" in st.session_state:
                 st.info(f"**Why this recipe:** {recipe['reason']}")
 
             # Chat interface for recipe refinement
+            chat_key = f"recipe_chat_{idx}"  # Already initialized above
             st.markdown("---")
-            with st.expander("💬 Chat to modify this recipe"):
-                st.markdown("*Ask to make changes like 'make it spicier', 'use different vegetables', 'make it faster', etc.*")
+            st.markdown("💬 **Chat to modify this recipe**")
+            st.markdown("*Discuss changes you'd like to make, then click 'Update Recipe' to apply them.*")
 
-                # Initialize chat history for this recipe if not exists
-                chat_key = f"recipe_chat_{idx}"
-                if chat_key not in st.session_state:
-                    st.session_state[chat_key] = []
+            # Display chat history
+            if st.session_state[chat_key]:
+                for msg in st.session_state[chat_key]:
+                    role = msg.get("role", "user")
+                    content = msg.get("content", "")
+                    if role == "user":
+                        st.markdown(f"**You:** {content}")
+                    else:
+                        st.markdown(f"**Assistant:** {content}")
+                st.markdown("---")
 
-                # Display chat history
-                if st.session_state[chat_key]:
-                    st.markdown("**Conversation:**")
-                    for msg in st.session_state[chat_key]:
-                        role = msg.get("role", "user")
-                        content = msg.get("content", "")
-                        if role == "user":
-                            st.markdown(f"**You:** {content}")
-                        else:
-                            st.markdown(f"**Assistant:** {content}")
-                    st.markdown("---")
+            # Check if we need to clear the input (must be before creating the widget)
+            clear_input_key = f"clear_chat_input_{idx}"
+            if clear_input_key in st.session_state and st.session_state[clear_input_key]:
+                # Reset the input value before widget creation
+                if f"chat_input_{idx}" in st.session_state:
+                    st.session_state[f"chat_input_{idx}"] = ""
+                st.session_state[clear_input_key] = False
 
-                # Chat input
+            # Chat input and buttons
+            col_input, col_send, col_update = st.columns([3, 1, 1])
+
+            with col_input:
                 chat_input = st.text_input(
                     "Your message",
                     key=f"chat_input_{idx}",
-                    placeholder="e.g., 'make this spicier' or 'what if I don't have bell peppers?'",
+                    placeholder="e.g., 'make this spicier' or 'use mushrooms instead'",
                     label_visibility="collapsed"
                 )
 
-                if st.button("Send", key=f"send_chat_{idx}", type="primary"):
-                    if chat_input and chat_input.strip():
-                        with st.spinner("🤖 Refining recipe..."):
-                            try:
-                                # Initialize provider and generator
-                                provider = ClaudeProvider()
-                                generator = RecipeGenerator(provider)
+            with col_send:
+                send_clicked = st.button("💬 Send", key=f"send_chat_{idx}")
 
-                                # Add user message to chat history
-                                st.session_state[chat_key].append({
-                                    "role": "user",
-                                    "content": chat_input
-                                })
+            with col_update:
+                update_clicked = st.button("✨ Update Recipe", key=f"update_recipe_{idx}", type="primary")
 
-                                # Call refine_recipe
-                                updated_recipe = generator.refine_recipe(
-                                    recipe=recipe,
-                                    user_message=chat_input,
-                                    chat_history=st.session_state[chat_key][:-1]  # Exclude the message we just added
-                                )
+            # Handle Send button - conversational chat
+            if send_clicked:
+                if chat_input and chat_input.strip():
+                    with st.spinner("💬 Chatting..."):
+                        try:
+                            # Initialize provider and generator
+                            provider = ClaudeProvider()
+                            generator = RecipeGenerator(provider)
 
-                                # Add assistant response to chat history
-                                st.session_state[chat_key].append({
-                                    "role": "assistant",
-                                    "content": f"Updated the recipe as requested. Changes: {updated_recipe.get('reason', 'Recipe modified')}"
-                                })
+                            # Add user message to chat history
+                            st.session_state[chat_key].append({
+                                "role": "user",
+                                "content": chat_input
+                            })
 
-                                # Update the recipe in the generated_recipes list
-                                st.session_state["generated_recipes"][idx - 1] = updated_recipe
+                            # Get conversational response (not regenerating recipe yet)
+                            assistant_response = generator.chat_about_recipe(
+                                recipe=recipe,
+                                user_message=chat_input,
+                                chat_history=st.session_state[chat_key][:-1]  # Exclude the message we just added
+                            )
 
-                                logger.info(
-                                    "Recipe refined via chat",
-                                    extra={
-                                        "recipe_name": recipe["name"],
-                                        "user_message": chat_input
-                                    }
-                                )
+                            # Add assistant response to chat history
+                            st.session_state[chat_key].append({
+                                "role": "assistant",
+                                "content": assistant_response
+                            })
 
-                                st.success("✅ Recipe updated!")
-                                st.rerun()
+                            logger.info(
+                                "Chat message sent",
+                                extra={
+                                    "recipe_name": recipe["name"],
+                                    "user_message": chat_input
+                                }
+                            )
 
-                            except LLMAPIError as e:
-                                st.error(f"❌ API Error: {str(e)}")
-                                logger.error("LLM API error during recipe refinement", exc_info=True)
-                            except RecipeParsingError as e:
-                                st.error(f"❌ Parsing Error: {str(e)}")
-                                logger.error("Recipe parsing error during refinement", exc_info=True)
-                            except Exception as e:
-                                st.error(f"❌ Unexpected Error: {str(e)}")
-                                logger.error("Unexpected error during recipe refinement", exc_info=True)
-                    else:
-                        st.warning("Please enter a message!")
+                            # Set flag to clear input on next render
+                            st.session_state[f"clear_chat_input_{idx}"] = True
+
+                            st.rerun()
+
+                        except LLMAPIError as e:
+                            st.error(f"❌ API Error: {str(e)}")
+                            logger.error("LLM API error during chat", exc_info=True)
+                        except Exception as e:
+                            st.error(f"❌ Unexpected Error: {str(e)}")
+                            logger.error("Unexpected error during chat", exc_info=True)
+                else:
+                    st.warning("Please enter a message!")
+
+            # Handle Update Recipe button - regenerate with all changes
+            if update_clicked:
+                if st.session_state[chat_key]:
+                    with st.spinner("✨ Updating recipe with your changes..."):
+                        try:
+                            # Initialize provider and generator
+                            provider = ClaudeProvider()
+                            generator = RecipeGenerator(provider)
+
+                            # Build a summary of all requested changes from chat
+                            all_changes = "\n".join([
+                                msg["content"] for msg in st.session_state[chat_key]
+                                if msg["role"] == "user"
+                            ])
+
+                            # Call refine_recipe with full conversation context
+                            updated_recipe = generator.refine_recipe(
+                                recipe=recipe,
+                                user_message=all_changes,
+                                chat_history=st.session_state[chat_key]
+                            )
+
+                            # Update the recipe in the generated_recipes list
+                            st.session_state["generated_recipes"][idx - 1] = updated_recipe
+
+                            # Clear chat history after successful update
+                            st.session_state[chat_key] = []
+
+                            logger.info(
+                                "Recipe updated from chat conversation",
+                                extra={
+                                    "recipe_name": recipe["name"],
+                                    "changes": all_changes
+                                }
+                            )
+
+                            st.success("✅ Recipe updated successfully!")
+                            st.rerun()
+
+                        except LLMAPIError as e:
+                            st.error(f"❌ API Error: {str(e)}")
+                            logger.error("LLM API error during recipe update", exc_info=True)
+                        except RecipeParsingError as e:
+                            st.error(f"❌ Parsing Error: {str(e)}")
+                            logger.error("Recipe parsing error during update", exc_info=True)
+                        except Exception as e:
+                            st.error(f"❌ Unexpected Error: {str(e)}")
+                            logger.error("Unexpected error during recipe update", exc_info=True)
+                else:
+                    st.info("💡 Start a conversation about changes you'd like, then click 'Update Recipe' to apply them!")
 
             # Action buttons
             st.markdown("---")
@@ -782,9 +854,10 @@ if "generated_recipes" in st.session_state:
 
             with btn_col1:
                 if st.button("👨‍🍳 Cook This", key=f"cook_{idx}"):
-                    # Store selected recipe in session state for cooking mode
+                    # Store selected recipe in session state AND persistent storage for cooking mode
                     st.session_state['active_recipe'] = recipe
                     st.session_state['active_recipe_idx'] = idx
+                    save_active_recipe(recipe)
                     # Clear any existing chat history for new recipe
                     st.session_state['cooking_chat_history'] = []
                     logger.info(
@@ -796,14 +869,9 @@ if "generated_recipes" in st.session_state:
 
             with btn_col2:
                 if st.button("📅 Add to Plan", key=f"plan_{idx}"):
-                    # Prepare recipe for weekly planner
-                    plan_recipe = {
-                        'name': recipe['name'],
-                        'source': 'Generated',
-                        'time_minutes': recipe.get('time_minutes'),
-                        'difficulty': recipe.get('difficulty'),
-                        'ingredients_needed': recipe.get('ingredients_needed', ''),
-                    }
+                    # Prepare recipe for weekly planner with FULL details
+                    plan_recipe = recipe.copy()  # Copy full recipe
+                    plan_recipe['source'] = 'Generated'  # Mark as generated
 
                     if add_recipe_to_plan(plan_recipe):
                         st.success(f"✅ Added to weekly plan!")

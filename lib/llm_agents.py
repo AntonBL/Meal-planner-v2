@@ -379,6 +379,72 @@ Please provide exactly {num_suggestions} recipes in this format."""
             )
             raise RecipeParsingError(f"Failed to parse recipes: {e}") from e
 
+    def chat_about_recipe(
+        self,
+        recipe: dict[str, str],
+        user_message: str,
+        chat_history: list[dict[str, str]] | None = None,
+    ) -> str:
+        """Chat about recipe modifications without regenerating it yet.
+
+        Args:
+            recipe: The current recipe dictionary
+            user_message: New message from user
+            chat_history: Previous chat messages for this recipe (optional)
+
+        Returns:
+            Assistant's conversational response
+
+        Raises:
+            LLMAPIError: If API call fails
+        """
+        logger.info(
+            "Chatting about recipe",
+            extra={"recipe_name": recipe.get("name"), "user_message": user_message},
+        )
+
+        if chat_history is None:
+            chat_history = []
+
+        # Build conversation context
+        conversation = ""
+        for msg in chat_history:
+            role = msg.get("role", "user")
+            content = msg.get("content", "")
+            conversation += f"{role.upper()}: {content}\n"
+
+        prompt = f"""You are a helpful cooking assistant discussing recipe modifications with a user. The user is looking at this recipe:
+
+RECIPE: {recipe.get('name', 'Unknown')}
+DESCRIPTION: {recipe.get('description', '')}
+TIME: {recipe.get('time_minutes', '')} minutes
+DIFFICULTY: {recipe.get('difficulty', '')}
+
+{f'''PREVIOUS CONVERSATION:
+{conversation}''' if conversation else ''}
+
+USER MESSAGE:
+{user_message}
+
+INSTRUCTIONS:
+1. Respond conversationally to the user's request about modifying the recipe
+2. Acknowledge what changes they want to make
+3. Discuss feasibility, suggest alternatives if needed, or confirm it sounds good
+4. At the end of your response, remind them: "When you're ready, click the 'Update Recipe' button to apply these changes!"
+5. Keep responses concise (2-3 sentences max)
+6. Be friendly and encouraging
+
+Respond naturally as a cooking assistant:"""
+
+        try:
+            response = self.llm.generate(prompt, max_tokens=300)
+            logger.info("Chat response generated successfully")
+            return response.strip()
+
+        except LLMAPIError:
+            logger.error("Failed to generate chat response - API error")
+            raise
+
     def refine_recipe(
         self,
         recipe: dict[str, str],
@@ -401,7 +467,7 @@ Please provide exactly {num_suggestions} recipes in this format."""
         """
         logger.info(
             "Refining recipe via chat",
-            extra={"recipe_name": recipe.get("name"), "message": user_message},
+            extra={"recipe_name": recipe.get("name"), "user_message": user_message},
         )
 
         # Build conversation history

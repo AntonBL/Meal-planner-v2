@@ -24,6 +24,7 @@ DataFileType = Literal[
     "loved_recipes",
     "liked_recipes",
     "not_again_recipes",
+    "generated_recipes",
     "preferences",
     "meal_history",
     "weekly_plan",
@@ -54,6 +55,7 @@ def get_data_file_path(file_type: DataFileType) -> Path:
         "loved_recipes": "data/recipes/loved.md",
         "liked_recipes": "data/recipes/liked.md",
         "not_again_recipes": "data/recipes/not_again.md",
+        "generated_recipes": "data/recipes/generated.md",
         "preferences": "data/preferences.md",
         "meal_history": "data/meal_history.md",
         "weekly_plan": "data/weekly_plan.md",
@@ -177,7 +179,7 @@ def load_all_recipe_data() -> dict[str, str]:
     """Load all recipe-related data files.
 
     Returns:
-        Dictionary with keys: loved, liked, not_again
+        Dictionary with keys: loved, liked, not_again, generated
         Values are file contents as strings
 
     Raises:
@@ -195,12 +197,13 @@ def load_all_recipe_data() -> dict[str, str]:
             "loved": load_data_file("loved_recipes"),
             "liked": load_data_file("liked_recipes"),
             "not_again": load_data_file("not_again_recipes"),
+            "generated": load_data_file("generated_recipes"),
         }
 
         logger.info(
             "All recipe data loaded successfully",
             extra={
-                "files_loaded": 3,
+                "files_loaded": 4,
                 "total_size_bytes": sum(len(v) for v in recipe_data.values()),
             },
         )

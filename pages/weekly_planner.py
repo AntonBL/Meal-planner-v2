@@ -21,6 +21,7 @@ from lib.weekly_plan_manager import (
     remove_meal_from_plan,
     clear_weekly_plan,
 )
+from lib.active_recipe_manager import save_active_recipe
 
 setup_logging("INFO")
 logger = get_logger(__name__)
@@ -45,7 +46,7 @@ def load_available_recipes() -> list[dict]:
     """Load all recipes available for meal planning.
 
     Returns:
-        List of recipe dicts from loved and liked collections
+        List of recipe dicts from loved, liked, and generated collections
     """
     try:
         recipes = []
@@ -71,6 +72,17 @@ def load_available_recipes() -> list[dict]:
                 recipes.append(recipe)
         except Exception as e:
             logger.warning(f"Could not load liked recipes: {e}")
+
+        # Load generated recipes (not yet rated)
+        try:
+            generated_content = load_data_file("generated_recipes")
+            generated_recipes = parse_all_recipes(generated_content)
+            for recipe in generated_recipes:
+                recipe['source'] = 'Generated'
+                recipe['source_file'] = 'generated_recipes'
+                recipes.append(recipe)
+        except Exception as e:
+            logger.warning(f"Could not load generated recipes: {e}")
 
         logger.info(
             "Loaded recipes for meal planning",
@@ -157,8 +169,8 @@ with tab1:
                     full_recipe = next((r for r in available_recipes if r['name'] == meal['name']), None)
 
                     if full_recipe:
-                        # Set active recipe for cooking mode
-                        st.session_state['active_recipe'] = {
+                        # Prepare active recipe data
+                        active_recipe = {
                             'name': full_recipe['name'],
                             'time_minutes': full_recipe.get('time_minutes'),
                             'difficulty': full_recipe.get('difficulty'),
@@ -167,6 +179,10 @@ with tab1:
                             'ingredients_needed': '',
                             'reason': f"From your weekly plan • {full_recipe.get('source')} recipe"
                         }
+
+                        # Save to both session state AND persistent storage
+                        st.session_state['active_recipe'] = active_recipe
+                        save_active_recipe(active_recipe)
 
                         logger.info(
                             "User started cooking from weekly plan",
@@ -214,7 +230,7 @@ with tab2:
             search = st.text_input("🔍 Search recipes", placeholder="Type to filter...", key="search_recipes")
 
         with col2:
-            source_filter = st.selectbox("Source", ["All", "Loved", "Liked"], key="source_filter")
+            source_filter = st.selectbox("Source", ["All", "Loved", "Liked", "Generated"], key="source_filter")
 
         with col3:
             time_filter = st.selectbox("Time", ["All", "< 30 min", "30-45 min", "> 45 min"], key="time_filter")

@@ -138,6 +138,98 @@ def remove_recipe_from_shopping_list(recipe_name: str) -> bool:
         return False
 
 
+def save_generated_recipe(recipe: dict) -> bool:
+    """Save a generated recipe to the generated recipes file.
+
+    This preserves the full recipe details (ingredients, instructions, etc.)
+    so generated recipes can be cooked later from the weekly plan.
+
+    Args:
+        recipe: Full recipe dictionary with all details
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        # Only save if this is actually a generated recipe
+        if recipe.get('source') != 'Generated':
+            return True  # Not an error, just not applicable
+
+        generated_path = get_data_file_path("generated_recipes")
+        content = generated_path.read_text(encoding="utf-8")
+
+        # Check if recipe already exists (avoid duplicates)
+        if f"## {recipe['name']}" in content:
+            logger.debug(f"Generated recipe already saved: {recipe['name']}")
+            return True
+
+        # Build recipe entry
+        today = datetime.now()
+        entry = f"\n---\n\n"
+        entry += f"## {recipe['name']}\n"
+        entry += f"**Added to plan:** {today.strftime('%Y-%m-%d')}\n"
+
+        if recipe.get('time_minutes'):
+            entry += f"**Time:** {recipe['time_minutes']} minutes\n"
+
+        if recipe.get('difficulty'):
+            entry += f"**Difficulty:** {(recipe['difficulty'] or 'unknown').title()}\n"
+
+        if recipe.get('description'):
+            entry += f"\n{recipe['description']}\n"
+
+        # Ingredients
+        entry += f"\n**Ingredients:**\n"
+
+        # Get ingredients from available and needed
+        all_ingredients = []
+        if recipe.get('ingredients_available'):
+            ing_list = recipe['ingredients_available'].split(',') if isinstance(recipe['ingredients_available'], str) else recipe['ingredients_available']
+            all_ingredients.extend([i.strip() for i in ing_list if i.strip()])
+
+        if recipe.get('ingredients_needed'):
+            ing_list = recipe['ingredients_needed'].split(',') if isinstance(recipe['ingredients_needed'], str) else recipe['ingredients_needed']
+            all_ingredients.extend([i.strip() for i in ing_list if i.strip()])
+
+        # Remove duplicates while preserving order
+        seen = set()
+        unique_ingredients = []
+        for ing in all_ingredients:
+            if ing.lower() not in seen:
+                seen.add(ing.lower())
+                unique_ingredients.append(ing)
+
+        for ingredient in unique_ingredients:
+            entry += f"- {ingredient}\n"
+
+        # Instructions
+        if recipe.get('instructions'):
+            entry += f"\n**Instructions:**\n{recipe['instructions']}\n"
+
+        if recipe.get('reason'):
+            entry += f"\n**Why this recipe:** {recipe['reason']}\n"
+
+        entry += "\n"
+
+        # Append to file
+        generated_path.write_text(content + entry, encoding="utf-8")
+
+        logger.info(
+            "Saved generated recipe to file",
+            extra={"recipe_name": recipe['name']}
+        )
+
+        return True
+
+    except Exception as e:
+        logger.error(
+            "Failed to save generated recipe",
+            extra={"recipe_name": recipe.get('name'), "error": str(e)},
+            exc_info=True
+        )
+        return False
+
+
 def load_current_plan() -> list[dict]:
     """Load the current weekly meal plan.
 
@@ -292,6 +384,10 @@ def add_recipe_to_plan(recipe: dict) -> bool:
             "Added recipe to weekly plan",
             extra={"recipe_name": recipe['name'], "plan_size": len(current_plan) + 1}
         )
+
+        # Save full generated recipe details if this is a generated recipe
+        if recipe.get('source') == 'Generated':
+            save_generated_recipe(recipe)
 
         # Add needed ingredients to shopping list
         if recipe.get('ingredients_needed'):
