@@ -6,7 +6,14 @@ Last updated: 2025-11-29
 
 ## Current Plan
 
-*No meals planned yet. Click "Add Meal" to start planning!*
+
+
+### 1. Vegetarian Sopa Azteca (Tortilla Soup) with Toasted Dried Chili
+**Source:** Generated
+**Time:** 55 minutes
+**Difficulty:** Medium
+**Added:** 2025-11-29
+
 
 ---
 
