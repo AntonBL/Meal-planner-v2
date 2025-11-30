@@ -9,6 +9,7 @@ import streamlit as st
 
 from lib.file_manager import get_data_file_path
 from lib.logging_config import get_logger
+from lib.constants import RECIPE_SOURCE_GENERATED
 
 logger = get_logger(__name__)
 
@@ -138,6 +139,77 @@ def remove_recipe_from_shopping_list(recipe_name: str) -> bool:
         return False
 
 
+def remove_generated_recipe(recipe_name: str) -> bool:
+    """Remove a generated recipe from the generated recipes file.
+
+    Should be called when a generated recipe is removed from the plan
+    or after it's been rated and moved to loved/liked/not_again.
+
+    Args:
+        recipe_name: Name of the recipe to remove
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        generated_path = get_data_file_path("generated_recipes")
+        content = generated_path.read_text(encoding="utf-8")
+
+        lines = content.split('\n')
+        new_lines = []
+        skip_section = False
+
+        for line in lines:
+            line_stripped = line.strip()
+
+            # Check if this is the recipe header we want to remove
+            if line_stripped.startswith('##') and not line.startswith('###'):
+                # Extract recipe name from header
+                recipe_header = line_stripped.replace('##', '').strip()
+
+                # If this is the recipe we want to remove, skip this section
+                if recipe_header == recipe_name:
+                    skip_section = True
+                    continue
+                else:
+                    skip_section = False
+                    new_lines.append(line)
+
+            # Check if we're at a separator (start of new section)
+            elif line_stripped.startswith('---'):
+                # If we were skipping, don't add the previous separator
+                if skip_section:
+                    skip_section = False
+                    continue
+                else:
+                    new_lines.append(line)
+
+            # Skip lines in the section we're removing
+            elif skip_section:
+                continue
+
+            else:
+                new_lines.append(line)
+
+        # Write back
+        generated_path.write_text('\n'.join(new_lines), encoding="utf-8")
+
+        logger.info(
+            "Removed generated recipe from file",
+            extra={"recipe_name": recipe_name}
+        )
+
+        return True
+
+    except Exception as e:
+        logger.error(
+            "Failed to remove generated recipe",
+            extra={"recipe_name": recipe_name, "error": str(e)},
+            exc_info=True
+        )
+        return False
+
+
 def save_generated_recipe(recipe: dict) -> bool:
     """Save a generated recipe to the generated recipes file.
 
@@ -152,14 +224,17 @@ def save_generated_recipe(recipe: dict) -> bool:
     """
     try:
         # Only save if this is actually a generated recipe
-        if recipe.get('source') != 'Generated':
+        if recipe.get('source') != RECIPE_SOURCE_GENERATED:
             return True  # Not an error, just not applicable
 
         generated_path = get_data_file_path("generated_recipes")
         content = generated_path.read_text(encoding="utf-8")
 
         # Check if recipe already exists (avoid duplicates)
-        if f"## {recipe['name']}" in content:
+        # Use regex to check recipe headers more robustly
+        import re
+        existing_recipes = re.findall(r'^## (.+)$', content, re.MULTILINE)
+        if recipe['name'] in existing_recipes:
             logger.debug(f"Generated recipe already saved: {recipe['name']}")
             return True
 
@@ -386,7 +461,7 @@ def add_recipe_to_plan(recipe: dict) -> bool:
         )
 
         # Save full generated recipe details if this is a generated recipe
-        if recipe.get('source') == 'Generated':
+        if recipe.get('source') == RECIPE_SOURCE_GENERATED:
             save_generated_recipe(recipe)
 
         # Add needed ingredients to shopping list
@@ -399,7 +474,8 @@ def add_recipe_to_plan(recipe: dict) -> bool:
         # Clear Streamlit cache if available
         try:
             st.cache_data.clear()
-        except:
+        except AttributeError:
+            # Streamlit cache not available (e.g., during testing)
             pass
 
         return True
@@ -427,6 +503,10 @@ def remove_meal_from_plan(index: int) -> bool:
 
         # Remove the meal
         removed_meal = current_plan.pop(index)
+
+        # If this was a generated recipe, also remove from generated recipes file
+        if removed_meal.get('source') == RECIPE_SOURCE_GENERATED:
+            remove_generated_recipe(removed_meal['name'])
 
         # Rebuild the plan section
         plan_lines = []
@@ -494,7 +574,8 @@ def remove_meal_from_plan(index: int) -> bool:
         # Clear cache
         try:
             st.cache_data.clear()
-        except:
+        except AttributeError:
+            # Streamlit cache not available (e.g., during testing)
             pass
 
         return True
@@ -585,7 +666,8 @@ def clear_weekly_plan() -> bool:
         # Clear cache
         try:
             st.cache_data.clear()
-        except:
+        except AttributeError:
+            # Streamlit cache not available (e.g., during testing)
             pass
 
         return True

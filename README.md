@@ -53,25 +53,32 @@ An intelligent meal planning application powered by AI that helps you manage ing
 3. **Set up environment variables**
    ```bash
    cp .env.example .env
-   # Edit .env and add your credentials:
-   # - ANTHROPIC_API_KEY (required for AI features)
-   # - AUTH_USERNAME (for web login)
-   # - AUTH_PASSWORD (for web login)
+   # Edit .env and add your Anthropic API key
    ```
 
    Example `.env` file:
    ```bash
    ANTHROPIC_API_KEY=sk-ant-your-key-here
-   AUTH_USERNAME=your_username
-   AUTH_PASSWORD=your_secure_password
    ```
 
-4. **Run the app**
+4. **Set up authentication** (secure, local login)
+   ```bash
+   python3 scripts/setup_auth.py
+   ```
+
+   This interactive script will:
+   - Generate a secure random session key
+   - Create your username/password (password is bcrypt-hashed)
+   - Save to `.streamlit/config.yaml` (already in .gitignore)
+
+   **Security Note:** The config file is excluded from git to protect your credentials.
+
+5. **Run the app**
    ```bash
    streamlit run app.py
    ```
 
-5. **Open your browser**
+6. **Open your browser**
    - The app will automatically open at `http://localhost:8501`
 
 ## How It Works
@@ -176,15 +183,17 @@ meal-planner-v2/
 │   └── cooking_mode.py      # Interactive cooking assistant
 │
 ├── lib/                   # Core logic
-│   ├── auth.py                 # Authentication & session management
-│   ├── llm_agents.py           # Claude API interactions
-│   ├── file_manager.py         # Markdown file operations
-│   ├── weekly_plan_manager.py  # Weekly plan & shopping list sync
-│   ├── active_recipe_manager.py # Active recipe persistence
-│   ├── vision.py               # Photo recognition with Claude Vision
-│   ├── recipe_parser.py        # Recipe parsing utilities
-│   ├── exceptions.py           # Custom exceptions
-│   └── logging_config.py       # Logging configuration
+│   ├── auth.py                  # Authentication & session management
+│   ├── llm_agents.py            # Claude API interactions
+│   ├── file_manager.py          # Markdown file operations
+│   ├── weekly_plan_manager.py   # Weekly plan & shopping list sync
+│   ├── active_recipe_manager.py # Active recipe session persistence
+│   ├── recipe_feedback.py       # Recipe rating & pantry updates (shared)
+│   ├── constants.py             # Application-wide constants
+│   ├── vision.py                # Photo recognition with Claude Vision
+│   ├── recipe_parser.py         # Recipe parsing utilities
+│   ├── exceptions.py            # Custom exceptions
+│   └── logging_config.py        # Logging configuration
 │
 └── data/                  # All user data (markdown files)
     ├── pantry/
@@ -212,6 +221,13 @@ This project follows professional Python development practices:
 - ✅ **Logging** instead of print statements (structured logging)
 - ✅ **Pre-commit hooks** for automated quality checks
 - ✅ **SOLID principles**, DRY, YAGNI, KISS
+- ✅ **Code organization**: Shared utilities extracted to avoid duplication
+
+### Recent Refactoring (2025-11-29)
+- Created `lib/recipe_feedback.py` to consolidate duplicated code (~300 lines removed)
+- Created `lib/constants.py` for magic strings (improved maintainability)
+- Enhanced cleanup logic for generated recipes (prevents data accumulation)
+- Improved exception handling and duplicate detection
 
 See [agent.md](./agent.md) for complete coding standards and best practices.
 

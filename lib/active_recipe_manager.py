@@ -12,8 +12,17 @@ from lib.logging_config import get_logger
 
 logger = get_logger(__name__)
 
-# File path for active recipe
+# File name for active recipe
 ACTIVE_RECIPE_FILE = "active_recipe.json"
+
+
+def _get_active_recipe_path() -> Path:
+    """Get the path to the active recipe JSON file.
+
+    Returns:
+        Path object pointing to the active recipe file
+    """
+    return Path(__file__).parent.parent / "data" / ACTIVE_RECIPE_FILE
 
 
 def save_active_recipe(recipe: dict) -> bool:
@@ -26,11 +35,9 @@ def save_active_recipe(recipe: dict) -> bool:
         True if successful, False otherwise
     """
     try:
-        # Get the data directory path
-        data_dir = Path(__file__).parent.parent / "data"
-        data_dir.mkdir(parents=True, exist_ok=True)
-
-        active_recipe_path = data_dir / ACTIVE_RECIPE_FILE
+        # Get the active recipe path
+        active_recipe_path = _get_active_recipe_path()
+        active_recipe_path.parent.mkdir(parents=True, exist_ok=True)
 
         # Write recipe as JSON for easy parsing
         with open(active_recipe_path, 'w', encoding='utf-8') as f:
@@ -59,9 +66,8 @@ def load_active_recipe() -> Optional[dict]:
         Recipe dictionary if found, None otherwise
     """
     try:
-        # Get the data directory path
-        data_dir = Path(__file__).parent.parent / "data"
-        active_recipe_path = data_dir / ACTIVE_RECIPE_FILE
+        # Get the active recipe path
+        active_recipe_path = _get_active_recipe_path()
 
         # Check if file exists
         if not active_recipe_path.exists():
@@ -103,9 +109,8 @@ def clear_active_recipe() -> bool:
         True if successful, False otherwise
     """
     try:
-        # Get the data directory path
-        data_dir = Path(__file__).parent.parent / "data"
-        active_recipe_path = data_dir / ACTIVE_RECIPE_FILE
+        # Get the active recipe path
+        active_recipe_path = _get_active_recipe_path()
 
         # Remove file if it exists
         if active_recipe_path.exists():
@@ -132,9 +137,7 @@ def has_active_recipe() -> bool:
         True if active recipe exists, False otherwise
     """
     try:
-        data_dir = Path(__file__).parent.parent / "data"
-        active_recipe_path = data_dir / ACTIVE_RECIPE_FILE
+        active_recipe_path = _get_active_recipe_path()
         return active_recipe_path.exists()
-
     except Exception:
         return False

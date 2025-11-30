@@ -22,6 +22,11 @@ from lib.weekly_plan_manager import (
     clear_weekly_plan,
 )
 from lib.active_recipe_manager import save_active_recipe
+from lib.constants import (
+    RECIPE_SOURCE_GENERATED,
+    RECIPE_SOURCE_LOVED,
+    RECIPE_SOURCE_LIKED
+)
 
 setup_logging("INFO")
 logger = get_logger(__name__)
@@ -56,7 +61,7 @@ def load_available_recipes() -> list[dict]:
             loved_content = load_data_file("loved_recipes")
             loved_recipes = parse_all_recipes(loved_content)
             for recipe in loved_recipes:
-                recipe['source'] = 'Loved'
+                recipe['source'] = RECIPE_SOURCE_LOVED
                 recipe['source_file'] = 'loved_recipes'
                 recipes.append(recipe)
         except Exception as e:
@@ -67,7 +72,7 @@ def load_available_recipes() -> list[dict]:
             liked_content = load_data_file("liked_recipes")
             liked_recipes = parse_all_recipes(liked_content)
             for recipe in liked_recipes:
-                recipe['source'] = 'Liked'
+                recipe['source'] = RECIPE_SOURCE_LIKED
                 recipe['source_file'] = 'liked_recipes'
                 recipes.append(recipe)
         except Exception as e:
@@ -78,7 +83,7 @@ def load_available_recipes() -> list[dict]:
             generated_content = load_data_file("generated_recipes")
             generated_recipes = parse_all_recipes(generated_content)
             for recipe in generated_recipes:
-                recipe['source'] = 'Generated'
+                recipe['source'] = RECIPE_SOURCE_GENERATED
                 recipe['source_file'] = 'generated_recipes'
                 recipes.append(recipe)
         except Exception as e:

@@ -5,42 +5,50 @@ Once you cook and rate these recipes, they'll be moved to your Loved, Liked, or 
 
 ---
 
-
 ---
 
-## Penne alla Vodka with Crispy Tofu, Roasted Eggplant & Spinach
+## Vegetarian Sopa Azteca (Tortilla Soup) with Toasted Dried Chili
 **Added to plan:** 2025-11-29
-**Time:** 33 minutes
-**Difficulty:** Easy
+**Time:** 55 minutes
+**Difficulty:** Medium
 
-A creamy Italian pasta dish with a tomato-vodka sauce, topped with pan-fried tofu and roasted eggplant for protein and depth, plus fresh spinach for brightness. Rich, satisfying, and ready in under 35 minutes.
+A classic Mexican tomato-based soup enriched with toasted, smoky dried chilies and charred tomatoes for deeper, more complex flavors, loaded with crispy tortilla strips, avocado, and fresh cilantro - a restaurant favorite made vegetarian with enhanced caramelized depth.
 
 **Ingredients:**
-- Penne pasta
-- extra-firm tofu
-- eggplant
-- canned tomatoes
-- spinach
-- garlic
-- onions
-- olive oil
-- butter
-- parmesan cheese
+- Extra Virgin Olive Oil
+- Tomatoes (6 large or 2 28oz cans)
+- vegetable broth (6 cups)
+- onion (1 medium)
+- garlic (4 cloves)
+- jalapeño (1)
+- dried chiles (2-3
+- such as ancho or guajillo)
+- corn tortillas (6-8)
+- avocado (2)
+- fresh cilantro (1/2 cup chopped)
+- lime (2)
 - salt
-- black pepper
-- red pepper flakes
-- basil
-- Heavy cream or whole milk (can substitute oat milk)
-- vodka (optional but recommended for authentic flavor)
+- pepper
+- optional: queso fresco (1/2 cup crumbled)
+- epazote (2 tbsp fresh)
 
 **Instructions:**
-1. Cut eggplant into 3/4-inch cubes, toss with olive oil, salt, and pepper. Spread on a baking sheet and roast at 400°F for 12-14 minutes until golden and tender. Set aside.
-2. While eggplant roasts, cut tofu into 3/4-inch cubes and pan-fry in olive oil over medium-high heat for 8-10 minutes until golden and crispy on all sides. Season with salt and pepper. Set aside.
-3. Bring salted water to boil and cook penne according to package directions. Reserve 1 cup pasta water before draining.
-4. While pasta cooks, sauté minced garlic and diced onion in butter and olive oil over medium heat for 3-4 minutes until softened.
-5. Add crushed canned tomatoes (about 1.5 cans) and simmer for 5 minutes. Stir in 1/2 cup vodka (or skip if preferred) and let simmer 2 minutes.
-6. Reduce heat to low and stir in 1/2 cup cream or milk. Add half the spinach and stir until wilted, then add remaining spinach.
-7. Toss cooked penne into sauce, adding pasta water as needed to reach desired consistency. Gently fold in roasted eggplant. Top with crispy tofu, fresh basil, and parmesan cheese.
+1. Heat 2 tbsp olive oil in a large pot over medium-high heat (1 minute)
+2. Place 2-3 dried chiles in a dry skillet over medium heat, toast for 1-2 minutes until fragrant, shaking occasionally to avoid burning
+3. Remove stems and seeds from toasted chiles and set aside
+4. In the same dry skillet, char 6 diced tomatoes over medium-high heat for 3-4 minutes, stirring occasionally, until lightly blackened and caramelized
+5. Add 1 diced onion and 4 minced garlic cloves to the pot with oil, sauté until fragrant (2-3 minutes)
+6. Add charred tomatoes and 1 diced jalapeño to pot, cook for 2 minutes
+7. Add toasted chiles to pot and cook for 1 minute to bloom flavors
+8. Pour in 6 cups vegetable broth and bring to a simmer (3-5 minutes)
+9. Simmer uncovered for 15-18 minutes until flavors meld
+10. Blend soup using immersion blender until smooth, or carefully blend in batches (3-5 minutes total)
+11. Season with salt, pepper, and a squeeze of fresh lime juice to taste (1-2 minutes)
+12. While soup simmers, cut 6-8 tortillas into 1/4-inch strips, toss with 1 tbsp olive oil and salt
+13. Bake tortilla strips on a baking sheet at 375°F for 8-10 minutes until golden and crispy, stirring halfway through
+14. Slice 2 avocados into 1/4-inch pieces (2 minutes)
+15. Ladle soup into bowls and top with crispy tortilla strips, avocado slices, fresh cilantro, queso fresco if desired, and an additional squeeze of fresh lime juice
+16. Serve immediately
 
-**Why this recipe:** Added roasted eggplant as a second protein element that complements the tofu while adding smoky depth and meaty texture. Eggplant is roasted separately to prevent wateriness and maintain firm texture. Time increased by 5 minutes to accommodate roasting step. Recipe remains fully vegetarian.
+**Why this recipe:** Recipe updated to incorporate toasting the dried chiles first (enhancing smokiness), charring the tomatoes for caramelized depth, and adding lime juice during seasoning to brighten flavors. These techniques deepen complexity and create a more authentic, restaurant-quality result. Time increased by 5 minutes to account for charring tomatoes.
 
