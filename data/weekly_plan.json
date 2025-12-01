@@ -1,22 +1,30 @@
 {
   "current_plan": [
     {
-      "name": "Thai Green Curry with Tomatoes and Fresh Herbs",
+      "name": "Braised Broccolini with Olives, Herbs & Parmesan",
+      "recipe_id": "a5154d0b-31ad-44e4-9a2f-477e7345c401",
       "source": "Generated",
-      "time_minutes": 25,
-      "difficulty": "easy",
-      "added": "2025-11-30",
-      "recipe_id": "8f4aa84a-4d29-4cc8-8dd0-25ef4e0811fb"
+      "time_minutes": "22",
+      "difficulty": "Easy",
+      "added": "2025-12-01"
     },
     {
-      "name": "Vegetarian Sopa Azteca (Tortilla Soup) with Toasted Dried Chili",
+      "name": "Indian Aloo Chana (Potato & Chickpea Curry)",
+      "recipe_id": "ce88ab90-920d-489c-9744-4d5b10914f93",
       "source": "Generated",
-      "time_minutes": 55,
-      "difficulty": "medium",
-      "added": "2025-11-29",
-      "recipe_id": "73a567a4-f53b-43a3-8c48-2844cc3afc77"
+      "time_minutes": "40",
+      "difficulty": "Medium",
+      "added": "2025-12-01"
+    },
+    {
+      "name": "Korean Doenjang-jjigae (Soybean Paste Stew)",
+      "recipe_id": "d28bfa23-c646-415b-8965-d83adad75267",
+      "source": "Generated",
+      "time_minutes": "30",
+      "difficulty": "Easy",
+      "added": "2025-12-01"
     }
   ],
   "history": [],
-  "last_updated": "2025-11-30T19:12:01.416990"
+  "last_updated": "2025-12-01T01:44:00.097923"
 }
