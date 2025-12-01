@@ -191,12 +191,12 @@ st.info("""
 with st.sidebar:
     st.markdown("## 🍳 Navigation")
     st.markdown("Use the buttons above or navigate using these links:")
-    st.page_link("app.py", label="🏠 Home", icon="🏠")
-    st.page_link("pages/generate_recipes.py", label="🎲 Generate Recipes", icon="🎲")
-    st.page_link("pages/weekly_planner.py", label="📅 Weekly Planner", icon="📅")
-    st.page_link("pages/pantry.py", label="🥫 Pantry", icon="🥫")
-    st.page_link("pages/shopping_list.py", label="🛒 Shopping List", icon="🛒")
-    st.page_link("pages/meal_history.py", label="📜 Meal History", icon="📜")
+    st.page_link("app.py", label="Home", icon="🏠")
+    st.page_link("pages/generate_recipes.py", label="Generate Recipes", icon="🎲")
+    st.page_link("pages/weekly_planner.py", label="Weekly Planner", icon="📅")
+    st.page_link("pages/pantry.py", label="Pantry", icon="🥫")
+    st.page_link("pages/shopping_list.py", label="Shopping List", icon="🛒")
+    st.page_link("pages/meal_history.py", label="Meal History", icon="📜")
 
     st.markdown("---")
     st.markdown("### ℹ️ About")
