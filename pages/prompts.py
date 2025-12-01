@@ -2,7 +2,7 @@
 
 import streamlit as st
 
-from lib.auth import require_auth
+from lib.auth import require_authentication
 from lib.prompt_manager import (
     get_prompt_variables,
     load_prompts,
@@ -12,7 +12,7 @@ from lib.prompt_manager import (
 from lib.ui import render_header
 
 # Require authentication
-require_auth()
+require_authentication()
 
 # Header
 render_header(
