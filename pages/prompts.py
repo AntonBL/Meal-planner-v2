@@ -41,7 +41,13 @@ changes_made = False
 
 with tab1:
     st.subheader("Recipe Generation Prompt")
-    st.markdown("Used when generating new recipe suggestions based on your pantry and preferences.")
+    st.info("""
+    **Where this is used:**
+    - 📍 **Generate Recipes page** - When you click "Generate Recipe Suggestions"
+    - 🔧 **Function:** `RecipeGenerator.suggest_recipes()` in `lib/llm_agents.py`
+    - 📊 **Input:** Your pantry items, preferences, cuisines, meal type
+    - 📤 **Output:** 4 recipe suggestions with ingredients and instructions
+    """)
     
     variables = get_prompt_variables("recipe_generation")
     with st.expander("📋 Available Variables"):
@@ -61,7 +67,13 @@ with tab1:
 
 with tab2:
     st.subheader("Recipe Refinement Prompt")
-    st.markdown("Used when modifying an existing recipe based on user feedback.")
+    st.info("""
+    **Where this is used:**
+    - 📍 **Generate Recipes page** - When you click "Update Recipe" after chatting about changes
+    - 🔧 **Function:** `RecipeGenerator.refine_recipe()` in `lib/llm_agents.py`
+    - 📊 **Input:** Current recipe + your requested modifications
+    - 📤 **Output:** Updated recipe with your changes applied
+    """)
     
     variables = get_prompt_variables("recipe_refinement")
     with st.expander("📋 Available Variables"):
@@ -81,7 +93,13 @@ with tab2:
 
 with tab3:
     st.subheader("Recipe Chat Prompt")
-    st.markdown("Used for conversational interactions about recipe modifications.")
+    st.info("""
+    **Where this is used:**
+    - 📍 **Generate Recipes page** - When you type a message in the chat box for a recipe
+    - 🔧 **Function:** `RecipeGenerator.chat_about_recipe()` in `lib/llm_agents.py`
+    - 📊 **Input:** Recipe details + your chat message
+    - 📤 **Output:** Conversational response discussing your requested changes
+    """)
     
     variables = get_prompt_variables("recipe_chat")
     with st.expander("📋 Available Variables"):
@@ -101,7 +119,14 @@ with tab3:
 
 with tab4:
     st.subheader("Ingredient Categorization Prompt")
-    st.markdown("Used to categorize ingredients into shopping list categories.")
+    st.info("""
+    **Where this is used:**
+    - 📍 **Shopping List page** - When adding ingredients to your shopping list
+    - 📍 **Generate Recipes page** - When adding recipe ingredients to shopping list
+    - 🔧 **Function:** `IngredientCategorizer.categorize()` in `lib/ingredient_agent.py`
+    - 📊 **Input:** Ingredient name (e.g., "tomatoes", "olive oil")
+    - 📤 **Output:** Category name (e.g., "Fresh Produce", "Other")
+    """)
     
     variables = get_prompt_variables("ingredient_categorization")
     with st.expander("📋 Available Variables"):
