@@ -97,14 +97,11 @@ col1, col2 = st.columns(2)
 with col1:
     st.markdown("**Select cuisines:**")
     cuisine_soup = st.checkbox("🍲 Soup")
-    cuisine_italian = st.checkbox("🇮🇹 Italian", value=True)
-    cuisine_thai = st.checkbox("🇹🇭 Thai", value=True)
+    cuisine_italian = st.checkbox("🇮🇹 Italian")
+    cuisine_thai = st.checkbox("🇹🇭 Thai")
     cuisine_korean = st.checkbox("🇰🇷 Korean")
     cuisine_mexican = st.checkbox("🌮 Mexican")
     cuisine_mediterranean = st.checkbox("🫒 Mediterranean")
-
-with col2:
-    st.markdown("&nbsp;")  # Spacing
     cuisine_middle_eastern = st.checkbox("🧆 Middle Eastern")
     cuisine_indian = st.checkbox("🍛 Indian")
     cuisine_asian = st.checkbox("🥡 Asian (General)")
