@@ -31,23 +31,11 @@ class IngredientCategorizer:
             ingredient_name: Name of the ingredient to categorize
 
         Returns:
-            Category name (e.g., "Produce", "Dairy", "Spices", "Canned Goods")
+            Category name for home pantry organization
         """
-        prompt = f"""Categorize this ingredient into ONE of these categories:
-- Produce (fresh fruits, vegetables, herbs)
-- Dairy (milk, cheese, yogurt, eggs)
-- Meat & Seafood (all proteins including tofu, tempeh)
-- Bakery (bread, tortillas, baked goods)
-- Pantry Staples (rice, pasta, flour, sugar, oils)
-- Spices & Condiments (spices, sauces, vinegar, condiments)
-- Canned & Jarred (canned goods, jars, preserves)
-- Frozen (frozen vegetables, meals, desserts)
-- Beverages (drinks, juices, coffee, tea)
-- Other (anything that doesn't fit above)
-
-Ingredient: {ingredient_name}
-
-Respond with ONLY the category name, nothing else."""
+        from lib.prompt_manager import get_prompt
+        
+        prompt = get_prompt("ingredient_categorization", ingredient_name=ingredient_name)
 
         try:
             response = self.llm.generate(prompt, max_tokens=50)

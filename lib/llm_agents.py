@@ -124,63 +124,23 @@ class RecipeGenerator:
         Returns:
             Formatted prompt string
         """
-        prompt = f"""You are a helpful vegetarian meal planning assistant. Based on the available ingredients and user preferences below, suggest {num_suggestions} recipes.
-
-AVAILABLE PANTRY STAPLES:
-{context['staples']}
-
-AVAILABLE FRESH ITEMS:
-{context['fresh']}
-
-USER PREFERENCES:
-{context['preferences']}
-
-FAVORITE RECIPES (for reference):
-{context['loved_recipes']}
-
-RECENT MEALS (for variety):
-{context['meal_history']}
-
-REQUEST:
-- Cuisines: {', '.join(cuisines)}
-- Meal type: {meal_type}
-{f"- Additional preferences: {additional_context}" if additional_context else ""}
-
-IMPORTANT REQUIREMENTS:
-1. ALL RECIPES MUST BE VEGETARIAN (no meat, poultry, or fish)
-2. Suggest {num_suggestions} recipes that:
-   - Use mostly available ingredients (minimize shopping needs)
-   - Match the requested cuisines
-   - Avoid recently cooked meals (check meal history for variety)
-   - Respect preferences (vegetarian diet)
-   - Are appropriate for {meal_type}
-
-3. For each recipe, provide:
-   - Name and brief description (1-2 sentences)
-   - List ingredients including amounts in two groups: AVAILABLE (already have) and NEEDED (must buy)
-   - Estimated time in minutes
-   - Difficulty (easy/medium/hard)
-   - Step-by-step cooking instructions (clear and concise) with amounts and timing
-   - Why you're suggesting it (brief reason)
-
-4. Format your response EXACTLY like this for EACH recipe:
-
----RECIPE---
-NAME: [Recipe Name]
-DESCRIPTION: [1-2 sentence description]
-AVAILABLE: [comma-separated list of ingredients already in pantry]
-NEEDED: [comma-separated list of ingredients to buy, or "None" if have everything]
-TIME: [number only, e.g., 30]
-DIFFICULTY: [easy/medium/hard]
-INSTRUCTIONS:
-1. [First step]
-2. [Second step]
-3. [Third step]
-[Continue with all steps needed]
-REASON: [Why suggesting this recipe]
----END---
-
-Please provide exactly {num_suggestions} recipes in this format."""
+        from lib.prompt_manager import get_prompt
+        
+        # Format additional context
+        additional_context_str = f"- Additional preferences: {additional_context}" if additional_context else ""
+        
+        prompt = get_prompt(
+            "recipe_generation",
+            num_suggestions=num_suggestions,
+            staples=context['staples'],
+            fresh=context['fresh'],
+            preferences=context['preferences'],
+            loved_recipes=context['loved_recipes'],
+            meal_history=context['meal_history'],
+            cuisines=', '.join(cuisines),
+            meal_type=meal_type,
+            additional_context=additional_context_str
+        )
 
         logger.debug(
             "Recipe prompt built",
@@ -308,6 +268,8 @@ Please provide exactly {num_suggestions} recipes in this format."""
         Raises:
             LLMAPIError: If API call fails
         """
+        from lib.prompt_manager import get_prompt
+        
         logger.info(
             "Chatting about recipe",
             extra={"recipe_name": recipe.get("name"), "user_message": user_message},
@@ -322,29 +284,18 @@ Please provide exactly {num_suggestions} recipes in this format."""
             role = msg.get("role", "user")
             content = msg.get("content", "")
             conversation += f"{role.upper()}: {content}\n"
+        
+        conversation_history = f"PREVIOUS CONVERSATION:\n{conversation}" if conversation else ""
 
-        prompt = f"""You are a helpful cooking assistant discussing recipe modifications with a user. The user is looking at this recipe:
-
-RECIPE: {recipe.get('name', 'Unknown')}
-DESCRIPTION: {recipe.get('description', '')}
-TIME: {recipe.get('time_minutes', '')} minutes
-DIFFICULTY: {recipe.get('difficulty', '')}
-
-{f'''PREVIOUS CONVERSATION:
-{conversation}''' if conversation else ''}
-
-USER MESSAGE:
-{user_message}
-
-INSTRUCTIONS:
-1. Respond conversationally to the user's request about modifying the recipe
-2. Acknowledge what changes they want to make
-3. Discuss feasibility, suggest alternatives if needed, or confirm it sounds good
-4. At the end of your response, remind them: "When you're ready, click the 'Update Recipe' button to apply these changes!"
-5. Keep responses concise (2-3 sentences max)
-6. Be friendly and encouraging
-
-Respond naturally as a cooking assistant:"""
+        prompt = get_prompt(
+            "recipe_chat",
+            recipe_name=recipe.get('name', 'Unknown'),
+            recipe_description=recipe.get('description', ''),
+            time_minutes=recipe.get('time_minutes', ''),
+            difficulty=recipe.get('difficulty', ''),
+            conversation_history=conversation_history,
+            user_message=user_message
+        )
 
         try:
             response = self.llm.generate(prompt, max_tokens=300)
@@ -426,55 +377,29 @@ Respond naturally as a cooking assistant:"""
         Returns:
             Formatted prompt string
         """
+        from lib.prompt_manager import get_prompt
+        
         # Build conversation context
         conversation = ""
         for msg in chat_history:
             role = msg.get("role", "user")
             content = msg.get("content", "")
             conversation += f"{role.upper()}: {content}\n"
+        
+        conversation_history = f"PREVIOUS CONVERSATION:\n{conversation}" if conversation else ""
 
-        prompt = f"""You are helping refine a recipe based on user feedback. The user wants to adjust the recipe below.
-
-CURRENT RECIPE:
-Name: {recipe.get('name', 'Unknown')}
-Description: {recipe.get('description', '')}
-Available Ingredients: {recipe.get('ingredients_available', '')}
-Needed Ingredients: {recipe.get('ingredients_needed', '')}
-Time: {recipe.get('time_minutes', '')} minutes
-Difficulty: {recipe.get('difficulty', '')}
-Instructions:
-{recipe.get('instructions', '')}
-
-{f'''PREVIOUS CONVERSATION:
-{conversation}''' if conversation else ''}
-
-USER REQUEST:
-{user_message}
-
-INSTRUCTIONS:
-1. Modify the recipe according to the user's request
-2. Keep it VEGETARIAN (no meat, poultry, or fish)
-3. Update all relevant fields (ingredients, instructions, time, etc.)
-4. Maintain the same quality and clarity
-
-Format your response EXACTLY like this:
-
----RECIPE---
-NAME: [Recipe Name]
-DESCRIPTION: [1-2 sentence description]
-AVAILABLE: [comma-separated list of ingredients already in pantry]
-NEEDED: [comma-separated list of ingredients to buy, or "None" if have everything]
-TIME: [number only, e.g., 30]
-DIFFICULTY: [easy/medium/hard]
-INSTRUCTIONS:
-1. [First step]
-2. [Second step]
-3. [Third step]
-[Continue with all steps needed]
-REASON: [Brief note about the changes made based on user request]
----END---
-
-Provide exactly ONE recipe in this format."""
+        prompt = get_prompt(
+            "recipe_refinement",
+            recipe_name=recipe.get('name', 'Unknown'),
+            recipe_description=recipe.get('description', ''),
+            ingredients_available=recipe.get('ingredients_available', ''),
+            ingredients_needed=recipe.get('ingredients_needed', ''),
+            time_minutes=recipe.get('time_minutes', ''),
+            difficulty=recipe.get('difficulty', ''),
+            instructions=recipe.get('instructions', ''),
+            conversation_history=conversation_history,
+            user_message=user_message
+        )
 
         return prompt
 
