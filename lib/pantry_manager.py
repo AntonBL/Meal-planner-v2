@@ -9,7 +9,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Optional
 
-from lib.file_manager import get_data_file_path
+
 from lib.logging_config import get_logger
 
 logger = get_logger(__name__)
@@ -82,62 +82,13 @@ def _parse_markdown_line(line: str) -> dict:
     return item
 
 
-def _migrate_markdown_pantry_if_needed():
-    """Migrate legacy markdown pantry files to JSON if JSON doesn't exist."""
-    json_path = _get_pantry_path()
-    if json_path.exists():
-        return
-
-    try:
-        logger.info("Migrating pantry from markdown to JSON...")
-        items = []
-        
-        # Files to migrate
-        files = [
-            ("fresh", "fresh"),
-            ("staples", "staple")
-        ]
-        
-        for file_key, item_type in files:
-            md_path = get_data_file_path(file_key)
-            if not md_path.exists():
-                continue
-                
-            content = md_path.read_text(encoding="utf-8")
-            current_section = "Uncategorized"
-            
-            for line in content.split('\n'):
-                line = line.strip()
-                if not line:
-                    continue
-                    
-                if line.startswith('##'):
-                    current_section = line.replace('##', '').strip()
-                elif line.startswith('-'):
-                    item = _parse_markdown_line(line)
-                    item["category"] = current_section
-                    item["type"] = item_type
-                    items.append(item)
-
-        # Save to JSON
-        data = {
-            "items": items,
-            "last_updated": datetime.now().isoformat()
-        }
-        _save_pantry_data(data)
-        logger.info(f"Migrated {len(items)} items to pantry.json")
-
-    except Exception as e:
-        logger.error(f"Failed to migrate pantry: {e}", exc_info=True)
-
-
 def load_pantry_items() -> List[Dict]:
     """Load all pantry items.
 
     Returns:
         List of item dictionaries
     """
-    _migrate_markdown_pantry_if_needed()
+
     data = _load_pantry_data()
     return data.get("items", [])
 

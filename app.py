@@ -37,19 +37,6 @@ name, username = require_authentication()
 # ============================================================================
 # Data Migration (one-time)
 # ============================================================================
-# Run migration from markdown to JSON if needed
-from lib.data_migration import run_migration
-from lib.logging_config import get_logger
-
-logger = get_logger(__name__)
-
-# Run migration silently in background
-try:
-    run_migration()
-except Exception as e:
-    logger.error(f"Migration failed: {e}", exc_info=True)
-    # Don't block app startup on migration failure
-
 # Title
 render_header(
     title="AI Recipe Planner",

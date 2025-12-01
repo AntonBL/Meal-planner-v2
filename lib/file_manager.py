@@ -1,22 +1,22 @@
-"""File operations for loading and managing data files.
+"""File operations and Context Loading.
 
-Following agent.md guidelines:
-- Type hints on all functions
-- Docstrings with Google style
-- Structured logging instead of print
-- Specific exceptions
-- DRY principle (reusable functions)
+This module now serves as an adapter to load data from JSON stores
+and format it for LLM context generation.
 """
 
 import logging
 from pathlib import Path
 from typing import Literal
 
-from lib.exceptions import DataFileNotFoundError, InvalidDataFormatError
+from lib.exceptions import DataFileNotFoundError
+from lib.history_manager import load_meal_history
+from lib.pantry_manager import load_pantry_items
+from lib.recipe_store import load_recipes
+from lib.shopping_list_manager import load_shopping_list
 
 logger = logging.getLogger(__name__)
 
-# Type alias for valid data file types
+# Type alias for valid data file types (Legacy support mostly)
 DataFileType = Literal[
     "staples",
     "fresh",
@@ -33,20 +33,8 @@ DataFileType = Literal[
 
 def get_data_file_path(file_type: DataFileType) -> Path:
     """Get the path to a data file by type.
-
-    Args:
-        file_type: Type of data file to load
-
-    Returns:
-        Path object pointing to the data file
-
-    Raises:
-        ValueError: If file_type is not recognized
-
-    Example:
-        >>> path = get_data_file_path("staples")
-        >>> print(path)
-        data/pantry/staples.md
+    
+    Kept for legacy support during transition, but most data is now in JSON.
     """
     file_map = {
         "staples": "data/pantry/staples.md",
@@ -67,194 +55,63 @@ def get_data_file_path(file_type: DataFileType) -> Path:
     return Path(file_map[file_type])
 
 
-def load_data_file(file_type: DataFileType) -> str:
-    """Load a data file and return its contents.
-
-    Args:
-        file_type: Type of data file to load
-
-    Returns:
-        File contents as string
-
-    Raises:
-        DataFileNotFoundError: If file doesn't exist
-        InvalidDataFormatError: If file is empty or unreadable
-
-    Example:
-        >>> content = load_data_file("staples")
-        >>> "Pantry Staples" in content
-        True
-    """
-    file_path = get_data_file_path(file_type)
-
-    logger.debug(
-        "Loading data file",
-        extra={"file_type": file_type, "file_path": str(file_path)},
-    )
-
-    # Check if file exists
-    if not file_path.exists():
-        logger.error(
-            "Data file not found",
-            extra={"file_type": file_type, "file_path": str(file_path)},
-        )
-        raise DataFileNotFoundError(
-            f"Data file not found: {file_path}. "
-            f"Please ensure the data directory structure is set up correctly."
-        )
-
-    try:
-        content = file_path.read_text(encoding="utf-8")
-
-        # Validate content
-        if not content or content.strip() == "":
-            logger.warning(
-                "Data file is empty",
-                extra={"file_type": file_type, "file_path": str(file_path)},
-            )
-            raise InvalidDataFormatError(f"Data file is empty: {file_path}")
-
-        logger.info(
-            "Data file loaded successfully",
-            extra={
-                "file_type": file_type,
-                "file_path": str(file_path),
-                "size_bytes": len(content),
-            },
-        )
-
-        return content
-
-    except UnicodeDecodeError as e:
-        logger.error(
-            "Failed to decode data file",
-            extra={"file_type": file_type, "error": str(e)},
-            exc_info=True,
-        )
-        raise InvalidDataFormatError(
-            f"Cannot read file {file_path}: Invalid encoding. Expected UTF-8."
-        ) from e
-
-
-def load_all_pantry_data() -> dict[str, str]:
-    """Load all pantry-related data files.
-
-    Returns:
-        Dictionary with keys: staples, fresh, shopping_list
-        Values are file contents as strings
-
-    Raises:
-        DataFileNotFoundError: If any required file is missing
-
-    Example:
-        >>> pantry_data = load_all_pantry_data()
-        >>> "staples" in pantry_data
-        True
-    """
-    logger.info("Loading all pantry data files")
-
-    try:
-        pantry_data = {
-            "staples": load_data_file("staples"),
-            "fresh": load_data_file("fresh"),
-            "shopping_list": load_data_file("shopping_list"),
-        }
-
-        logger.info(
-            "All pantry data loaded successfully",
-            extra={
-                "files_loaded": 3,
-                "total_size_bytes": sum(len(v) for v in pantry_data.values()),
-            },
-        )
-
-        return pantry_data
-
-    except DataFileNotFoundError:
-        logger.error("Failed to load pantry data - missing files")
-        raise
-
-
-def load_all_recipe_data() -> dict[str, str]:
-    """Load all recipe-related data files.
-
-    Returns:
-        Dictionary with keys: loved, liked, not_again, generated
-        Values are file contents as strings
-
-    Raises:
-        DataFileNotFoundError: If any required file is missing
-
-    Example:
-        >>> recipe_data = load_all_recipe_data()
-        >>> "loved" in recipe_data
-        True
-    """
-    logger.info("Loading all recipe data files")
-
-    try:
-        recipe_data = {
-            "loved": load_data_file("loved_recipes"),
-            "liked": load_data_file("liked_recipes"),
-            "not_again": load_data_file("not_again_recipes"),
-            "generated": load_data_file("generated_recipes"),
-        }
-
-        logger.info(
-            "All recipe data loaded successfully",
-            extra={
-                "files_loaded": 4,
-                "total_size_bytes": sum(len(v) for v in recipe_data.values()),
-            },
-        )
-
-        return recipe_data
-
-    except DataFileNotFoundError:
-        logger.error("Failed to load recipe data - missing files")
-        raise
-
-
 def load_context_for_recipe_generation() -> dict[str, str]:
-    """Load all data needed for recipe generation.
+    """Load all data needed for recipe generation from JSON stores.
 
     Returns:
-        Dictionary containing all context data:
-        - staples, fresh, shopping_list (pantry)
+        Dictionary containing formatted strings for:
+        - staples, fresh (pantry items)
+        - shopping_list
         - loved_recipes, preferences, meal_history
-
-    Raises:
-        DataFileNotFoundError: If any required file is missing
-
-    Example:
-        >>> context = load_context_for_recipe_generation()
-        >>> all(k in context for k in ["staples", "fresh", "preferences"])
-        True
     """
-    logger.info("Loading context for recipe generation")
+    logger.info("Loading context for recipe generation from JSON")
 
     try:
-        # Load pantry data
-        pantry_data = load_all_pantry_data()
+        # 1. Load Pantry
+        pantry_items = load_pantry_items()
+        staples = [f"- {i['name']}" for i in pantry_items if i.get('type') == 'staple']
+        fresh = [f"- {i['name']} (Qty: {i.get('quantity', '?')})" for i in pantry_items if i.get('type') == 'fresh']
 
-        # Load recipe and preference data
+        # 2. Load Shopping List
+        shopping_items = load_shopping_list()
+        shopping_list = [f"- {i['item']} (for {i.get('recipe', 'unknown')})" for i in shopping_items if not i.get('checked')]
+
+        # 3. Load Recipes (for loved/liked)
+        all_recipes = load_recipes()
+        loved = [f"- {r['name']}" for r in all_recipes if r.get('rating', 0) == 5]
+        
+        # 4. Load Meal History
+        history = load_meal_history()
+        # Format last 10 meals
+        recent_meals = [
+            f"- {m['date']}: {m['name']} (Rating: {m.get('rating', '?')}/5)"
+            for m in history[:10]
+        ]
+
+        # 5. Load Preferences (Legacy file or default)
+        # We might still want to keep preferences.md or move it to JSON.
+        # For now, let's try to read it if it exists, otherwise return empty.
+        preferences = ""
+        pref_path = Path("data/preferences.md")
+        if pref_path.exists():
+            preferences = pref_path.read_text(encoding="utf-8")
+
         context = {
-            **pantry_data,
-            "loved_recipes": load_data_file("loved_recipes"),
-            "preferences": load_data_file("preferences"),
-            "meal_history": load_data_file("meal_history"),
+            "staples": "\n".join(staples) if staples else "None",
+            "fresh": "\n".join(fresh) if fresh else "None",
+            "shopping_list": "\n".join(shopping_list) if shopping_list else "None",
+            "loved_recipes": "\n".join(loved) if loved else "None",
+            "meal_history": "\n".join(recent_meals) if recent_meals else "None",
+            "preferences": preferences,
         }
 
-        logger.info(
-            "Recipe generation context loaded successfully",
-            extra={
-                "files_loaded": len(context),
-                "total_size_bytes": sum(len(v) for v in context.values()),
-            },
-        )
-
+        logger.info("Recipe generation context loaded successfully")
         return context
 
-    except DataFileNotFoundError:
-        logger.error("Failed to load recipe generation context")
-        raise
+    except Exception as e:
+        logger.error(f"Failed to load recipe generation context: {e}", exc_info=True)
+        # Return empty context rather than crashing, to allow partial functionality
+        return {
+            "staples": "", "fresh": "", "shopping_list": "",
+            "loved_recipes": "", "meal_history": "", "preferences": ""
+        }

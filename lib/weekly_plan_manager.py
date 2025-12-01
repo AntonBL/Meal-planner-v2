@@ -12,7 +12,7 @@ from typing import Optional
 import streamlit as st
 
 from lib.constants import RECIPE_SOURCE_GENERATED
-from lib.file_manager import get_data_file_path
+
 from lib.logging_config import get_logger
 from lib.recipe_store import get_recipe_by_name, save_recipe
 
@@ -93,81 +93,7 @@ def _save_plan_data(data: dict) -> bool:
         return False
 
 
-def _migrate_markdown_plan_if_needed():
-    """Migrate legacy markdown plan to JSON if JSON doesn't exist."""
-    json_path = _get_weekly_plan_path()
-    if json_path.exists():
-        return
 
-    try:
-        # Try to load legacy markdown file
-        md_path = get_data_file_path("weekly_plan")
-        if not md_path.exists():
-            return
-
-        logger.info("Migrating weekly plan from markdown to JSON...")
-        content = md_path.read_text(encoding="utf-8")
-        
-        # Parse meals from Current Plan section (legacy logic)
-        lines = content.split('\n')
-        meals = []
-        current_meal = None
-        in_current_plan = False
-
-        for line in lines:
-            if line.startswith('## Current Plan'):
-                in_current_plan = True
-                continue
-            if in_current_plan and line.startswith('## '):
-                break
-            if in_current_plan and line.strip().startswith('*No meals'):
-                continue
-            
-            if in_current_plan and line.startswith('###'):
-                if current_meal and current_meal.get('name'):
-                    meals.append(current_meal)
-                meal_line = line.replace('###', '').strip()
-                name = meal_line.split('.', 1)[-1].strip()
-                current_meal = {
-                    'name': name,
-                    'source': None,
-                    'time_minutes': None,
-                    'difficulty': None,
-                    'added': None,
-                }
-            elif in_current_plan and current_meal and line.startswith('**'):
-                if '**Source:**' in line:
-                    current_meal['source'] = line.replace('**Source:**', '').strip()
-                elif '**Time:**' in line:
-                    time_str = line.replace('**Time:**', '').strip()
-                    match = re.search(r'(\d+)', time_str)
-                    if match:
-                        current_meal['time_minutes'] = int(match.group(1))
-                elif '**Difficulty:**' in line:
-                    current_meal['difficulty'] = line.replace('**Difficulty:**', '').strip().lower()
-                elif '**Added:**' in line:
-                    current_meal['added'] = line.replace('**Added:**', '').strip()
-
-        if current_meal and current_meal.get('name'):
-            meals.append(current_meal)
-
-        # Enhance meals with recipe IDs
-        for meal in meals:
-            recipe = get_recipe_by_name(meal['name'])
-            if recipe:
-                meal['recipe_id'] = recipe.get('id')
-        
-        # Save to JSON
-        data = {
-            "current_plan": meals,
-            "history": [], # We don't migrate history for now to keep it simple
-            "last_updated": datetime.now().isoformat()
-        }
-        _save_plan_data(data)
-        logger.info(f"Migrated {len(meals)} meals to weekly_plan.json")
-
-    except Exception as e:
-        logger.error(f"Failed to migrate weekly plan: {e}")
 
 
 def load_current_plan() -> list[dict]:
@@ -176,7 +102,7 @@ def load_current_plan() -> list[dict]:
     Returns:
         List of meal dictionaries from the current plan
     """
-    _migrate_markdown_plan_if_needed()
+
     data = _load_plan_data()
     return data.get("current_plan", [])
 

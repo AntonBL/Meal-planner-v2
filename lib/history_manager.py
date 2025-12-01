@@ -8,7 +8,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Optional
 
-from lib.file_manager import get_data_file_path
+
 from lib.logging_config import get_logger
 
 logger = get_logger(__name__)
@@ -48,73 +48,6 @@ def _save_history_data(data: dict) -> bool:
         return False
 
 
-def _migrate_markdown_history_if_needed():
-    """Migrate legacy markdown meal history to JSON if JSON doesn't exist."""
-    json_path = _get_history_path()
-    if json_path.exists():
-        return
-
-    try:
-        md_path = get_data_file_path("meal_history")
-        if not md_path.exists():
-            return
-
-        logger.info("Migrating meal history from markdown to JSON...")
-        content = md_path.read_text(encoding="utf-8")
-        
-        meals = []
-        lines = content.split('\n')
-        current_meal = None
-
-        for line in lines:
-            line = line.strip()
-
-            # Date header (### Day, Date)
-            if line.startswith('###'):
-                if current_meal and current_meal.get('name'):
-                    meals.append(current_meal)
-
-                date_str = line.replace('###', '').strip()
-                # Try to parse date string to standard format if possible, but keep original string for now
-                current_meal = {
-                    'date': date_str,
-                    'name': None,
-                    'rating': 0,
-                    'notes': None,
-                    'ingredients': None
-                }
-
-            # Recipe name
-            elif current_meal and not current_meal['name'] and '⭐' in line:
-                parts = line.split('⭐')
-                current_meal['name'] = parts[0].strip('*').strip()
-                current_meal['rating'] = len(parts) - 1
-            elif current_meal and not current_meal['name'] and line.startswith('**') and line.endswith('**'):
-                current_meal['name'] = line.strip('*').strip()
-
-            # Rating line
-            elif line.startswith('- Rating:'):
-                if current_meal:
-                    rating_str = line.replace('- Rating:', '').strip()
-                    if '/' in rating_str:
-                        try:
-                            current_meal['rating'] = int(rating_str.split('/')[0])
-                        except (ValueError, IndexError):
-                            pass
-
-            # Notes line
-            elif line.startswith('- Notes:'):
-                if current_meal:
-                    current_meal['notes'] = line.replace('- Notes:', '').strip()
-
-            # Ingredients line
-            elif line.startswith('- Ingredients used:'):
-                if current_meal:
-                    current_meal['ingredients'] = line.replace('- Ingredients used:', '').strip()
-
-        if current_meal and current_meal.get('name'):
-            meals.append(current_meal)
-
         # Save to JSON
         data = {
             "meals": meals,
@@ -133,7 +66,7 @@ def load_meal_history() -> List[Dict]:
     Returns:
         List of meal dictionaries
     """
-    _migrate_markdown_history_if_needed()
+
     data = _load_history_data()
     return data.get("meals", [])
 

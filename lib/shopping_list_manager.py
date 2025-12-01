@@ -8,7 +8,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Optional
 
-from lib.file_manager import get_data_file_path
+
 from lib.logging_config import get_logger
 
 logger = get_logger(__name__)
@@ -48,101 +48,26 @@ def _save_list_data(data: dict) -> bool:
         return False
 
 
-def _migrate_markdown_list_if_needed():
-    """Migrate legacy markdown shopping list to JSON if JSON doesn't exist."""
-    json_path = _get_shopping_list_path()
-    if json_path.exists():
-        return
-
-    try:
-        # Try to load legacy markdown file
-        md_path = get_data_file_path("shopping_list")
-        if not md_path.exists():
-            return
-
-        logger.info("Migrating shopping list from markdown to JSON...")
-        content = md_path.read_text(encoding="utf-8")
-        
-        lines = content.split('\n')
-        items = []
-        current_recipe = None
-        added_date = datetime.now().strftime("%Y-%m-%d")
-
-        for line in lines:
-            line = line.strip()
-            
-            # Recipe header
-            if line.startswith('##'):
-                recipe_part = line.replace('##', '').strip()
-                if 'For:' in recipe_part:
-                    recipe_part = recipe_part.split('For:')[1].strip()
-                
-                if '(Added:' in recipe_part:
-                    parts = recipe_part.split('(Added:')
-                    current_recipe = parts[0].strip()
-                    added_date = parts[1].replace(')', '').strip()
-                else:
-                    current_recipe = recipe_part.strip()
-                    added_date = datetime.now().strftime("%Y-%m-%d")
-            
-            # Item line
-            elif line.startswith('-') and current_recipe:
-                item_text = line[1:].strip()
-                if item_text:
-                    items.append({
-                        "item": item_text,
-                        "recipe": current_recipe,
-                        "added": added_date,
-                        "checked": False,
-                        "category": categorize_ingredient(item_text)
-                    })
-
-        # Save to JSON
-        data = {
-            "items": items,
-            "last_updated": datetime.now().isoformat()
-        }
-        _save_list_data(data)
-        logger.info(f"Migrated {len(items)} items to shopping_list.json")
-
-    except Exception as e:
-        logger.error(f"Failed to migrate shopping list: {e}")
 
 
 def categorize_ingredient(ingredient_name: str) -> str:
-    """Categorize ingredient as 'staple' or 'fresh' based on keywords.
-
+    """Categorize an ingredient using LLM for shopping list organization.
+    
     Args:
         ingredient_name: Name of the ingredient
-
+        
     Returns:
-        'staple' or 'fresh'
+        Category name
     """
-    ingredient_lower = ingredient_name.lower()
-
-    # Fresh item keywords
-    fresh_keywords = [
-        'milk', 'cheese', 'yogurt', 'cream', 'butter',
-        'egg', 'eggs',
-        'lettuce', 'spinach', 'kale', 'arugula', 'greens',
-        'tomato', 'tomatoes', 'cucumber', 'pepper', 'peppers',
-        'onion', 'onions', 'garlic', 'ginger',
-        'carrot', 'carrots', 'celery', 'broccoli', 'cauliflower',
-        'mushroom', 'mushrooms',
-        'potato', 'potatoes', 'sweet potato',
-        'avocado', 'avocados',
-        'apple', 'apples', 'banana', 'bananas', 'orange', 'oranges',
-        'lemon', 'lemons', 'lime', 'limes',
-        'fresh', 'tofu', 'tempeh'
-    ]
-
-    # Check if any fresh keyword is in the ingredient
-    for keyword in fresh_keywords:
-        if keyword in ingredient_lower:
-            return 'fresh'
-
-    # Default to staple
-    return 'staple'
+    from lib.ingredient_agent import get_ingredient_categorizer
+    
+    try:
+        categorizer = get_ingredient_categorizer()
+        return categorizer.categorize(ingredient_name)
+    except Exception as e:
+        logger.warning(f"Failed to categorize ingredient with LLM: {e}")
+        # Fallback to simple default
+        return "Other"
 
 
 def load_shopping_list() -> List[Dict]:
@@ -151,7 +76,7 @@ def load_shopping_list() -> List[Dict]:
     Returns:
         List of item dictionaries
     """
-    _migrate_markdown_list_if_needed()
+
     data = _load_list_data()
     return data.get("items", [])
 
