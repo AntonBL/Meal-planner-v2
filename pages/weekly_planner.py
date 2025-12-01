@@ -294,16 +294,16 @@ with tab3:
         st.info("📭 No meals in your plan yet")
     else:
         # Calculate total cooking time
-    def safe_int(value):
-        """Safely convert value to int, handling strings and None."""
-        if value is None:
-            return 0
-        try:
-            return int(value)
-        except (ValueError, TypeError):
-            return 0
-    
-    total_time = sum(safe_int(meal.get('time_minutes')) for meal in current_plan)
+        def safe_int(value):
+            """Safely convert value to int, handling strings and None."""
+            if value is None:
+                return 0
+            try:
+                return int(value)
+            except (ValueError, TypeError):
+                return 0
+        
+        total_time = sum(safe_int(meal.get('time_minutes')) for meal in current_plan)
         hours = total_time // 60
         minutes = total_time % 60
 
