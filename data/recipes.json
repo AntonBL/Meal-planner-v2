@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-11-30T19:52:09.439249",
+  "last_updated": "2025-12-01T01:27:59.602054",
   "recipes": [
     {
       "name": "Spicy Vegetarian Sopa Azteca (Tortilla Soup) with Ancho, Pasilla & Guajillo Chiles",
@@ -213,14 +213,14 @@
       "created_date": "2025-11-30T11:25:14.563885"
     },
     {
-      "name": "Vegetarian Korean Vegetable Soup (Yachae Guk)",
-      "description": "A light, savory Korean vegetable soup featuring fresh tomatoes, peppers, and onions in a garlic-infused broth with a hint of sesame. This comforting dinner soup is simple yet deeply flavorful and pairs perfectly with rice.",
-      "ingredients_available": "tomatoes (6 large or 2 28oz cans), garlic (4 cloves), onion (1 medium), pepper (1), jalapeño (1)",
-      "ingredients_needed": "",
+      "name": "Thai Green Curry Vegetable Soup",
+      "description": "A fragrant and creamy Thai-inspired soup combining your green curry paste with fresh vegetables and aromatic herbs. This light yet satisfying dinner offers a completely different flavor profile from your recent tortilla soup.",
+      "ingredients_available": "garlic (4 cloves), onion (1 medium), tomatoes (6 large or 2 28oz cans), jalapeño (1), fresh cilantro (1/2 cup chopped), lime (1)",
+      "ingredients_needed": "Coconut milk (1 can or 1.5 cups), spinach or bok choy (4-5 cups)",
       "time_minutes": "25",
       "difficulty": "easy",
-      "reason": "Uses most of your available fresh ingredients, creates variety from your recent tortilla soup, and offers an authentic Korean comfort meal that's quick and vegetarian-friendly.",
-      "instructions": "1. Heat 2 tbsp sesame oil in a large pot over medium heat. Add minced garlic (4 cloves) and sauté for 1 minute until fragrant.\n2. Dice the onion (1 medium) and add to pot, stirring for 2-3 minutes until softened.\n3. Chop the tomatoes (6 large) into chunks and add to pot, stirring well.\n4. Add 6 cups vegetable broth and bring to a boil.\n5. Dice the pepper (1) and jalapeño (1), then add to soup. Reduce heat and simmer for 10 minutes.\n6. Season with 1 tbsp soy sauce, 1 tsp salt, and ½ tsp white pepper. Simmer 5 more minutes.\n7. Finish with a squeeze of lime (½ lime) and drizzle of sesame oil. Serve hot.",
+      "reason": "Uses your green curry paste that pairs perfectly with soup, offers Asian cuisine variety from your recent Mexican meal, and utilizes most of your fresh ingredients with minimal shopping needed.",
+      "instructions": "1. Dice the onion and mince the garlic cloves.\n2. Heat 2 tbsp olive oil in a large pot over medium heat. Add diced onion and cook for 3 minutes until softened.\n3. Add minced garlic and cook for 1 minute until fragrant.\n4. Stir in 3-4 tbsp green curry paste and cook for 2 minutes, stirring constantly.\n5. Add 6 cups vegetable broth and bring to a simmer.\n6. Chop tomatoes and add to pot along with 1 can coconut milk. Simmer for 8 minutes.\n7. Slice the jalapeño and add to soup. Add 4-5 cups fresh spinach or bok choy and simmer for 3 minutes until wilted.\n8. Season with salt and pepper to taste.\n9. Squeeze juice from 1 lime into the soup. Ladle into bowls and garnish with fresh cilantro and lime wedges.",
       "source": "Generated",
       "rating": 0,
       "cook_count": 0,
@@ -228,24 +228,83 @@
         "vegetarian"
       ],
       "ingredients": [
-        "tomatoes (6 large or 2 28oz cans)",
         "garlic (4 cloves)",
         "onion (1 medium)",
-        "pepper (1)",
-        "jalapeño (1)"
+        "tomatoes (6 large or 2 28oz cans)",
+        "jalapeño (1)",
+        "fresh cilantro (1/2 cup chopped)",
+        "lime (1)",
+        "Coconut milk (1 can or 1.5 cups)",
+        "spinach or bok choy (4-5 cups)"
       ],
-      "id": "cb1c6166-2f77-454a-96d4-22bdc2f19b87",
-      "created_date": "2025-11-30T19:52:09.437413"
+      "id": "33414c0d-1f96-4abd-a562-3f38ec04ac39",
+      "created_date": "2025-12-01T00:50:16.671034"
     },
     {
-      "name": "Korean Veggie Lettuce Wraps with Avocado & Crispy Tortilla Chips",
-      "description": "A fresh, interactive Korean-inspired dinner featuring seasoned sautéed vegetables served in crispy tortilla \"lettuce wrap\" alternatives, topped with creamy avocado and finished with lime and cilantro. Light yet satisfying with vibrant flavors and textures.",
-      "ingredients_available": "tomatoes (6 large or 2 28oz cans), onion (1 medium), garlic (4 cloves), pepper (1), jalapeño (1), avocado (2), cilantro (½ cup chopped), lime (1), corn tortillas (6-8)",
+      "name": "Rustic Tomato & Avocado Soup with Tortilla Strips",
+      "description": "A velvety tomato-based soup finished with fresh lime and topped with crispy tortilla strips and creamy avocado. This Mexican-inspired comfort soup provides a lighter, fresher take than your previous tortilla soup while reusing familiar ingredients.",
+      "ingredients_available": "tomatoes (6 large or 2 28oz cans), garlic (4 cloves), onion (1 medium), jalapeño (1), fresh cilantro (1/2 cup chopped), lime (1), avocado (2), corn tortillas (6-8), epazote (2 tbsp fresh)",
       "ingredients_needed": "",
       "time_minutes": "30",
       "difficulty": "easy",
-      "reason": "Creates an interactive Korean dining experience, uses nearly all your available fresh ingredients, introduces Korean flavor profiles (gochugaru, sesame) that differ from your recent Mexican-inspired meal, and makes efficient use of your corn tortillas in a new way.",
-      "instructions": "1. Cut corn tortillas into strips and fry in ¼ inch hot vegetable oil for 2-3 minutes until crispy and golden. Drain on paper towels and sprinkle with salt.\n2. Dice onion (1 medium), mince garlic (4 cloves), and dice pepper (1) and jalapeño (1). Chop tomatoes (6 large) into bite-sized pieces.\n3. Heat 2 tbsp sesame oil in a large skillet over medium-high heat. Add garlic and onion, sauté for 2 minutes.\n4. Add diced pepper, jalapeño, and tomatoes to skillet. Stir-fry for 5-7 minutes until vegetables are tender-crisp.\n5. Season with 2 tbsp soy sauce, 1 tsp sesame oil, 1 tsp gochugaru (Korean red pepper flakes), and squeeze of lime juice.\n6. Slice avocados (2) into halves and remove pits. Arrange crispy tortilla chips on plates, top with cooked vegetables, avocado slices, fresh cilantro (¼ cup), and lime wedges.\n7. Diners assemble their own wraps by spooning vegetables and avocado onto crispy tortilla chips and squeezing lime over top.",
+      "reason": "Uses nearly all your fresh ingredients (minimizing waste), creates a lighter variation from your rated 5/5 tortilla soup while staying in the same flavor family, and provides a complete dinner using what you already have in stock.",
+      "instructions": "1. Dice the onion and mince the garlic cloves.\n2. Cut tortillas into thin strips. Heat 2 tbsp olive oil in a small skillet over medium-high heat. Fry tortilla strips in batches for 2-3 minutes until crispy and golden. Set aside on paper towels and sprinkle with salt.\n3. In a large pot, heat 2 tbsp olive oil over medium heat. Add diced onion and cook for 4 minutes until softened.\n4. Add minced garlic and sliced jalapeño; cook for 1 minute until fragrant.\n5. Add chopped tomatoes and 6 cups vegetable broth. Bring to a boil, then reduce heat and simmer for 12 minutes.\n6. Using an immersion blender, puree soup until smooth (or carefully transfer to blender in batches).\n7. Return to pot if blended separately. Season with salt, pepper, and squeeze in juice from 1 lime.\n8. Stir in fresh epazote (2 tbsp) just before serving.\n9. Ladle into bowls. Top with crispy tortilla strips, diced avocado, fresh cilantro, and serve with lime wedges.",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "tomatoes (6 large or 2 28oz cans)",
+        "garlic (4 cloves)",
+        "onion (1 medium)",
+        "jalapeño (1)",
+        "fresh cilantro (1/2 cup chopped)",
+        "lime (1)",
+        "avocado (2)",
+        "corn tortillas (6-8)",
+        "epazote (2 tbsp fresh)"
+      ],
+      "id": "56b08ecd-bdf2-4737-9e5c-a13bbe00fa12",
+      "created_date": "2025-12-01T00:50:16.672639"
+    },
+    {
+      "name": "Lemon and Caper Pasta with Garlic and Tomatoes",
+      "description": "A bright, zesty Italian pasta dish featuring fresh lemon juice and briny capers tossed with al dente pasta, garlic, and tomatoes for a simple yet elegant dinner.",
+      "ingredients_available": "tomatoes (6 large or 2 28oz cans), garlic (4 cloves), lime (can substitute for lemon), fresh cilantro (1/2 cup chopped)",
+      "ingredients_needed": "Fresh lemon (2-3), pasta (1 lb), capers (2-3 tbsp)",
+      "time_minutes": "25",
+      "difficulty": "easy",
+      "reason": "Matches your Italian pasta preference with lemon and capers; uses most available ingredients and requires minimal additional shopping.",
+      "instructions": "1. Bring a large pot of salted water to boil and cook 1 lb pasta according to package directions until al dente; reserve 1 cup pasta water before draining.\n2. While pasta cooks, heat 3 tbsp extra virgin olive oil in a large skillet over medium heat.\n3. Mince 4 garlic cloves and add to hot oil, stirring constantly for 30 seconds until fragrant.\n4. Add 6 large diced tomatoes (or 2 28oz cans, drained) and 2-3 tbsp capers to the skillet; simmer 8-10 minutes.\n5. Stir in juice from 2-3 fresh lemons and season with salt and pepper to taste.\n6. Add cooked pasta to the skillet and toss, adding pasta water as needed for a light sauce consistency (about 1/4-1/2 cup).\n7. Garnish with fresh cilantro and serve immediately with extra lemon wedges.",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "tomatoes (6 large or 2 28oz cans)",
+        "garlic (4 cloves)",
+        "lime (can substitute for lemon)",
+        "fresh cilantro (1/2 cup chopped)",
+        "Fresh lemon (2-3)",
+        "pasta (1 lb)",
+        "capers (2-3 tbsp)"
+      ],
+      "id": "a036cd49-e6e4-4be3-ae5c-72235ff523d7",
+      "created_date": "2025-12-01T01:20:30.515969"
+    },
+    {
+      "name": "Indian Aloo Gobi (Potato and Cauliflower Curry)",
+      "description": "A classic vegetarian Indian dish featuring potatoes and cauliflower in a fragrant, spiced tomato-based curry with warming cumin, turmeric, and ginger.",
+      "ingredients_available": "tomatoes (6 large or 2 28oz cans), onion (1 medium), garlic (4 cloves), fresh cilantro (1/2 cup chopped)",
+      "ingredients_needed": "Potatoes (3-4 medium), cauliflower (1 medium head), fresh ginger (2 tbsp grated)",
+      "time_minutes": "40",
+      "difficulty": "medium",
+      "reason": "Directly matches your aloo gobi request; uses available tomatoes, onion, and garlic with minimal fresh ingredient shopping.",
+      "instructions": "1. Peel and cut 3-4 medium potatoes into 1-inch cubes and chop 1 medium head of cauliflower into florets; set aside.\n2. Heat 3 tbsp oil in a large pot over medium-high heat.\n3. Dice 1 medium onion and add to oil; cook 5-6 minutes until softened and lightly golden.\n4. Mince 4 garlic cloves and 2 tbsp fresh ginger; add to onions and cook 1-2 minutes until fragrant.\n5. Stir in 2 tsp cumin seeds, 1 tsp turmeric powder, and 1 tsp coriander; toast for 30 seconds.\n6. Add 6 diced tomatoes (or 2 28oz cans, drained) and cook 5 minutes, stirring occasionally.\n7. Add potato and cauliflower pieces with 1 tsp salt; stir well to coat with spices.\n8. Add 1 cup vegetable broth, bring to simmer, cover and cook 20-25 minutes until vegetables are tender.\n9. Adjust salt and pepper to taste; garnish with fresh cilantro and serve with rice or bread.",
       "source": "Generated",
       "rating": 0,
       "cook_count": 0,
@@ -256,15 +315,456 @@
         "tomatoes (6 large or 2 28oz cans)",
         "onion (1 medium)",
         "garlic (4 cloves)",
-        "pepper (1)",
-        "jalapeño (1)",
-        "avocado (2)",
-        "cilantro (½ cup chopped)",
-        "lime (1)",
-        "corn tortillas (6-8)"
+        "fresh cilantro (1/2 cup chopped)",
+        "Potatoes (3-4 medium)",
+        "cauliflower (1 medium head)",
+        "fresh ginger (2 tbsp grated)"
       ],
-      "id": "afaa6345-11f2-4c16-a04d-4bc349fcec59",
-      "created_date": "2025-11-30T19:52:09.439156"
+      "id": "068bf32d-112f-4aec-a666-b1d67d714599",
+      "created_date": "2025-12-01T01:20:30.517637"
+    },
+    {
+      "name": "Potato and Leek Soup with Garlic and Herbs",
+      "description": "A creamy, comforting French-inspired soup combining tender potatoes and leeks with garlic and herbs, finished with a drizzle of olive oil and fresh cilantro.",
+      "ingredients_available": "onion (1 medium, can substitute), garlic (4 cloves), fresh cilantro (1/2 cup chopped)",
+      "ingredients_needed": "Potatoes (4-5 medium), leeks (2-3 large)",
+      "time_minutes": "35",
+      "difficulty": "easy",
+      "reason": "Matches your soup and French comfort food preferences; uses available garlic and pantry staples with minimal fresh ingredient additions.",
+      "instructions": "1. Clean 2-3 large leeks by slicing lengthwise and rinsing between layers; slice into half-moons.\n2. Peel and cube 4-5 medium potatoes into 1-inch pieces.\n3. Heat 2 tbsp extra virgin olive oil in a large pot over medium heat.\n4. Add sliced leeks and cook 6-8 minutes, stirring occasionally, until softened.\n5. Mince 4 garlic cloves and add to pot; cook 1 minute until fragrant.\n6. Add cubed potatoes and 6 cups vegetable broth; bring to boil.\n7. Reduce heat and simmer 15-20 minutes until potatoes are very tender.\n8. Using an immersion blender, blend soup until desired consistency (partially chunky or completely smooth); alternatively, mash potatoes with a fork for rustic texture.\n9. Season with salt, white pepper, and fresh thyme to taste.\n10. Serve hot with a drizzle of olive oil, fresh cilantro, and cracked black pepper.",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "onion (1 medium",
+        "can substitute)",
+        "garlic (4 cloves)",
+        "fresh cilantro (1/2 cup chopped)",
+        "Potatoes (4-5 medium)",
+        "leeks (2-3 large)"
+      ],
+      "id": "64f11010-577a-4382-a20d-4db200dc41c4",
+      "created_date": "2025-12-01T01:20:30.519142"
+    },
+    {
+      "name": "Doenjiang Jjigae (Korean Soybean Paste Stew)",
+      "description": "A warming Korean soybean paste stew featuring vegetables and soft tofu in a rich, umami-forward broth seasoned with doenjiang (fermented soybean paste).",
+      "ingredients_available": "tomatoes (6 large or 2 28oz cans), onion (1 medium), garlic (4 cloves), jalapeño (1), fresh cilantro (1/2 cup chopped)",
+      "ingredients_needed": "Firm tofu (1 block), zucchini (1-2 medium), mushrooms (4 oz), doenjiang paste (2-3 tbsp)",
+      "time_minutes": "30",
+      "difficulty": "easy",
+      "reason": "Directly matches your doenjiang request; uses available vegetables (onion, garlic, jalapeño, tomatoes) with simple pantry additions.",
+      "instructions": "1. Heat 1 tbsp sesame oil in a large pot or heavy-bottomed bowl over medium-high heat.\n2. Dice 1 medium onion and add to pot; cook 3-4 minutes until fragrant and slightly softened.\n3. Mince 4 garlic cloves and add to onions; stir for 30 seconds.\n4. Add 6 cups vegetable broth and bring to a boil.\n5. While broth heats, dice 1 block firm tofu into 1/2-inch cubes, chop 1-2 zucchini into chunks, slice 4 oz mushrooms, and mince 1 jalapeño.\n6. In a small bowl, dissolve 2-3 tbsp doenjiang paste with 2-3 tbsp warm broth to create a smooth paste.\n7. Add zucchini and mushrooms to boiling broth; cook 3-4 minutes.\n8. Stir in doenjiang mixture thoroughly so it dissolves evenly throughout the broth.\n9. Add tofu cubes and minced jalapeño; simmer 5-7 minutes until flavors meld.\n10. Dice 2-3 tomatoes and add to pot just before serving (or use canned tomatoes).\n11. Season with salt to taste and serve hot in bowls, garnished with sliced green onions and sesame seeds if desired.",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "tomatoes (6 large or 2 28oz cans)",
+        "onion (1 medium)",
+        "garlic (4 cloves)",
+        "jalapeño (1)",
+        "fresh cilantro (1/2 cup chopped)",
+        "Firm tofu (1 block)",
+        "zucchini (1-2 medium)",
+        "mushrooms (4 oz)",
+        "doenjiang paste (2-3 tbsp)"
+      ],
+      "id": "f5bcf94f-f865-446b-8173-bf1e7c61be8c",
+      "created_date": "2025-12-01T01:20:30.520530"
+    },
+    {
+      "name": "Thai Green Curry Soup with Vegetables",
+      "description": "A fragrant Thai-inspired soup combining green curry paste with coconut milk and vegetables in a light vegetable broth base, finished with fresh lime and cilantro.",
+      "ingredients_available": "green curry paste (from pantry), vegetable broth (6 cups), lime (1 of 2 available), onion (1 medium), garlic (4 cloves), jalapeño (1), fresh cilantro (1/2 cup chopped)",
+      "ingredients_needed": "Coconut milk (1 can), bell pepper (1), mushrooms (4 oz), Thai basil or additional fresh herbs",
+      "time_minutes": "25",
+      "difficulty": "easy",
+      "reason": "Uses your available green curry paste and vegetable broth from pantry; provides international variety from Korean and Indian dishes with minimal additional fresh ingredient needs.",
+      "instructions": "1. Heat 1 tbsp extra virgin olive oil in a large pot over medium heat.\n2. Dice 1 medium onion and add to pot; cook 3-4 minutes until softened.\n3. Mince 4 garlic cloves and add to onions; cook 1 minute.\n4. Stir in 2-3 tbsp green curry paste, breaking it apart to distribute evenly; cook 1-2 minutes, stirring constantly.\n5. Slowly pour in 1 can coconut milk while stirring to combine with curry paste.\n6. Add 6 cups vegetable broth; bring to gentle simmer.\n7. While soup simmers, slice 1 bell pepper into strips, slice 4 oz mushrooms, and mince 1 jalapeño.\n8. Add pepper, mushrooms, and jalapeño to soup; simmer 8-10 minutes until vegetables are tender.\n9. Squeeze juice from 1 lime into soup and season with salt to taste.\n10. Serve hot, garnished generously with fresh cilantro and lime wedges on the side.",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "green curry paste (from pantry)",
+        "vegetable broth (6 cups)",
+        "lime (1 of 2 available)",
+        "onion (1 medium)",
+        "garlic (4 cloves)",
+        "jalapeño (1)",
+        "fresh cilantro (1/2 cup chopped)",
+        "Coconut milk (1 can)",
+        "bell pepper (1)",
+        "mushrooms (4 oz)",
+        "Thai basil or additional fresh herbs"
+      ],
+      "id": "4a278daf-13ab-40b5-a1c9-e56fd1144bfe",
+      "created_date": "2025-12-01T01:20:30.522252"
+    },
+    {
+      "name": "Pasta with Lemon, Capers, and Winter Vegetables",
+      "description": "A bright, tangy Italian pasta dish featuring tender pasta tossed with preserved lemon, briny capers, and roasted winter vegetables for a light yet satisfying dinner.",
+      "ingredients_available": "Oil",
+      "ingredients_needed": "Pasta, lemon, capers, carrots, celery, Brussels sprouts or winter squash, garlic, onion, fresh parsley",
+      "time_minutes": "35",
+      "difficulty": "easy",
+      "reason": "Matches your specific request for pasta with lemon, capers, and winter vegetables; provides Italian cuisine variety without repeating your recent spicy soup",
+      "instructions": "1. Peel and chop 2 carrots, 2 celery stalks, 1 cup Brussels sprouts (halved), and 1 small onion into bite-sized pieces\n2. Toss vegetables with 3 tablespoons olive oil, salt, and pepper on a baking sheet\n3. Roast at 425°F for 20-25 minutes until caramelized and tender\n4. Meanwhile, bring salted water to boil and cook 12 oz pasta according to package directions; drain and reserve 1 cup pasta water\n5. Zest 2 lemons and juice them (about 6 tablespoons juice); mince 3 garlic cloves\n6. In a large pan, heat 2 tablespoons olive oil over medium heat; sauté garlic for 1 minute until fragrant\n7. Add cooked pasta, roasted vegetables, lemon juice, zest, and 3 tablespoons capers to the pan\n8. Toss well, adding pasta water 1/4 cup at a time until sauce coats pasta (you may not need all of it)\n9. Season with salt and pepper to taste; garnish with fresh parsley and serve immediately",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "Oil",
+        "Pasta",
+        "lemon",
+        "capers",
+        "carrots",
+        "celery",
+        "Brussels sprouts or winter squash",
+        "garlic",
+        "onion",
+        "fresh parsley"
+      ],
+      "id": "26880568-952e-4481-b620-18c69cb6c41e",
+      "created_date": "2025-12-01T01:25:37.086725"
+    },
+    {
+      "name": "Indian Potato and Chickpea Curry (Aloo Chana Masala)",
+      "description": "A warming, fragrant Indian curry combining tender potatoes and chickpeas in a spiced tomato-based sauce, perfect for a satisfying vegetarian dinner.",
+      "ingredients_available": "Oil",
+      "ingredients_needed": "Potatoes, chickpeas (canned or dried), onion, garlic, ginger, tomatoes (canned), coconut milk",
+      "time_minutes": "40",
+      "difficulty": "medium",
+      "reason": "Directly matches your request for an Indian potato and chickpea curry; provides Indian cuisine as requested and varied meal type from recent soup",
+      "instructions": "1. Dice 1 lb potatoes into 1-inch cubes; mince 4 garlic cloves and 1 tablespoon fresh ginger\n2. Dice 1 large onion; drain and rinse 2 cans (15 oz each) chickpeas\n3. Heat 3 tablespoons oil in a large pot over medium-high heat; add onion and cook 5 minutes until softened\n4. Add garlic and ginger; cook 2 minutes until fragrant\n5. Stir in 2 teaspoons cumin, 2 teaspoons coriander, 1 teaspoon turmeric, 1/2 teaspoon cayenne pepper, and 1/2 teaspoon paprika; toast for 1 minute\n6. Add potatoes and stir to coat with spices; cook 3 minutes\n7. Pour in 1 can (14.5 oz) diced tomatoes with juice and 1 cup coconut milk; stir well\n8. Bring to simmer, cover, and cook 20 minutes until potatoes are tender\n9. Add chickpeas and cook uncovered 5 more minutes; season with salt and pepper\n10. Serve with rice or naan bread",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "Oil",
+        "Potatoes",
+        "chickpeas (canned or dried)",
+        "onion",
+        "garlic",
+        "ginger",
+        "tomatoes (canned)",
+        "coconut milk"
+      ],
+      "id": "3fc4fa6a-a139-4bfd-979c-3632aa4d6eb3",
+      "created_date": "2025-12-01T01:25:37.088620"
+    },
+    {
+      "name": "Doenjiang Jjigae (Korean Soybean Paste Stew)",
+      "description": "A traditional Korean comfort stew made with earthy doenjiang (soybean paste), silky tofu, and vegetables in a rich, umami-packed broth.",
+      "ingredients_available": "Oil",
+      "ingredients_needed": "Firm tofu, doenjiang (Korean soybean paste), onion, garlic, zucchini, potato, mushrooms (shiitake or cremini), green chili pepper, scallions",
+      "time_minutes": "30",
+      "difficulty": "medium",
+      "reason": "Directly matches your request for doenjiang; provides Korean cuisine variety and introduces a traditional comfort dish different from recent meals",
+      "instructions": "1. Dice 14 oz firm tofu into 1-inch cubes; peel and dice 1 potato; dice 1 medium onion\n2. Mince 4 garlic cloves; slice 1 medium zucchini; slice 8 oz mushrooms; seed and slice 1 green chili pepper\n3. Chop 3 scallions, separating white and green parts\n4. Bring 4 cups vegetable broth to boil in a large pot or stone bowl (if available)\n5. Add onion and cook 2 minutes; add garlic and cook 1 minute until fragrant\n6. Add diced potato and mushrooms; simmer 8-10 minutes until potato begins to soften\n7. Stir 3 tablespoons doenjiang (soybean paste) into a small bowl with 1/4 cup warm broth to dissolve; pour into pot\n8. Add tofu cubes, zucchini, and white parts of scallions; simmer 8-10 minutes\n9. Top with green chili pepper slices and green scallion parts; add a drizzle of sesame oil if desired\n10. Serve hot in individual bowls with rice on the side",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "Oil",
+        "Firm tofu",
+        "doenjiang (Korean soybean paste)",
+        "onion",
+        "garlic",
+        "zucchini",
+        "potato",
+        "mushrooms (shiitake or cremini)",
+        "green chili pepper",
+        "scallions"
+      ],
+      "id": "02b83724-cb0e-415f-8225-d077c1ac3eca",
+      "created_date": "2025-12-01T01:25:37.090560"
+    },
+    {
+      "name": "Creamy Potato and Leek Soup",
+      "description": "A classic, velvety soup combining tender potatoes and mild leeks in a creamy broth, finished with fresh herbs for a comforting dinner.",
+      "ingredients_available": "Oil",
+      "ingredients_needed": "Potatoes, leeks, onion, garlic, vegetable broth, heavy cream or coconut milk, fresh thyme, fresh parsley",
+      "time_minutes": "40",
+      "difficulty": "easy",
+      "reason": "Directly matches your request for potato and leek soup; provides soup cuisine variety and classic comfort dish suited for dinner without repeating your recent spicy soup",
+      "instructions": "1. Clean leeks thoroughly: slice white and light green parts only into 1/4-inch rounds (about 3 cups)\n2. Peel and dice 1.5 lbs potatoes into 1-inch cubes; dice 1/2 onion; mince 3 garlic cloves\n3. Heat 3 tablespoons butter or olive oil in a large pot over medium heat\n4. Add sliced leeks and diced onion; cook 8-10 minutes, stirring occasionally, until very soft and fragrant\n5. Add garlic and cook 1-2 minutes more until fragrant\n6. Add diced potatoes and 6 cups vegetable broth; bring to boil\n7. Reduce heat and simmer 15-20 minutes until potatoes are very tender\n8. Blend soup until smooth using an immersion blender, or carefully transfer to blender in batches\n9. Stir in 1 cup heavy cream or coconut milk and 1 teaspoon fresh thyme (or 1/2 teaspoon dried)\n10. Season with salt and pepper to taste; garnish with fresh parsley and serve hot",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "Oil",
+        "Potatoes",
+        "leeks",
+        "onion",
+        "garlic",
+        "vegetable broth",
+        "heavy cream or coconut milk",
+        "fresh thyme",
+        "fresh parsley"
+      ],
+      "id": "f5794985-ae94-4f0b-ae76-2cbab680c35b",
+      "created_date": "2025-12-01T01:25:37.092027"
+    },
+    {
+      "name": "Minestrone Soup with Winter Vegetables",
+      "description": "A hearty Italian vegetable and pasta soup loaded with seasonal winter vegetables, beans, and aromatics in a tomato-based broth.",
+      "ingredients_available": "Oil",
+      "ingredients_needed": "Carrots, celery, onion, garlic, canned tomatoes, vegetable broth, green beans or zucchini, spinach or kale, white beans (canned), small pasta (ditalini or elbow)",
+      "time_minutes": "45",
+      "difficulty": "easy",
+      "reason": "Provides soup cuisine variety with a different style than your recent spicy tortilla soup; uses easily accessible winter vegetables and is perfect for a comforting Italian dinner",
+      "instructions": "1. Dice 2 carrots, 2 celery stalks, 1 large onion; mince 4 garlic cloves\n2. Trim 1 cup green beans and cut into 1-inch pieces; chop 2 cups fresh spinach or kale; drain 1 can (15 oz) white beans\n3. Heat 3 tablespoons olive oil in a large pot over medium heat\n4. Add onion, carrots, and celery; cook 8-10 minutes until softened\n5. Add garlic and cook 1 minute until fragrant\n6. Stir in 1 can (28 oz) crushed tomatoes, 6 cups vegetable broth, 1 teaspoon Italian seasoning, and salt and pepper to taste\n7. Bring to boil, then reduce heat and simmer 10 minutes\n8. Add green beans, white beans, and pasta; simmer 12-15 minutes until pasta is tender\n9. Stir in fresh spinach or kale and cook 2-3 minutes until wilted\n10. Taste and adjust seasoning; serve hot with crusty bread or grated Parmesan",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "Oil",
+        "Carrots",
+        "celery",
+        "onion",
+        "garlic",
+        "canned tomatoes",
+        "vegetable broth",
+        "green beans or zucchini",
+        "spinach or kale",
+        "white beans (canned)",
+        "small pasta (ditalini or elbow)"
+      ],
+      "id": "7e3cd392-80fa-446d-83a7-1d26d5eda3b8",
+      "created_date": "2025-12-01T01:25:37.094386"
+    },
+    {
+      "name": "Korean Vegetable and Tofu Bibimbap with Gochujang Sauce",
+      "description": "A vibrant Korean mixed rice bowl topped with seasoned vegetables, crispy fried tofu, a fried egg, and spicy gochujang sauce served over warm rice.",
+      "ingredients_available": "Oil",
+      "ingredients_needed": "Short-grain rice, firm tofu, egg, shiitake mushrooms, spinach, carrots, zucchini, bean sprouts, scallions, gochujang (Korean red chili paste), sesame seeds",
+      "time_minutes": "50",
+      "difficulty": "medium",
+      "reason": "Provides Korean cuisine variety different from the doenjiang stew; offers a visually appealing, complete meal with multiple components and textures for dinner",
+      "instructions": "1. Cook 2 cups short-grain rice according to package directions; keep warm\n2. Press 14 oz firm tofu between paper towels with weight for 15 minutes; cut into 1/2-inch thick slabs\n3. Slice 8 oz mushrooms; julienne 2 carrots; slice 1 medium zucchini lengthwise then into matchsticks; chop 2 cups spinach; chop 2 cups bean sprouts; chop 3 scallions\n4. Heat 2 tablespoons oil in a skillet over medium-high heat; pan-fry tofu slices 4-5 minutes per side until golden; set aside and cut into bite-sized pieces\n5. In same skillet, sauté mushrooms with a pinch of salt and 1/2 teaspoon sesame oil for 4 minutes; transfer to a bowl\n6. Sauté carrots and zucchini together for 4 minutes with salt; transfer to separate bowl\n7. Sauté spinach with 1/2 teaspoon sesame oil and a pinch of salt for 2 minutes; transfer to bowl\n8. Sauté bean sprouts with salt and 1/2 teaspoon sesame oil for 2 minutes; transfer to bowl\n9. In a small bowl, whisk 3 tablespoons gochujang with 2 tablespoons sesame oil, 1 tablespoon rice vinegar, 1 teaspoon sugar, and 1 minced garlic clove to make sauce\n10. Divide warm rice among bowls; arrange vegetables and tofu on top in sections; fry 1 egg per bowl sunny-side up; top with egg, gochujang sauce, and sesame seeds",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "Oil",
+        "Short-grain rice",
+        "firm tofu",
+        "egg",
+        "shiitake mushrooms",
+        "spinach",
+        "carrots",
+        "zucchini",
+        "bean sprouts",
+        "scallions",
+        "gochujang (Korean red chili paste)",
+        "sesame seeds"
+      ],
+      "id": "1b4acd78-45a3-4eaa-9ff1-3c904da3a8e0",
+      "created_date": "2025-12-01T01:25:37.096095"
+    },
+    {
+      "name": "Pasta with Lemon, Capers & Winter Vegetables",
+      "description": "A bright, tangy Italian pasta dish featuring zesty lemon and briny capers paired with roasted winter vegetables for a light yet satisfying dinner. This fresh-flavored pasta celebrates simple, quality ingredients.",
+      "ingredients_available": "Oil",
+      "ingredients_needed": "Pasta, lemon, capers, garlic, onion, carrots, celery, Brussels sprouts (or kale), fresh parsley",
+      "time_minutes": "35",
+      "difficulty": "Easy",
+      "reason": "Directly matches your request for a pasta with lemon, capers, and winter vegetables in an Italian style.",
+      "instructions": "1. Preheat oven to 425°F. Chop 2 cups Brussels sprouts, 2 carrots, and 2 celery stalks into bite-sized pieces.\n2. Toss vegetables with 3 tablespoons olive oil, salt, and pepper. Roast for 20 minutes until golden and tender.\n3. Bring a large pot of salted water to boil and cook 1 pound pasta according to package directions (about 9-12 minutes). Reserve 1 cup pasta water before draining.\n4. Mince 4 garlic cloves and finely chop 1 small onion.\n5. In a large skillet, heat 2 tablespoons olive oil over medium heat. Sauté garlic and onion for 3-4 minutes until fragrant.\n6. Add roasted vegetables to the skillet along with 3 tablespoons capers (drained), zest of 2 lemons, and juice of 1.5 lemons.\n7. Toss in cooked pasta and mix well, adding pasta water 1/4 cup at a time until creamy (you may not need all of it).\n8. Season with salt, pepper, and red pepper flakes to taste. Garnish with 2 tablespoons fresh parsley and serve.",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "Oil",
+        "Pasta",
+        "lemon",
+        "capers",
+        "garlic",
+        "onion",
+        "carrots",
+        "celery",
+        "Brussels sprouts (or kale)",
+        "fresh parsley"
+      ],
+      "id": "a5154d0b-31ad-44e4-9a2f-477e7345c401",
+      "created_date": "2025-12-01T01:27:59.591363"
+    },
+    {
+      "name": "Indian Aloo Chana (Potato & Chickpea Curry)",
+      "description": "A hearty and aromatic Indian curry combining tender potatoes and chickpeas in a spiced tomato-based sauce. This comforting dish is rich in protein and perfectly suited for a warming dinner.",
+      "ingredients_available": "Oil",
+      "ingredients_needed": "Potatoes, chickpeas (canned or dried/cooked), tomatoes (canned or fresh), onion, garlic, ginger, green chilies",
+      "time_minutes": "40",
+      "difficulty": "Medium",
+      "reason": "Directly matches your request for an Indian potato and chickpea curry for dinner.",
+      "instructions": "1. Heat 2 tablespoons oil in a large pot over medium heat. Dice 1 large onion and add to the pot, cooking for 5-6 minutes until golden.\n2. Add 4 minced garlic cloves and 1 tablespoon minced fresh ginger, cooking for 1 minute until fragrant.\n3. Add 2 teaspoons cumin, 1.5 teaspoons coriander, 1 teaspoon turmeric, and 1 teaspoon paprika. Stir constantly for 30 seconds to bloom the spices.\n4. Add 1 can (14 oz) diced tomatoes with their juices and 1 diced green chili. Cook for 3-4 minutes.\n5. Dice 1.5 pounds potatoes into 1-inch cubes and add to the pot along with 2 cans (15 oz each) chickpeas (drained and rinsed).\n6. Pour in 1 cup water and bring to a simmer. Cook covered for 20-25 minutes until potatoes are very tender.\n7. Stir in 1 teaspoon garam masala and 1/2 teaspoon salt (adjust to taste). Simmer for 2 more minutes.\n8. Finish with juice of 1/2 lime and fresh cilantro if available. Serve with rice or naan.",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "Oil",
+        "Potatoes",
+        "chickpeas (canned or dried/cooked)",
+        "tomatoes (canned or fresh)",
+        "onion",
+        "garlic",
+        "ginger",
+        "green chilies"
+      ],
+      "id": "ce88ab90-920d-489c-9744-4d5b10914f93",
+      "created_date": "2025-12-01T01:27:59.593627"
+    },
+    {
+      "name": "Korean Doenjang-jjigae (Soybean Paste Stew)",
+      "description": "A traditional Korean comfort stew featuring salty, umami-rich soybean paste with tofu, vegetables, and aromatic broth. This warming soup is a staple of Korean home cooking and deeply satisfying.",
+      "ingredients_available": "Oil",
+      "ingredients_needed": "Doenjang (Korean soybean paste), tofu, potatoes, onion, garlic, zucchini, mushrooms (shiitake or button), green onions, gochugaru (Korean red chili flakes, optional)",
+      "time_minutes": "30",
+      "difficulty": "Easy",
+      "reason": "Directly matches your request for a doenjang (Korean soybean paste stew) for dinner.",
+      "instructions": "1. Cut 14 oz firm tofu into 1/2-inch cubes and set aside.\n2. Dice 1 medium potato, 1/2 onion, 3 garlic cloves, 1 medium zucchini, and slice 4 oz mushrooms.\n3. Heat 1 tablespoon oil in a large pot over medium heat. Sauté onion and garlic for 2-3 minutes until fragrant.\n4. Add diced potato and 4 cups water. Bring to a boil and cook for 8-10 minutes until potatoes soften.\n5. In a small bowl, mix 3 tablespoons doenjang with 1/4 cup hot broth until smooth paste forms. Stir this mixture into the pot.\n6. Add zucchini, mushrooms, and tofu cubes. Simmer for 5-7 minutes until vegetables are tender.\n7. Add 1 teaspoon sesame oil, salt and pepper to taste, and 1/2 teaspoon gochugaru if desired.\n8. Serve in bowls, garnishing with sliced green onions and a drizzle of sesame oil.",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "Oil",
+        "Doenjang (Korean soybean paste)",
+        "tofu",
+        "potatoes",
+        "onion",
+        "garlic",
+        "zucchini",
+        "mushrooms (shiitake or button)",
+        "green onions",
+        "gochugaru (Korean red chili flakes",
+        "optional)"
+      ],
+      "id": "d28bfa23-c646-415b-8965-d83adad75267",
+      "created_date": "2025-12-01T01:27:59.595632"
+    },
+    {
+      "name": "Creamy Potato & Leek Soup",
+      "description": "A classic French-inspired soup featuring tender potatoes and sweet leeks in a silky, comforting broth. This elegant yet simple soup is perfect for a sophisticated dinner.",
+      "ingredients_available": "Oil",
+      "ingredients_needed": "Leeks, potatoes, vegetable broth (or water), onion, garlic, fresh thyme, bay leaf, cream or milk (optional)",
+      "time_minutes": "40",
+      "difficulty": "Easy",
+      "reason": "Directly matches your request for a potato and leek soup for dinner.",
+      "instructions": "1. Clean 3 large leeks by slicing lengthwise, rinsing between layers, then slicing into 1/2-inch half-moons.\n2. Dice 1 pound potatoes into 1/2-inch cubes. Dice 1/2 onion and mince 3 garlic cloves.\n3. Heat 2 tablespoons olive oil in a large pot over medium heat. Sauté onion and leeks for 6-8 minutes, stirring occasionally, until softened.\n4. Add garlic and cook for 1 minute until fragrant.\n5. Add diced potatoes, 4 cups vegetable broth (or water), 1 bay leaf, and 2-3 sprigs fresh thyme. Bring to a boil.\n6. Reduce heat and simmer for 20 minutes until potatoes are very tender.\n7. Remove bay leaf and thyme sprigs. For a rustic texture, mash some potatoes in the pot with a wooden spoon. For a smooth soup, blend until desired consistency using an immersion blender.\n8. Stir in 1/2 cup cream or milk if desired, season with salt and pepper to taste, and serve hot.",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "Oil",
+        "Leeks",
+        "potatoes",
+        "vegetable broth (or water)",
+        "onion",
+        "garlic",
+        "fresh thyme",
+        "bay leaf",
+        "cream or milk (optional)"
+      ],
+      "id": "0e2e49c0-afec-4b1f-9ec6-c1a9c45d1dd8",
+      "created_date": "2025-12-01T01:27:59.597867"
+    },
+    {
+      "name": "Indian Spinach & Tomato Dal (Lentil Soup)",
+      "description": "A vibrant and nutritious Indian lentil soup combining red lentils, spinach, and tomatoes in an aromatic spiced broth. This protein-rich soup is both comforting and nourishing.",
+      "ingredients_available": "Oil",
+      "ingredients_needed": "Red lentils, spinach (fresh or frozen), tomatoes (canned or fresh), onion, garlic, ginger, cumin seeds, mustard seeds",
+      "time_minutes": "35",
+      "difficulty": "Easy",
+      "reason": "Provides another Indian soup option that complements your requested aloo chana curry while offering different flavors and textures.",
+      "instructions": "1. Rinse 1 cup red lentils thoroughly under cold water until water runs clear.\n2. Heat 2 tablespoons oil in a large pot over medium-high heat. Add 1 teaspoon cumin seeds and 1/2 teaspoon mustard seeds, cooking for 1 minute until they pop and crackle.\n3. Dice 1 large onion and add to the pot, cooking for 5 minutes until golden.\n4. Add 4 minced garlic cloves and 1 tablespoon minced fresh ginger, cooking for 1 minute.\n5. Stir in 1 teaspoon turmeric and 1/2 teaspoon cayenne pepper, cooking for 30 seconds.\n6. Add the rinsed lentils, 1 can (14 oz) diced tomatoes, and 4 cups water. Bring to a boil.\n7. Reduce heat and simmer for 15-18 minutes until lentils are completely soft and breaking down.\n8. Add 3 cups fresh spinach (or 1 cup frozen) and stir until wilted, about 2-3 minutes.\n9. Season with salt and juice of 1 lime. Serve with rice or bread.",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "Oil",
+        "Red lentils",
+        "spinach (fresh or frozen)",
+        "tomatoes (canned or fresh)",
+        "onion",
+        "garlic",
+        "ginger",
+        "cumin seeds",
+        "mustard seeds"
+      ],
+      "id": "22c6b7f2-15d3-42d2-adaa-c1419b55ffe7",
+      "created_date": "2025-12-01T01:27:59.599976"
+    },
+    {
+      "name": "Tuscan White Bean & Kale Soup",
+      "description": "A rustic Italian soup featuring creamy white beans, hearty kale, and aromatic vegetables in a herb-infused broth. This warming dinner is simple yet deeply satisfying.",
+      "ingredients_available": "Oil",
+      "ingredients_needed": "Cannellini beans (canned or dried/cooked), kale, carrots, celery, onion, garlic, tomatoes (canned), vegetable broth, fresh rosemary",
+      "time_minutes": "35",
+      "difficulty": "Easy",
+      "reason": "Provides an Italian soup option that offers variety from your other meal choices while being hearty and suitable for dinner.",
+      "instructions": "1. Heat 3 tablespoons olive oil in a large pot over medium heat.\n2. Dice 1 onion, 2 carrots, and 2 celery stalks. Mince 4 garlic cloves.\n3. Add onion, carrots, and celery to the pot, cooking for 6-7 minutes until softened.\n4. Add garlic and cook for 1 minute until fragrant.\n5. Stir in 1 can (14 oz) diced tomatoes, 2 cans (15 oz each) cannellini beans (drained and rinsed), 4 cups vegetable broth, and 2 sprigs fresh rosemary.\n6. Bring to a boil, then reduce heat and simmer for 10 minutes.\n7. Chop 4 cups fresh kale (remove tough stems), removing any tough center ribs, and add to the pot.\n8. Simmer for 8-10 minutes until kale is tender. Remove rosemary sprigs.\n9. Season with salt, pepper, and a splash of balsamic vinegar. Serve with crusty bread.",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "Oil",
+        "Cannellini beans (canned or dried/cooked)",
+        "kale",
+        "carrots",
+        "celery",
+        "onion",
+        "garlic",
+        "tomatoes (canned)",
+        "vegetable broth",
+        "fresh rosemary"
+      ],
+      "id": "29806d07-cf2c-4ee9-8cd1-3e0e184434be",
+      "created_date": "2025-12-01T01:27:59.601841"
     }
   ]
 }

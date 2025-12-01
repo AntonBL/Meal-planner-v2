@@ -3,6 +3,7 @@
 Display active recipe and provide AI chat for cooking questions.
 """
 
+from lib.mobile_ui import add_mobile_styles
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -45,10 +46,13 @@ st.set_page_config(
 )
 
 # Apply custom styling
-apply_styling()
+# apply_styling()
 
 # Authentication
 require_authentication()
+
+# Apply mobile styles
+add_mobile_styles()
 
 render_header(
     title="Cooking Mode",

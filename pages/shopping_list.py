@@ -106,7 +106,7 @@ st.set_page_config(
 )
 
 # Apply custom styling
-apply_styling()
+# apply_styling()
 
 # Authentication
 require_authentication()

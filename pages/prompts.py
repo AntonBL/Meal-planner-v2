@@ -10,9 +10,13 @@ from lib.prompt_manager import (
     save_prompts,
 )
 from lib.ui import render_header
+from lib.mobile_ui import add_mobile_styles
 
 # Require authentication
 require_authentication()
+
+# Apply mobile styles
+add_mobile_styles()
 
 # Header
 render_header(
