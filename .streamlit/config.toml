@@ -1,0 +1,30 @@
+[theme]
+# Mobile-optimized color scheme with warm, soft backgrounds
+primaryColor = "#FF6B35"  # Warm orange for primary actions
+backgroundColor = "#FFF8F3"  # Warm off-white background (cream)
+secondaryBackgroundColor = "#FFF0E6"  # Lighter peach for cards
+textColor = "#2C2416"  # Warm dark brown for readability
+font = "sans serif"
+
+[server]
+# Enable file watcher for development
+fileWatcherType = "auto"
+headless = true
+
+[browser]
+# Optimize for mobile
+gatherUsageStats = false
+
+[client]
+# Show error details
+showErrorDetails = true
+toolbarMode = "minimal"
+
+[runner]
+# Faster rerun
+fastReruns = true
+
+[ui]
+# Hide default Streamlit elements for cleaner mobile UI
+hideTopBar = false
+hideSidebarNav = false

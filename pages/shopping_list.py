@@ -16,6 +16,7 @@ import streamlit as st
 from lib.auth import require_authentication
 from lib.file_manager import get_data_file_path
 from lib.logging_config import get_logger, setup_logging
+from lib.mobile_ui import add_mobile_styles, mobile_section_header
 from lib.shopping_list_manager import (
     add_items_to_list,
     categorize_ingredient,
@@ -28,6 +29,9 @@ from lib.ui import apply_styling, render_header, render_metric_card
 
 setup_logging("INFO")
 logger = get_logger(__name__)
+
+# Apply mobile styles
+add_mobile_styles()
 
 
 # ============================================================================
@@ -102,7 +106,7 @@ st.set_page_config(
 )
 
 # Apply custom styling
-apply_styling()
+# apply_styling()
 
 # Authentication
 require_authentication()

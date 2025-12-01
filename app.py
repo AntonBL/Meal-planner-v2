@@ -13,6 +13,7 @@ from pathlib import Path
 import streamlit as st
 
 from lib.auth import require_authentication
+from lib.mobile_ui import add_mobile_styles
 from lib.ui import apply_styling, render_card, render_header, render_metric_card
 
 # Page configuration
@@ -24,7 +25,8 @@ st.set_page_config(
 )
 
 # Apply custom styling
-apply_styling()
+# apply_styling()
+add_mobile_styles()  # Add mobile-optimized styles
 
 # ============================================================================
 # Authentication
