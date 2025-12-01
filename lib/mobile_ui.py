@@ -16,16 +16,17 @@ def mobile_card(title: str, content: str, icon: str = "📋", actions=None):
     with st.container():
         st.markdown(f"""
         <div style="
-            background-color: #F8F9FA;
+            background-color: #FFF0E6;
             border-radius: 12px;
             padding: 16px;
             margin-bottom: 12px;
             border-left: 4px solid #FF6B35;
+            box-shadow: 0 2px 4px rgba(255, 107, 53, 0.1);
         ">
-            <h3 style="margin: 0 0 8px 0; font-size: 18px;">
+            <h3 style="margin: 0 0 8px 0; font-size: 18px; color: #2C2416;">
                 {icon} {title}
             </h3>
-            <div style="font-size: 16px; line-height: 1.5;">
+            <div style="font-size: 16px; line-height: 1.5; color: #2C2416;">
                 {content}
             </div>
         </div>

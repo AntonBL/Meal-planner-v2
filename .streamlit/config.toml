@@ -1,9 +1,9 @@
 [theme]
-# Mobile-optimized color scheme
+# Mobile-optimized color scheme with warm, soft backgrounds
 primaryColor = "#FF6B35"  # Warm orange for primary actions
-backgroundColor = "#FFFFFF"  # Clean white background
-secondaryBackgroundColor = "#F8F9FA"  # Light gray for cards
-textColor = "#212529"  # Dark gray for readability
+backgroundColor = "#FFF8F3"  # Warm off-white background (cream)
+secondaryBackgroundColor = "#FFF0E6"  # Lighter peach for cards
+textColor = "#2C2416"  # Warm dark brown for readability
 font = "sans serif"
 
 [server]
