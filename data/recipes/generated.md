@@ -52,3 +52,43 @@ A classic Mexican tomato-based soup enriched with toasted, smoky dried chilies a
 
 **Why this recipe:** Recipe updated to incorporate toasting the dried chiles first (enhancing smokiness), charring the tomatoes for caramelized depth, and adding lime juice during seasoning to brighten flavors. These techniques deepen complexity and create a more authentic, restaurant-quality result. Time increased by 5 minutes to account for charring tomatoes.
 
+
+---
+
+## Thai Green Curry with Tomatoes and Fresh Herbs
+**Added to plan:** 2025-11-30
+**Time:** 25 minutes
+**Difficulty:** Easy
+
+A vibrant, aromatic Thai curry featuring your green curry paste with fresh tomatoes, garlic, and cilantro. Served with lime wedges and fresh avocado for creaminess.
+
+**Ingredients:**
+- Green Curry Paste
+- tomatoes (6 large)
+- garlic (4 cloves)
+- onion (1 medium)
+- fresh cilantro (1/2 cup)
+- lime (2)
+- avocado (2)
+- extra virgin olive oil
+- salt
+- pepper
+- epazote (2 tbsp)
+- Coconut milk (1 can)
+- vegetable or firm tofu (1 block)
+- bell peppers (2)
+- fresh basil (optional but recommended)
+
+**Instructions:**
+1. Heat 2 tablespoons olive oil in a large pot over medium heat
+2. Add diced onion (1 medium) and minced garlic (2 cloves), sauté for 2 minutes until fragrant
+3. Stir in 4-5 tablespoons Green Curry Paste and cook for 1-2 minutes, stirring constantly
+4. Add diced tomatoes (4 cups) and 1 can coconut milk, stir well to combine
+5. Cut tofu into 1-inch cubes and add to curry, along with diced bell peppers (2 cups)
+6. Simmer for 12-15 minutes until peppers are tender and curry is fragrant
+7. Season with salt and pepper to taste
+8. Stir in fresh cilantro (3 tablespoons) and epazote (1 tablespoon) just before serving
+9. Serve over rice with lime wedges and sliced avocado on the side
+
+**Why this recipe:** Uses your Green Curry Paste and fresh herbs perfectly; Thai cuisine matches your request; light and flavorful dinner that's quick to prepare.
+

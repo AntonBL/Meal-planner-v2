@@ -4,12 +4,16 @@ A Streamlit app for intelligent meal planning and pantry management.
 """
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
-import streamlit as st
-from pathlib import Path
 from datetime import datetime, timedelta
+from pathlib import Path
+
+import streamlit as st
+
 from lib.auth import require_authentication
+from lib.ui import apply_styling, render_card, render_header, render_metric_card
 
 # Page configuration
 st.set_page_config(
@@ -19,6 +23,9 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Apply custom styling
+apply_styling()
+
 # ============================================================================
 # Authentication
 # ============================================================================
@@ -27,9 +34,28 @@ st.set_page_config(
 
 name, username = require_authentication()
 
+# ============================================================================
+# Data Migration (one-time)
+# ============================================================================
+# Run migration from markdown to JSON if needed
+from lib.data_migration import run_migration
+from lib.logging_config import get_logger
+
+logger = get_logger(__name__)
+
+# Run migration silently in background
+try:
+    run_migration()
+except Exception as e:
+    logger.error(f"Migration failed: {e}", exc_info=True)
+    # Don't block app startup on migration failure
+
 # Title
-st.title("🏠 AI Recipe Planner")
-st.markdown("*Your intelligent cooking companion*")
+render_header(
+    title="AI Recipe Planner",
+    subtitle="Your intelligent cooking companion",
+    icon="🏠"
+)
 
 # Helper functions
 def count_items_in_file(file_path):
@@ -87,15 +113,15 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     pantry_count = count_items_in_file("data/pantry/staples.md")
-    st.metric("🥫 Pantry Items", pantry_count)
+    render_metric_card("🥫 Pantry Items", str(pantry_count))
 
 with col2:
     fresh_count = count_items_in_file("data/pantry/fresh.md")
-    st.metric("🥬 Fresh Items", fresh_count)
+    render_metric_card("🥬 Fresh Items", str(fresh_count))
 
 with col3:
     expiring_count = get_expiring_soon()
-    st.metric("⚠️ Expiring Soon", expiring_count, delta="Warning" if expiring_count > 0 else None)
+    render_metric_card("⚠️ Expiring Soon", str(expiring_count), delta="Warning" if expiring_count > 0 else None)
 
 # Separator
 st.markdown("---")
@@ -156,7 +182,7 @@ try:
 
     if recent_meals:
         for meal in recent_meals:
-            st.markdown(f"- {meal}")
+            render_card(f"**{meal}**", icon="🍳")
     else:
         st.info("No meals logged yet. Start cooking and log your first meal!")
 

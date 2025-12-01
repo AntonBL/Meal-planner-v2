@@ -7,15 +7,17 @@ This module consolidates previously duplicated code to maintain DRY principles.
 """
 
 from datetime import datetime
+
+from lib.constants import RATING_LIKED_THRESHOLD, RATING_LOVED_THRESHOLD, RECIPE_SOURCE_GENERATED
 from lib.file_manager import get_data_file_path
 from lib.logging_config import get_logger
-from lib.constants import (
-    RATING_LOVED_THRESHOLD,
-    RATING_LIKED_THRESHOLD,
-    RECIPE_SOURCE_GENERATED
-)
 
 logger = get_logger(__name__)
+
+
+from lib.history_manager import add_meal_to_history
+from lib.pantry_manager import load_pantry_items, remove_pantry_item
+from lib.recipe_store import get_recipe_by_id, save_recipe
 
 
 def save_recipe_feedback(
@@ -37,118 +39,45 @@ def save_recipe_feedback(
     """
     try:
         # 1. Add to meal history
-        history_path = get_data_file_path("meal_history")
-        history_content = history_path.read_text(encoding="utf-8")
-
-        # Build meal entry
         today = datetime.now()
         date_str = today.strftime("%A, %Y-%m-%d")
-        stars = "⭐" * rating
-
-        new_entry = f"\n### {date_str}\n"
-        new_entry += f"**{recipe['name']}** {stars}\n"
-        new_entry += f"- Rating: {rating}/5\n"
-
-        if notes:
-            new_entry += f"- Notes: {notes}\n"
-
-        # Add ingredients
+        
+        # Prepare ingredients string
         ingredients_list = []
         if recipe.get('ingredients_available'):
             ingredients_list.append(recipe['ingredients_available'])
         if recipe.get('ingredients_needed'):
             ingredients_list.append(recipe['ingredients_needed'])
+        
+        all_ingredients = ', '.join(ingredients_list) if ingredients_list else None
 
-        if ingredients_list:
-            all_ingredients = ', '.join(ingredients_list)
-            new_entry += f"- Ingredients used: {all_ingredients}\n"
+        meal_entry = {
+            "date": date_str,
+            "name": recipe['name'],
+            "rating": rating,
+            "notes": notes,
+            "ingredients": all_ingredients
+        }
+        
+        add_meal_to_history(meal_entry)
 
-        new_entry += "\n"
+        # 2. Save to appropriate recipe file based on rating (Legacy support or update JSON stats)
+        # We already update JSON stats in cooking_mode.py via update_recipe_stats
+        # But we might want to update the recipe object itself with rating/notes if we want to persist that
+        # For now, let's assume update_recipe_stats handles the core stats.
+        # If we want to save "loved/liked" status, we should update the recipe in the store.
+        
+        if recipe.get('id'):
+            full_recipe = get_recipe_by_id(recipe['id'])
+            if full_recipe:
+                full_recipe['rating'] = rating
+                full_recipe['last_cooked'] = today.strftime('%Y-%m-%d')
+                # We could append notes to description or a notes field
+                save_recipe(full_recipe)
 
-        # Find where to insert (after most recent month header or at end)
-        lines = history_content.split('\n')
-
-        # Find first month header (## November 2025)
-        insert_index = -1
-        for i, line in enumerate(lines):
-            if line.startswith('## '):
-                # Insert after this line
-                insert_index = i + 1
-                break
-
-        if insert_index == -1:
-            # No month header found, create one
-            month_year = today.strftime("%B %Y")
-            new_entry = f"\n## {month_year}\n" + new_entry
-            lines.append(new_entry)
-        else:
-            # Insert after month header
-            lines.insert(insert_index, new_entry)
-
-        # Write back
-        history_path.write_text('\n'.join(lines), encoding="utf-8")
-
-        logger.info(
-            "Saved meal to history",
-            extra={"recipe_name": recipe['name'], "rating": rating}
-        )
-
-        # 2. Save to appropriate recipe file based on rating
-        if rating >= RATING_LOVED_THRESHOLD:
-            recipe_file = "loved_recipes"
-        elif rating >= RATING_LIKED_THRESHOLD:
-            recipe_file = "liked_recipes"
-        else:
-            recipe_file = "not_again_recipes"
-
-        recipe_path = get_data_file_path(recipe_file)
-        recipe_content = recipe_path.read_text(encoding="utf-8")
-
-        # Build recipe entry
-        recipe_entry = f"\n---\n\n"
-        recipe_entry += f"## {recipe['name']}\n"
-        recipe_entry += f"**Last made:** {today.strftime('%Y-%m-%d')}\n"
-        recipe_entry += f"**Rating:** {rating}/5 {stars}\n"
-
-        if recipe.get('time_minutes'):
-            recipe_entry += f"**Time:** {recipe['time_minutes']} minutes\n"
-
-        if recipe.get('difficulty'):
-            recipe_entry += f"**Difficulty:** {(recipe['difficulty'] or 'unknown').title()}\n"
-
-        recipe_entry += "\n**Ingredients:**\n"
-
-        # Combine all ingredients
-        if recipe.get('ingredients_available'):
-            for item in recipe['ingredients_available'].split(','):
-                recipe_entry += f"- {item.strip()}\n"
-
-        if recipe.get('ingredients_needed'):
-            for item in recipe['ingredients_needed'].split(','):
-                recipe_entry += f"- {item.strip()}\n"
-
-        if notes:
-            recipe_entry += f"\n**Notes:** {notes}\n"
-
-        if make_again:
-            recipe_entry += f"\n**Make again:** {make_again}\n"
-
-        recipe_entry += "\n"
-
-        # Append to recipe file
-        recipe_path.write_text(recipe_content + recipe_entry, encoding="utf-8")
-
-        logger.info(
-            "Saved recipe to file",
-            extra={"recipe_name": recipe['name'], "file": recipe_file}
-        )
-
-        # If this was a generated recipe, remove it from generated.md now that it's been rated
-        if recipe.get('source') == RECIPE_SOURCE_GENERATED:
-            # Import here to avoid circular dependency
-            from lib.weekly_plan_manager import remove_generated_recipe
-            remove_generated_recipe(recipe['name'])
-
+        # If this was a generated recipe, we don't need to do anything special anymore
+        # as generated recipes are now saved directly to the main recipe store.
+        
         return True
 
     except Exception as e:
@@ -201,11 +130,7 @@ def is_staple_ingredient(ingredient_name: str) -> bool:
     ]
 
     # Check if any staple keyword matches
-    for keyword in staple_keywords:
-        if keyword in ingredient_lower:
-            return True
-
-    return False
+    return any(keyword in ingredient_lower for keyword in staple_keywords)
 
 
 def update_pantry_after_cooking(recipe: dict) -> bool:
@@ -244,46 +169,22 @@ def update_pantry_after_cooking(recipe: dict) -> bool:
             else:
                 items_to_remove.append(ingredient)
 
-        # Remove consumable items from pantry files
+        # Remove consumable items from pantry
         removed_count = 0
-
-        for file_name in ['staples', 'fresh']:
-            file_path = get_data_file_path(file_name)
-            content = file_path.read_text(encoding="utf-8")
-            lines = content.split('\n')
-            new_lines = []
-
-            for line in lines:
-                line_stripped = line.strip().lower()
-
-                # Check if this line contains an ingredient to remove
-                should_remove = False
-                for item in items_to_remove:
-                    if line_stripped.startswith('-') and item.lower() in line_stripped:
-                        should_remove = True
-                        removed_count += 1
-                        logger.info(f"Removing from pantry: {item}")
-                        break
-
-                if not should_remove:
-                    new_lines.append(line)
-
-            # Write back
-            file_path.write_text('\n'.join(new_lines), encoding="utf-8")
-
-        # Add usage note
-        today = datetime.now().strftime("%Y-%m-%d")
-        note = f"\n<!-- Cooked {recipe['name']} on {today}"
-        if staples_kept:
-            note += f" | Staples used (not removed): {', '.join(staples_kept)}"
-        if items_to_remove:
-            note += f" | Removed: {', '.join(items_to_remove)}"
-        note += " -->\n"
-
-        # Add note to staples file
-        staples_path = get_data_file_path("staples")
-        staples_content = staples_path.read_text(encoding="utf-8")
-        staples_path.write_text(staples_content + note, encoding="utf-8")
+        current_pantry_items = load_pantry_items()
+        
+        for item_to_remove in items_to_remove:
+            # Find matching items in pantry
+            # Simple substring match for now
+            matches = [
+                i for i in current_pantry_items 
+                if item_to_remove.lower() in i['name'].lower() or i['name'].lower() in item_to_remove.lower()
+            ]
+            
+            for match in matches:
+                if remove_pantry_item(match['id']):
+                    removed_count += 1
+                    logger.info(f"Removed from pantry: {match['name']}")
 
         logger.info(
             "Updated pantry after cooking",

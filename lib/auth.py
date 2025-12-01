@@ -4,11 +4,10 @@ Encapsulated authentication logic using streamlit-authenticator.
 Can be easily enabled/disabled with the ENABLE_AUTH flag.
 """
 
-import streamlit as st
-import yaml
-import os
 import logging
-from pathlib import Path
+import os
+
+import streamlit as st
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -149,14 +148,14 @@ def setup_authentication():
         return False, None, None, None
 
     # Check authentication status - BLOCK if not authenticated
-    if authentication_status == False:
+    if authentication_status is False:
         logger.warning("Authentication failed - incorrect credentials")
         st.error('🔒 Username/password is incorrect')
         st.warning(f'⚠️ Maximum {MAX_LOGIN_ATTEMPTS} failed attempts allowed before lockout')
         st.stop()  # Block access completely
         return False, None, None, authenticator
 
-    if authentication_status == None:
+    if authentication_status is None:
         logger.info("Authentication status is None - showing login form")
         # Don't show extra message - login form should already be visible
         st.stop()  # Block access completely

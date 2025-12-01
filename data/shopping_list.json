@@ -1,0 +1,47 @@
+{
+  "items": [
+    {
+      "item": "optional: queso fresco (1/2 cup crumbled)",
+      "recipe": "Vegetarian Sopa Azteca (Tortilla Soup) with Toasted Dried Chili",
+      "added": "2025-11-29",
+      "checked": false,
+      "category": "staple"
+    },
+    {
+      "item": "Olive oil",
+      "recipe": "Manual Additions",
+      "added": "2025-11-30",
+      "checked": false,
+      "category": "staple"
+    },
+    {
+      "item": "Coconut milk (1 can)",
+      "recipe": "Thai Green Curry with Tomatoes and Fresh Herbs",
+      "added": "2025-11-30",
+      "checked": false,
+      "category": "fresh"
+    },
+    {
+      "item": "vegetable or firm tofu (1 block)",
+      "recipe": "Thai Green Curry with Tomatoes and Fresh Herbs",
+      "added": "2025-11-30",
+      "checked": false,
+      "category": "fresh"
+    },
+    {
+      "item": "bell peppers (2)",
+      "recipe": "Thai Green Curry with Tomatoes and Fresh Herbs",
+      "added": "2025-11-30",
+      "checked": false,
+      "category": "fresh"
+    },
+    {
+      "item": "fresh basil (optional but recommended)",
+      "recipe": "Thai Green Curry with Tomatoes and Fresh Herbs",
+      "added": "2025-11-30",
+      "checked": false,
+      "category": "fresh"
+    }
+  ],
+  "last_updated": "2025-11-30T19:14:24.963842"
+}

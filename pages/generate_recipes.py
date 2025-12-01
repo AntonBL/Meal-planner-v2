@@ -4,24 +4,27 @@ Streamlit page for generating recipe suggestions using Claude API.
 """
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
-import streamlit as st
 from datetime import datetime
 
+import streamlit as st
+
+from lib.active_recipe_manager import save_active_recipe
 from lib.auth import require_authentication
+from lib.chat_manager import clear_chat_history
+from lib.constants import RECIPE_SOURCE_GENERATED
 from lib.exceptions import DataFileNotFoundError, LLMAPIError, RecipeParsingError
+from lib.file_manager import get_data_file_path
 from lib.llm_agents import ClaudeProvider, RecipeGenerator
 from lib.logging_config import get_logger, setup_logging
-from lib.file_manager import get_data_file_path
-from lib.weekly_plan_manager import add_recipe_to_plan
-from lib.active_recipe_manager import save_active_recipe
 from lib.recipe_feedback import (
     save_recipe_feedback,
-    is_staple_ingredient,
-    update_pantry_after_cooking
+    update_pantry_after_cooking,
 )
-from lib.constants import RECIPE_SOURCE_GENERATED
+from lib.recipe_store import save_recipe
+from lib.weekly_plan_manager import add_recipe_to_plan
 
 # Set up logging
 setup_logging("INFO")
@@ -34,8 +37,10 @@ logger = get_logger(__name__)
 # Note: Feedback and pantry functions now imported from lib/recipe_feedback.py
 
 
+from lib.shopping_list_manager import add_items_to_list
+
 def add_ingredients_to_shopping_list(recipe_name: str, ingredients: str) -> bool:
-    """Add ingredients to shopping list file.
+    """Add ingredients to shopping list.
 
     Args:
         recipe_name: Name of the recipe
@@ -44,42 +49,11 @@ def add_ingredients_to_shopping_list(recipe_name: str, ingredients: str) -> bool
     Returns:
         True if successful, False otherwise
     """
-    try:
-        shopping_path = get_data_file_path("shopping_list")
-        content = shopping_path.read_text(encoding="utf-8")
-
-        # Build entry for this recipe
-        today = datetime.now().strftime("%Y-%m-%d")
-        entry = f"\n## For: {recipe_name} (Added: {today})\n"
-
-        # Add each ingredient as a bullet point
-        for item in ingredients.split(','):
-            item = item.strip()
-            if item:
-                entry += f"- {item}\n"
-
-        entry += "\n"
-
-        # Append to shopping list file
-        shopping_path.write_text(content + entry, encoding="utf-8")
-
-        logger.info(
-            "Added ingredients to shopping list",
-            extra={
-                "recipe_name": recipe_name,
-                "ingredient_count": len([i for i in ingredients.split(',') if i.strip()])
-            }
-        )
-
+    if not ingredients:
         return True
-
-    except Exception as e:
-        logger.error(
-            "Failed to add to shopping list",
-            extra={"recipe_name": recipe_name, "error": str(e)},
-            exc_info=True
-        )
-        return False
+        
+    ing_list = [i.strip() for i in ingredients.split(',') if i.strip()]
+    return add_items_to_list(recipe_name, ing_list)
 
 
 # ============================================================================
@@ -218,6 +192,24 @@ if st.button("✨ Generate Recipe Suggestions", type="primary", use_container_wi
                     num_suggestions=num_recipes,
                     additional_context=additional_prefs if additional_prefs else None,
                 )
+
+                # Save generated recipes to recipe store
+                for recipe in recipes:
+                    recipe['source'] = RECIPE_SOURCE_GENERATED
+                    recipe['rating'] = 0  # Not rated yet
+                    recipe['cook_count'] = 0
+                    recipe['tags'] = ['vegetarian']
+
+                    # Convert ingredients to list if needed
+                    all_ingredients = []
+                    if recipe.get('ingredients_available'):
+                        all_ingredients.extend([i.strip() for i in recipe['ingredients_available'].split(',')])
+                    if recipe.get('ingredients_needed'):
+                        all_ingredients.extend([i.strip() for i in recipe['ingredients_needed'].split(',')])
+                    recipe['ingredients'] = all_ingredients
+
+                    save_recipe(recipe)
+                    logger.info(f"Saved generated recipe to store: {recipe.get('name')}")
 
                 # Store in session state
                 st.session_state["generated_recipes"] = recipes
@@ -587,6 +579,7 @@ if "generated_recipes" in st.session_state:
                     save_active_recipe(recipe)
                     # Clear any existing chat history for new recipe
                     st.session_state['cooking_chat_history'] = []
+                    clear_chat_history()
                     logger.info(
                         "User selected recipe to cook",
                         extra={"recipe_name": recipe["name"]},
@@ -601,7 +594,7 @@ if "generated_recipes" in st.session_state:
                     plan_recipe['source'] = RECIPE_SOURCE_GENERATED  # Mark as generated
 
                     if add_recipe_to_plan(plan_recipe):
-                        st.success(f"✅ Added to weekly plan!")
+                        st.success("✅ Added to weekly plan!")
                         logger.info(
                             "Added generated recipe to weekly plan",
                             extra={"recipe_name": recipe["name"]},

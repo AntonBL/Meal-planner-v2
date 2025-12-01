@@ -7,7 +7,6 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from lib.file_manager import get_data_file_path
 from lib.logging_config import get_logger
 
 logger = get_logger(__name__)
@@ -75,7 +74,7 @@ def load_active_recipe() -> Optional[dict]:
             return None
 
         # Read and parse JSON
-        with open(active_recipe_path, 'r', encoding='utf-8') as f:
+        with open(active_recipe_path, encoding='utf-8') as f:
             recipe = json.load(f)
 
         logger.info(

@@ -49,7 +49,7 @@ def parse_recipe_section(section: str) -> Optional[dict]:
     in_ingredients_section = False
     in_notes_section = False
 
-    for i, line in enumerate(lines):
+    for _i, line in enumerate(lines):
         line_stripped = line.strip()
 
         # Recipe name (## header)

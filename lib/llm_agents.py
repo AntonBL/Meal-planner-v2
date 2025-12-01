@@ -233,8 +233,8 @@ RECENT MEALS (for variety):
 
 REQUEST:
 - Cuisines: {', '.join(cuisines)}
-- Meal type: {meal_type}{f"""
-- Additional preferences: {additional_context}""" if additional_context else ""}
+- Meal type: {meal_type}
+{f"- Additional preferences: {additional_context}" if additional_context else ""}
 
 IMPORTANT REQUIREMENTS:
 1. ALL RECIPES MUST BE VEGETARIAN (no meat, poultry, or fish)
@@ -247,10 +247,10 @@ IMPORTANT REQUIREMENTS:
 
 3. For each recipe, provide:
    - Name and brief description (1-2 sentences)
-   - List ingredients in two groups: AVAILABLE (already have) and NEEDED (must buy)
+   - List ingredients including amounts in two groups: AVAILABLE (already have) and NEEDED (must buy)
    - Estimated time in minutes
    - Difficulty (easy/medium/hard)
-   - Step-by-step cooking instructions (clear and concise)
+   - Step-by-step cooking instructions (clear and concise) with amounts and timing
    - Why you're suggesting it (brief reason)
 
 4. Format your response EXACTLY like this for EACH recipe:

@@ -5,27 +5,21 @@ from their saved recipes (loved and liked collections).
 """
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
-import streamlit as st
-from datetime import datetime
-from pathlib import Path
 
-from lib.auth import require_authentication
-from lib.file_manager import load_data_file, get_data_file_path
-from lib.recipe_parser import parse_all_recipes
-from lib.logging_config import get_logger, setup_logging
-from lib.weekly_plan_manager import (
-    load_current_plan,
-    add_recipe_to_plan,
-    remove_meal_from_plan,
-    clear_weekly_plan,
-)
+import streamlit as st
+
 from lib.active_recipe_manager import save_active_recipe
-from lib.constants import (
-    RECIPE_SOURCE_GENERATED,
-    RECIPE_SOURCE_LOVED,
-    RECIPE_SOURCE_LIKED
+from lib.auth import require_authentication
+from lib.logging_config import get_logger, setup_logging
+from lib.recipe_store import get_recipe_by_id, get_recipe_by_name, load_recipes
+from lib.weekly_plan_manager import (
+    add_recipe_to_plan,
+    clear_weekly_plan,
+    load_current_plan,
+    remove_meal_from_plan,
 )
 
 setup_logging("INFO")
@@ -48,46 +42,13 @@ require_authentication()
 
 @st.cache_data(ttl=300)  # Cache for 5 minutes
 def load_available_recipes() -> list[dict]:
-    """Load all recipes available for meal planning.
+    """Load all recipes available for meal planning from recipe store.
 
     Returns:
-        List of recipe dicts from loved, liked, and generated collections
+        List of recipe dicts from the JSON recipe store
     """
     try:
-        recipes = []
-
-        # Load loved recipes
-        try:
-            loved_content = load_data_file("loved_recipes")
-            loved_recipes = parse_all_recipes(loved_content)
-            for recipe in loved_recipes:
-                recipe['source'] = RECIPE_SOURCE_LOVED
-                recipe['source_file'] = 'loved_recipes'
-                recipes.append(recipe)
-        except Exception as e:
-            logger.warning(f"Could not load loved recipes: {e}")
-
-        # Load liked recipes
-        try:
-            liked_content = load_data_file("liked_recipes")
-            liked_recipes = parse_all_recipes(liked_content)
-            for recipe in liked_recipes:
-                recipe['source'] = RECIPE_SOURCE_LIKED
-                recipe['source_file'] = 'liked_recipes'
-                recipes.append(recipe)
-        except Exception as e:
-            logger.warning(f"Could not load liked recipes: {e}")
-
-        # Load generated recipes (not yet rated)
-        try:
-            generated_content = load_data_file("generated_recipes")
-            generated_recipes = parse_all_recipes(generated_content)
-            for recipe in generated_recipes:
-                recipe['source'] = RECIPE_SOURCE_GENERATED
-                recipe['source_file'] = 'generated_recipes'
-                recipes.append(recipe)
-        except Exception as e:
-            logger.warning(f"Could not load generated recipes: {e}")
+        recipes = load_recipes()
 
         logger.info(
             "Loaded recipes for meal planning",
@@ -96,7 +57,7 @@ def load_available_recipes() -> list[dict]:
 
         return recipes
 
-    except Exception as e:
+    except Exception:
         logger.error("Failed to load recipes", exc_info=True)
         st.error("❌ Could not load saved recipes")
         return []
@@ -169,19 +130,28 @@ with tab1:
 
             with col2:
                 if st.button("👨‍🍳 Cook", key=f"view_{idx}", use_container_width=True):
-                    # Find full recipe details from loved/liked
-                    available_recipes = load_available_recipes()
-                    full_recipe = next((r for r in available_recipes if r['name'] == meal['name']), None)
+                    # Load full recipe from recipe store by ID
+
+                    # Try to get recipe by ID first (if available)
+                    full_recipe = None
+                    if meal.get('recipe_id'):
+                        full_recipe = get_recipe_by_id(meal['recipe_id'])
+
+                    # Fallback: search by name (for recipes added before migration)
+                    if not full_recipe:
+                        full_recipe = get_recipe_by_name(meal['name'])
 
                     if full_recipe:
-                        # Prepare active recipe data
+                        # Prepare active recipe data with all necessary fields
                         active_recipe = {
+                            'id': full_recipe.get('id'),
                             'name': full_recipe['name'],
                             'time_minutes': full_recipe.get('time_minutes'),
                             'difficulty': full_recipe.get('difficulty'),
-                            'description': full_recipe.get('notes', ''),
+                            'description': full_recipe.get('description', ''),
                             'ingredients_available': ', '.join(full_recipe.get('ingredients', [])),
                             'ingredients_needed': '',
+                            'instructions': full_recipe.get('instructions', 'No instructions available'),
                             'reason': f"From your weekly plan • {full_recipe.get('source')} recipe"
                         }
 
@@ -191,7 +161,7 @@ with tab1:
 
                         logger.info(
                             "User started cooking from weekly plan",
-                            extra={"recipe_name": meal['name']}
+                            extra={"recipe_name": meal['name'], "recipe_id": full_recipe.get('id')}
                         )
 
                         st.switch_page("pages/cooking_mode.py")

@@ -7,11 +7,12 @@ This script creates a .streamlit/config.yaml file with:
 - Your chosen username, email, and hashed password
 """
 
-import secrets
-import yaml
-from pathlib import Path
-import bcrypt
 import getpass
+import secrets
+from pathlib import Path
+
+import bcrypt
+import yaml
 
 
 def generate_secret_key() -> str:

@@ -1,21 +1,27 @@
 """Pantry Page - AI-Powered Pantry Management.
 
 Users chat with AI to add, update, or remove pantry items.
-The AI reads and writes directly to pantry markdown files.
+The AI reads and writes directly to pantry JSON storage.
 """
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
-import streamlit as st
 from datetime import datetime
-from pathlib import Path
+
+import streamlit as st
 
 from lib.auth import require_authentication
-from lib.llm_agents import ClaudeProvider
-from lib.file_manager import load_data_file, get_data_file_path
 from lib.exceptions import LLMAPIError
+from lib.llm_agents import ClaudeProvider
 from lib.logging_config import get_logger, setup_logging
+from lib.pantry_manager import (
+    add_pantry_item,
+    load_pantry_items,
+    remove_pantry_item,
+)
+from lib.ui import apply_styling, render_header
 from lib.vision import detect_items_from_image
 
 setup_logging("INFO")
@@ -27,10 +33,17 @@ st.set_page_config(
     layout="wide",
 )
 
+# Apply custom styling
+apply_styling()
+
 # Authentication
 require_authentication()
 
-st.title("🥫 Pantry")
+render_header(
+    title="Pantry",
+    subtitle="Manage your pantry staples and fresh items",
+    icon="🥫"
+)
 
 # Initialize session state for chat
 if "pantry_messages" not in st.session_state:
@@ -43,46 +56,9 @@ except LLMAPIError as e:
     st.error(f"❌ Failed to initialize AI: {e}")
     st.stop()
 
-# Helper function to parse pantry items by section
-def parse_pantry_by_sections(content):
-    """Parse markdown pantry content into sections with items."""
-    sections = {}
-    current_section = None
-    lines = content.split('\n')
-
-    for i, line in enumerate(lines):
-        if line.strip().startswith('##'):
-            # This is a section header
-            current_section = line.strip()[2:].strip()
-            sections[current_section] = []
-        elif line.strip().startswith('-') and current_section:
-            # This is an item line under a section
-            sections[current_section].append({
-                'line_number': i,
-                'text': line.strip()[2:],  # Remove "- " prefix
-                'full_line': line
-            })
-
-    return sections
-
-def delete_pantry_item(file_path, line_number):
-    """Delete an item from pantry file by line number."""
-    try:
-        content = file_path.read_text(encoding="utf-8")
-        lines = content.split('\n')
-
-        # Remove the line
-        del lines[line_number]
-
-        # Write back
-        file_path.write_text('\n'.join(lines), encoding="utf-8")
-        return True
-    except Exception as e:
-        logger.error(f"Failed to delete pantry item: {e}", exc_info=True)
-        return False
 
 # ============================================================================
-# MAIN CONTENT: Current Pantry Display (at top to prevent auto-scroll)
+# MAIN CONTENT: Current Pantry Display
 # ============================================================================
 
 # Add delete mode toggle
@@ -93,16 +69,9 @@ with col_toggle:
     delete_mode = st.checkbox("🗑️ Delete mode", value=False, help="Enable to show delete buttons for items")
 
 try:
-    staples_path = get_data_file_path("staples")
-    fresh_path = get_data_file_path("fresh")
-    staples_content = load_data_file("staples")
-    fresh_content = load_data_file("fresh")
-
-    # Parse items by sections
-    staples_sections = parse_pantry_by_sections(staples_content)
-    fresh_sections = parse_pantry_by_sections(fresh_content)
-
-    # Category icons for better visual organization
+    items = load_pantry_items()
+    
+    # Category icons
     category_icons = {
         "Grains & Pasta": "🌾",
         "Beans & Legumes": "🫘",
@@ -113,53 +82,49 @@ try:
         "Dairy & Alternatives": "🧈",
         "Vegetables": "🥬",
         "Fresh Herbs": "🌱",
-        "Fruits": "🍋"
+        "Fruits": "🍋",
+        "Uncategorized": "📦"
     }
 
-    # Combine all sections from both files
-    all_sections = {}
+    # Group by category
+    sections = {}
+    for item in items:
+        cat = item.get("category", "Uncategorized")
+        if cat not in sections:
+            sections[cat] = []
+        sections[cat].append(item)
 
-    # Add staples sections
-    for section_name, items in staples_sections.items():
-        if items:  # Only add non-empty sections
-            all_sections[section_name] = {
-                'items': items,
-                'file_path': staples_path,
-                'file_type': 'staples'
-            }
+    if sections:
+        # Sort sections: defined categories first, then others
+        defined_cats = list(category_icons.keys())
+        sorted_cats = sorted(sections.keys(), key=lambda x: defined_cats.index(x) if x in defined_cats else 999)
 
-    # Add fresh sections
-    for section_name, items in fresh_sections.items():
-        if items:  # Only add non-empty sections
-            all_sections[section_name] = {
-                'items': items,
-                'file_path': fresh_path,
-                'file_type': 'fresh'
-            }
-
-    # Display sections in a single column for better organization
-    if all_sections:
-        for section_name, section_data in all_sections.items():
+        for section_name in sorted_cats:
+            section_items = sections[section_name]
             icon = category_icons.get(section_name, "📦")
 
             with st.expander(f"{icon} {section_name}", expanded=False):
-                for item in section_data['items']:
+                for item in section_items:
+                    # Format item text
+                    text = f"{item['name']}"
+                    if item.get('quantity') and item['quantity'] != "1":
+                        text += f" - {item['quantity']}"
+                    if item.get('expiry'):
+                        text += f" (Exp: {item['expiry']})"
+                        
                     if delete_mode:
-                        # Show with delete button
                         cols = st.columns([4, 1])
                         with cols[0]:
-                            st.markdown(f"• {item['text']}")
+                            st.markdown(f"• {text}")
                         with cols[1]:
-                            if st.button("🗑️", key=f"del_{section_data['file_type']}_{item['line_number']}", help="Delete this item"):
-                                if delete_pantry_item(section_data['file_path'], item['line_number']):
-                                    st.success(f"Deleted!")
-                                    logger.info(f"Deleted item: {item['text']}")
+                            if st.button("🗑️", key=f"del_{item['id']}", help="Delete this item"):
+                                if remove_pantry_item(item['id']):
+                                    st.success("Deleted!")
                                     st.rerun()
                                 else:
                                     st.error("Failed to delete")
                     else:
-                        # Clean view without delete buttons
-                        st.markdown(f"• {item['text']}")
+                        st.markdown(f"• {text}")
     else:
         st.info("Your pantry is empty. Use the chat below to add items!")
 
@@ -168,7 +133,7 @@ except Exception as e:
     logger.error("Error in pantry display", exc_info=True)
 
 # ============================================================================
-# INTERACTIVE TOOLS: Photo Upload & AI Chat (in expanders to prevent scroll)
+# INTERACTIVE TOOLS: Photo Upload & AI Chat
 # ============================================================================
 
 st.markdown("---")
@@ -195,14 +160,10 @@ with st.expander("📸 Quick Add: Upload Photo", expanded=False):
             if st.button("🔍 Detect Items with AI", type="primary", use_container_width=True):
                 with st.spinner("🤖 Analyzing image... This may take 10-15 seconds"):
                     try:
-                        # Reset file pointer
                         uploaded_file.seek(0)
-
-                        # Detect items using vision
                         detected_items = detect_items_from_image(uploaded_file, llm)
 
                         if detected_items:
-                            # Build a natural language prompt from detected items
                             item_descriptions = []
                             for item in detected_items:
                                 item_descriptions.append(f"{item['name']} ({item['quantity']})")
@@ -212,39 +173,27 @@ with st.expander("📸 Quick Add: Upload Photo", expanded=False):
 
                             st.success(f"✅ Detected {len(detected_items)} items!")
                             st.info(f"📝 Auto-prompt: \"{auto_prompt}\"")
-                            st.markdown("*The AI will process this in the chat below*")
-
-                            # Add to chat as if user typed it
                             st.session_state.pantry_messages.append({"role": "user", "content": auto_prompt})
-
-                            # Trigger processing by setting a flag
                             st.session_state['process_vision_prompt'] = auto_prompt
-
                             st.rerun()
                         else:
                             st.warning("⚠️ No items detected. Try a clearer photo or add items manually using the chat below.")
 
-                    except LLMAPIError as e:
-                        st.error(f"❌ Vision API error: {e}")
-                        logger.error("Vision detection failed", exc_info=True)
                     except Exception as e:
-                        st.error(f"❌ Unexpected error: {e}")
+                        st.error(f"❌ Error: {e}")
                         logger.error("Photo upload error", exc_info=True)
 
 # Chat Interface Section
 with st.expander("💬 Chat with AI to Update Pantry", expanded=False):
     st.markdown("*Examples: 'Add 2 bottles of olive oil', 'I bought milk and eggs', 'Remove expired tomatoes'*")
-    st.markdown("")  # Add some spacing
+    st.markdown("")
 
-    # Display chat messages
     for message in st.session_state.pantry_messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    # Check if there's a vision prompt to process automatically
     vision_prompt = st.session_state.pop('process_vision_prompt', None)
 
-    # Chat input
     if prompt := st.chat_input("What would you like to add, remove, or update?"):
         process_prompt = prompt
     elif vision_prompt:
@@ -253,20 +202,14 @@ with st.expander("💬 Chat with AI to Update Pantry", expanded=False):
         process_prompt = None
 
     if process_prompt:
-        # Add user message to chat (if from manual input, not vision)
         if not vision_prompt:
             st.session_state.pantry_messages.append({"role": "user", "content": process_prompt})
             with st.chat_message("user"):
                 st.markdown(process_prompt)
 
-        # Load current pantry data
+        # AI Processing
         try:
-            staples_content = load_data_file("staples")
-            fresh_content = load_data_file("fresh")
-            staples_path = get_data_file_path("staples")
-            fresh_path = get_data_file_path("fresh")
-
-            # Build AI prompt to interpret the request
+            # Build AI prompt
             ai_prompt = f"""You are a pantry management assistant. Interpret what the user wants to do with their pantry.
 
 USER REQUEST: "{process_prompt}"
@@ -275,155 +218,97 @@ Analyze the request and respond in EXACTLY this format (nothing else):
 
 ACTION: [add/remove/update]
 ITEMS:
-- Item: [item name] | Quantity: [quantity] | Category: [staple/fresh] | Expiry: [YYYY-MM-DD or none]
+- Item: [item name] | Quantity: [quantity] | Category: [category name] | Expiry: [YYYY-MM-DD or none]
+
+Categories: Grains & Pasta, Beans & Legumes, Oils & Condiments, Canned Goods, Spices & Herbs (Dried), Proteins (Vegetarian), Dairy & Alternatives, Vegetables, Fresh Herbs, Fruits. Use "Uncategorized" if unsure.
 
 Examples:
 USER: "add tomatoes"
 ACTION: add
 ITEMS:
-- Item: Tomatoes | Quantity: 1 lb | Category: fresh | Expiry: none
-
-USER: "I bought 2 bottles of olive oil and some rice"
-ACTION: add
-ITEMS:
-- Item: Olive Oil | Quantity: 2 bottles | Category: staple | Expiry: none
-- Item: Rice | Quantity: 1 bag | Category: staple | Expiry: none
+- Item: Tomatoes | Quantity: 1 lb | Category: Vegetables | Expiry: none
 
 USER: "remove expired milk"
 ACTION: remove
 ITEMS:
-- Item: Milk | Quantity: any | Category: fresh | Expiry: none
+- Item: Milk | Quantity: any | Category: Dairy & Alternatives | Expiry: none
 
 Now interpret: "{process_prompt}"
 """
 
-            # Get AI response
-            with st.chat_message("assistant"):
-                with st.spinner("Understanding your request..."):
-                    try:
-                        response = llm.generate(ai_prompt, max_tokens=1000)
+            with st.chat_message("assistant"), st.spinner("Understanding your request..."):
+                response = llm.generate(ai_prompt, max_tokens=1000)
 
-                        # Parse the response
-                        if "ACTION:" in response and "ITEMS:" in response:
-                            action = ""
-                            items = []
+                if "ACTION:" in response and "ITEMS:" in response:
+                    action = ""
+                    items_to_process = []
 
-                            for line in response.split('\n'):
-                                line = line.strip()
-                                if line.startswith("ACTION:"):
-                                    action = line.replace("ACTION:", "").strip().lower()
-                                elif line.startswith("- Item:"):
-                                    # Parse item line
-                                    parts = line.replace("- Item:", "").split("|")
-                                    if len(parts) >= 3:
-                                        item_name = parts[0].replace("Item:", "").strip()
-                                        quantity = parts[1].replace("Quantity:", "").strip()
-                                        category = parts[2].replace("Category:", "").strip()
-                                        expiry = parts[3].replace("Expiry:", "").strip() if len(parts) > 3 else "none"
+                    for line in response.split('\n'):
+                        line = line.strip()
+                        if line.startswith("ACTION:"):
+                            action = line.replace("ACTION:", "").strip().lower()
+                        elif line.startswith("- Item:"):
+                            parts = line.replace("- Item:", "").split("|")
+                            if len(parts) >= 3:
+                                item_name = parts[0].replace("Item:", "").strip()
+                                quantity = parts[1].replace("Quantity:", "").strip()
+                                category = parts[2].replace("Category:", "").strip()
+                                expiry = parts[3].replace("Expiry:", "").strip() if len(parts) > 3 else None
+                                if expiry == "none": expiry = None
 
-                                        items.append({
-                                            'name': item_name,
-                                            'quantity': quantity,
-                                            'category': category,
-                                            'expiry': expiry
-                                        })
-
-                            # Now perform the action
-                            if action == "add" and items:
-                                for item in items:
-                                    # Determine which file
-                                    if item['category'] == 'fresh':
-                                        file_path = fresh_path
-                                        current_content = fresh_content
-                                    else:
-                                        file_path = staples_path
-                                        current_content = staples_content
-
-                                    # Build new line
-                                    today = datetime.now().strftime("%Y-%m-%d")
-                                    new_line = f"- {item['name']} - {item['quantity']} - Added: {today}"
-                                    if item['expiry'] != "none":
-                                        new_line += f" - Expires: {item['expiry']}"
-                                    new_line += "\n"
-
-                                    # Find first section header and insert after it
-                                    lines = current_content.split('\n')
-                                    for i, line in enumerate(lines):
-                                        if line.startswith('##'):
-                                            lines.insert(i + 1, new_line)
-                                            break
-
-                                    # Write back
-                                    file_path.write_text('\n'.join(lines), encoding="utf-8")
-
-                                item_names = ", ".join([i['name'] for i in items])
-                                success_msg = f"✅ Added {item_names} to pantry!"
-                                st.success(success_msg)
-
-                                logger.info("Pantry updated via AI", extra={"action": "add", "items": items})
-
-                                st.session_state.pantry_messages.append({
-                                    "role": "assistant",
-                                    "content": success_msg
+                                items_to_process.append({
+                                    'name': item_name,
+                                    'quantity': quantity,
+                                    'category': category,
+                                    'expiry': expiry,
+                                    'type': 'fresh' if category in ['Vegetables', 'Fruits', 'Fresh Herbs', 'Dairy & Alternatives'] else 'staple'
                                 })
 
-                                st.rerun()
+                    # Perform Action
+                    if action == "add" and items_to_process:
+                        for item in items_to_process:
+                            add_pantry_item(item)
+                        
+                        names = ", ".join([i['name'] for i in items_to_process])
+                        msg = f"✅ Added {names} to pantry!"
+                        st.success(msg)
+                        st.session_state.pantry_messages.append({"role": "assistant", "content": msg})
+                        st.rerun()
 
-                            elif action == "remove" and items:
-                                removed_items = []
-                                for item in items:
-                                    # Check both files for the item
-                                    for file_path, content in [(staples_path, staples_content), (fresh_path, fresh_content)]:
-                                        lines = content.split('\n')
-                                        new_lines = []
-                                        item_removed = False
-
-                                        for line in lines:
-                                            # Check if this line contains the item name
-                                            if line.strip().startswith('-') and item['name'].lower() in line.lower():
-                                                # Skip this line (remove it)
-                                                item_removed = True
-                                            else:
-                                                new_lines.append(line)
-
-                                        if item_removed:
-                                            # Write back updated content
-                                            file_path.write_text('\n'.join(new_lines), encoding="utf-8")
-                                            removed_items.append(item['name'])
-                                            break  # Found and removed, don't check other file
-
-                                if removed_items:
-                                    item_names = ", ".join(removed_items)
-                                    success_msg = f"✅ Removed {item_names} from pantry!"
-                                    st.success(success_msg)
-
-                                    logger.info("Pantry updated via AI", extra={"action": "remove", "items": removed_items})
-
-                                    st.session_state.pantry_messages.append({
-                                        "role": "assistant",
-                                        "content": success_msg
-                                    })
-
-                                    st.rerun()
-                                else:
-                                    st.warning("⚠️ Couldn't find those items in your pantry. Please check the sidebar to see what's available.")
-
-                            else:
-                                st.warning(f"I understood you want to {action}, but couldn't parse the items. Please try being more specific.")
+                    elif action == "remove" and items_to_process:
+                        # For removal, we need to find items by name since we don't have IDs from the user
+                        current_items = load_pantry_items()
+                        removed_names = []
+                        
+                        for item_to_remove in items_to_process:
+                            # Find matching items in pantry
+                            matches = [
+                                i for i in current_items 
+                                if item_to_remove['name'].lower() in i['name'].lower()
+                            ]
+                            
+                            for match in matches:
+                                if remove_pantry_item(match['id']):
+                                    removed_names.append(match['name'])
+                        
+                        if removed_names:
+                            msg = f"✅ Removed {', '.join(removed_names)} from pantry!"
+                            st.success(msg)
+                            st.session_state.pantry_messages.append({"role": "assistant", "content": msg})
+                            st.rerun()
                         else:
-                            st.error("❌ I had trouble understanding that. Please try rephrasing, like 'add tomatoes' or 'I bought milk and eggs'")
-                            logger.error("Invalid AI response format", extra={"response": response[:500]})
+                            msg = "⚠️ Couldn't find those items in your pantry."
+                            st.warning(msg)
+                            st.session_state.pantry_messages.append({"role": "assistant", "content": msg})
 
-                    except LLMAPIError as e:
-                        st.error(f"❌ AI error: {e}")
-                        logger.error("LLM API error", exc_info=True)
-                    except Exception as e:
-                        st.error(f"❌ Unexpected error: {e}")
-                        logger.error("Unexpected error updating pantry", exc_info=True)
+                    else:
+                        st.warning("Could not understand items to process.")
+                else:
+                    st.error("❌ I had trouble understanding that. Please try rephrasing.")
 
         except Exception as e:
-            st.error(f"❌ Error loading pantry files: {e}")
-            logger.error("Error loading pantry files", exc_info=True)
+            st.error(f"❌ Error: {e}")
+            logger.error("Error processing request", exc_info=True)
 
 # Navigation
 st.markdown("---")

@@ -4,21 +4,23 @@ Display active recipe and provide AI chat for cooking questions.
 """
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
-import streamlit as st
-from datetime import datetime
 
+import streamlit as st
+
+from lib.active_recipe_manager import clear_active_recipe, load_active_recipe
 from lib.auth import require_authentication
+from lib.chat_manager import clear_chat_history, load_chat_history, save_chat_history
 from lib.llm_agents import ClaudeProvider
 from lib.logging_config import get_logger, setup_logging
-from lib.file_manager import get_data_file_path
-from lib.active_recipe_manager import load_active_recipe, clear_active_recipe
 from lib.recipe_feedback import (
     save_recipe_feedback,
-    is_staple_ingredient,
-    update_pantry_after_cooking
+    update_pantry_after_cooking,
 )
+from lib.recipe_store import update_recipe_stats
+from lib.ui import apply_styling, render_header, render_metric_card
 
 # Set up logging
 setup_logging("INFO")
@@ -42,11 +44,17 @@ st.set_page_config(
     layout="wide",
 )
 
+# Apply custom styling
+apply_styling()
+
 # Authentication
 require_authentication()
 
-# Title
-st.title("👨‍🍳 Cooking Mode")
+render_header(
+    title="Cooking Mode",
+    subtitle="Your interactive AI cooking assistant",
+    icon="👨‍🍳"
+)
 
 # Check if a recipe is active - try session state first, then persistent storage
 if 'active_recipe' not in st.session_state or st.session_state['active_recipe'] is None:
@@ -78,9 +86,14 @@ if 'active_recipe' not in st.session_state or st.session_state['active_recipe'] 
 # Get active recipe
 recipe = st.session_state['active_recipe']
 
-# Initialize chat history in session state
-if 'cooking_chat_history' not in st.session_state:
-    st.session_state['cooking_chat_history'] = []
+# Initialize chat history - try session state, then persistent storage
+if 'cooking_chat_history' not in st.session_state or not st.session_state['cooking_chat_history']:
+    # Try loading from disk
+    persisted_history = load_chat_history()
+    if persisted_history:
+        st.session_state['cooking_chat_history'] = persisted_history
+    else:
+        st.session_state['cooking_chat_history'] = []
 
 # Display recipe details
 st.markdown("---")
@@ -89,9 +102,9 @@ st.markdown(f"## 🍽️ {recipe['name']}")
 # Recipe metadata
 col1, col2 = st.columns(2)
 with col1:
-    st.metric("⏱️ Time", f"{recipe.get('time_minutes', '?')} min")
+    render_metric_card("⏱️ Time", f"{recipe.get('time_minutes', '?')} min")
 with col2:
-    st.metric("📊 Difficulty", (recipe.get('difficulty') or 'medium').title())
+    render_metric_card("📊 Difficulty", (recipe.get('difficulty') or 'medium').title())
 
 # Recipe description
 if recipe.get('description'):
@@ -173,6 +186,7 @@ with st.form("chat_form", clear_on_submit=True):
 # Handle clear chat
 if clear_chat:
     st.session_state['cooking_chat_history'] = []
+    clear_chat_history()
     logger.info("Cooking chat history cleared")
     st.rerun()
 
@@ -183,6 +197,9 @@ if submit and user_input:
         'role': 'user',
         'content': user_input
     })
+
+    # Save to disk
+    save_chat_history(st.session_state['cooking_chat_history'])
 
     logger.info(
         "User asked cooking question",
@@ -232,6 +249,9 @@ Keep your response to 2-3 paragraphs maximum."""
                 'role': 'assistant',
                 'content': response
             })
+
+            # Save to disk
+            save_chat_history(st.session_state['cooking_chat_history'])
 
             logger.info(
                 "AI response generated",
@@ -300,6 +320,11 @@ if st.session_state.get('show_cooking_feedback', False):
             )
 
             if success:
+                # Update recipe stats in recipe store
+                if recipe.get('id'):
+                    update_recipe_stats(recipe['id'], cooked=True)
+                    logger.info(f"Updated recipe stats for {recipe.get('name')}")
+
                 st.success("✅ Feedback saved! Meal logged to history.")
                 # Set flag to show pantry update prompt
                 st.session_state['show_cooking_feedback'] = False
@@ -343,6 +368,7 @@ elif st.session_state.get('feedback_saved_show_pantry_prompt', False):
 
             # Clear persistent storage
             clear_active_recipe()
+            clear_chat_history()
 
             import time
             time.sleep(1.5)
@@ -359,6 +385,7 @@ elif st.session_state.get('feedback_saved_show_pantry_prompt', False):
 
             # Clear persistent storage
             clear_active_recipe()
+            clear_chat_history()
 
             logger.info("User declined pantry update")
             st.switch_page("app.py")

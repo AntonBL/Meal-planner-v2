@@ -1,0 +1,149 @@
+{
+  "items": [
+    {
+      "id": "211fbde0-cee7-46c2-b4c8-919d1f8fc348",
+      "name": "lime (2)",
+      "quantity": "1",
+      "added": "2025-11-30 (from shopping list)",
+      "expiry": null,
+      "category": "Fresh Vegetables",
+      "type": "fresh"
+    },
+    {
+      "id": "396f1e79-c7a3-45a5-818e-f1e96d6dee16",
+      "name": "epazote (2 tbsp fresh)",
+      "quantity": "1",
+      "added": "2025-11-30 (from shopping list)",
+      "expiry": null,
+      "category": "Fresh Vegetables",
+      "type": "fresh"
+    },
+    {
+      "id": "22a6e5fa-934f-4c20-befd-721c5ee5c5fa",
+      "name": "fresh cilantro (1/2 cup chopped)",
+      "quantity": "1",
+      "added": "2025-11-30 (from shopping list)",
+      "expiry": null,
+      "category": "Fresh Vegetables",
+      "type": "fresh"
+    },
+    {
+      "id": "7172e28c-3d3b-4faa-8ef4-beea53227623",
+      "name": "avocado (2)",
+      "quantity": "1",
+      "added": "2025-11-30 (from shopping list)",
+      "expiry": null,
+      "category": "Fresh Vegetables",
+      "type": "fresh"
+    },
+    {
+      "id": "92876104-e38f-44d1-98ea-75447a39e1de",
+      "name": "Tomatoes (6 large or 2 28oz cans)",
+      "quantity": "1",
+      "added": "2025-11-30 (from shopping list)",
+      "expiry": null,
+      "category": "Fresh Vegetables",
+      "type": "fresh"
+    },
+    {
+      "id": "cfebc05f-eecc-44b8-ad62-ecdf6345a656",
+      "name": "garlic (4 cloves)",
+      "quantity": "1",
+      "added": "2025-11-29 (from shopping list)",
+      "expiry": null,
+      "category": "Fresh Vegetables",
+      "type": "fresh"
+    },
+    {
+      "id": "2ec82f46-690b-402f-9577-0236ded7183b",
+      "name": "onion (1 medium)",
+      "quantity": "1",
+      "added": "2025-11-29 (from shopping list)",
+      "expiry": null,
+      "category": "Fresh Vegetables",
+      "type": "fresh"
+    },
+    {
+      "id": "ae5e5782-55f5-4743-b832-96c955221e48",
+      "name": "pepper",
+      "quantity": "1",
+      "added": "2025-11-29 (from shopping list)",
+      "expiry": null,
+      "category": "Fresh Vegetables",
+      "type": "fresh"
+    },
+    {
+      "id": "b8fac448-4b31-4f5b-b3e9-656961e8ad9d",
+      "name": "corn tortillas (6-8)",
+      "quantity": "1",
+      "added": "2025-11-30 (from shopping list)",
+      "expiry": null,
+      "category": "Grains & Pasta",
+      "type": "staple"
+    },
+    {
+      "id": "4ef0593a-b7f7-43a1-86a6-e6752add013f",
+      "name": "such as ancho or guajillo)",
+      "quantity": "1",
+      "added": "2025-11-30 (from shopping list)",
+      "expiry": null,
+      "category": "Grains & Pasta",
+      "type": "staple"
+    },
+    {
+      "id": "3abd710d-8a9f-4901-8888-eb161795d8d1",
+      "name": "dried chiles (2-3",
+      "quantity": "1",
+      "added": "2025-11-30 (from shopping list)",
+      "expiry": null,
+      "category": "Grains & Pasta",
+      "type": "staple"
+    },
+    {
+      "id": "d227fa81-a685-49da-9b5a-1a670386d5df",
+      "name": "jalapeño (1)",
+      "quantity": "1",
+      "added": "2025-11-30 (from shopping list)",
+      "expiry": null,
+      "category": "Grains & Pasta",
+      "type": "staple"
+    },
+    {
+      "id": "04e37859-8c8b-42a1-8b18-681f5712637b",
+      "name": "vegetable broth (6 cups)",
+      "quantity": "1",
+      "added": "2025-11-29 (from shopping list)",
+      "expiry": null,
+      "category": "Grains & Pasta",
+      "type": "staple"
+    },
+    {
+      "id": "6f4b8d3d-e3fb-4cd8-94e9-c42dfb37c0e0",
+      "name": "salt",
+      "quantity": "1",
+      "added": "2025-11-29 (from shopping list)",
+      "expiry": null,
+      "category": "Grains & Pasta",
+      "type": "staple"
+    },
+    {
+      "id": "5b991c48-99a5-43cb-b61c-c78e6c0843c0",
+      "name": "Green Curry Paste",
+      "quantity": "1 container (400g)",
+      "added": "2025-11-29",
+      "expiry": null,
+      "category": "Grains & Pasta",
+      "type": "staple"
+    },
+    {
+      "id": "dc348f15-a904-49fe-ac23-8816a72ec4be",
+      "name": "Extra Virgin Olive Oil (\"Drizzle\"",
+      "quantity": "1 bottle",
+      "added": "2025-11-29",
+      "expiry": null,
+      "category": "Grains & Pasta",
+      "type": "staple"
+    }
+  ],
+  "last_updated": "2025-11-30T19:15:38.114949"
+}
