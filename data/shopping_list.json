@@ -18,7 +18,7 @@
       "item": "Coconut milk (1 can)",
       "recipe": "Thai Green Curry with Tomatoes and Fresh Herbs",
       "added": "2025-11-30",
-      "checked": false,
+      "checked": true,
       "category": "fresh"
     },
     {
@@ -43,5 +43,5 @@
       "category": "fresh"
     }
   ],
-  "last_updated": "2025-11-30T19:14:24.963842"
+  "last_updated": "2025-11-30T19:46:29.413732"
 }

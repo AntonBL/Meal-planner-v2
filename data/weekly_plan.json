@@ -15,8 +15,16 @@
       "difficulty": "medium",
       "added": "2025-11-29",
       "recipe_id": "73a567a4-f53b-43a3-8c48-2844cc3afc77"
+    },
+    {
+      "name": "Vegetarian Korean Vegetable Soup (Yachae Guk)",
+      "recipe_id": "cb1c6166-2f77-454a-96d4-22bdc2f19b87",
+      "source": "Generated",
+      "time_minutes": "25",
+      "difficulty": "easy",
+      "added": "2025-11-30"
     }
   ],
   "history": [],
-  "last_updated": "2025-11-30T19:12:01.416990"
+  "last_updated": "2025-11-30T19:52:14.316061"
 }

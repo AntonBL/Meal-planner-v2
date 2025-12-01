@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-11-30T11:25:14.563961",
+  "last_updated": "2025-11-30T19:52:09.439249",
   "recipes": [
     {
       "name": "Spicy Vegetarian Sopa Azteca (Tortilla Soup) with Ancho, Pasilla & Guajillo Chiles",
@@ -211,6 +211,60 @@
       ],
       "id": "facf1702-f730-4bb6-a65d-74c94927688a",
       "created_date": "2025-11-30T11:25:14.563885"
+    },
+    {
+      "name": "Vegetarian Korean Vegetable Soup (Yachae Guk)",
+      "description": "A light, savory Korean vegetable soup featuring fresh tomatoes, peppers, and onions in a garlic-infused broth with a hint of sesame. This comforting dinner soup is simple yet deeply flavorful and pairs perfectly with rice.",
+      "ingredients_available": "tomatoes (6 large or 2 28oz cans), garlic (4 cloves), onion (1 medium), pepper (1), jalapeño (1)",
+      "ingredients_needed": "",
+      "time_minutes": "25",
+      "difficulty": "easy",
+      "reason": "Uses most of your available fresh ingredients, creates variety from your recent tortilla soup, and offers an authentic Korean comfort meal that's quick and vegetarian-friendly.",
+      "instructions": "1. Heat 2 tbsp sesame oil in a large pot over medium heat. Add minced garlic (4 cloves) and sauté for 1 minute until fragrant.\n2. Dice the onion (1 medium) and add to pot, stirring for 2-3 minutes until softened.\n3. Chop the tomatoes (6 large) into chunks and add to pot, stirring well.\n4. Add 6 cups vegetable broth and bring to a boil.\n5. Dice the pepper (1) and jalapeño (1), then add to soup. Reduce heat and simmer for 10 minutes.\n6. Season with 1 tbsp soy sauce, 1 tsp salt, and ½ tsp white pepper. Simmer 5 more minutes.\n7. Finish with a squeeze of lime (½ lime) and drizzle of sesame oil. Serve hot.",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "tomatoes (6 large or 2 28oz cans)",
+        "garlic (4 cloves)",
+        "onion (1 medium)",
+        "pepper (1)",
+        "jalapeño (1)"
+      ],
+      "id": "cb1c6166-2f77-454a-96d4-22bdc2f19b87",
+      "created_date": "2025-11-30T19:52:09.437413"
+    },
+    {
+      "name": "Korean Veggie Lettuce Wraps with Avocado & Crispy Tortilla Chips",
+      "description": "A fresh, interactive Korean-inspired dinner featuring seasoned sautéed vegetables served in crispy tortilla \"lettuce wrap\" alternatives, topped with creamy avocado and finished with lime and cilantro. Light yet satisfying with vibrant flavors and textures.",
+      "ingredients_available": "tomatoes (6 large or 2 28oz cans), onion (1 medium), garlic (4 cloves), pepper (1), jalapeño (1), avocado (2), cilantro (½ cup chopped), lime (1), corn tortillas (6-8)",
+      "ingredients_needed": "",
+      "time_minutes": "30",
+      "difficulty": "easy",
+      "reason": "Creates an interactive Korean dining experience, uses nearly all your available fresh ingredients, introduces Korean flavor profiles (gochugaru, sesame) that differ from your recent Mexican-inspired meal, and makes efficient use of your corn tortillas in a new way.",
+      "instructions": "1. Cut corn tortillas into strips and fry in ¼ inch hot vegetable oil for 2-3 minutes until crispy and golden. Drain on paper towels and sprinkle with salt.\n2. Dice onion (1 medium), mince garlic (4 cloves), and dice pepper (1) and jalapeño (1). Chop tomatoes (6 large) into bite-sized pieces.\n3. Heat 2 tbsp sesame oil in a large skillet over medium-high heat. Add garlic and onion, sauté for 2 minutes.\n4. Add diced pepper, jalapeño, and tomatoes to skillet. Stir-fry for 5-7 minutes until vegetables are tender-crisp.\n5. Season with 2 tbsp soy sauce, 1 tsp sesame oil, 1 tsp gochugaru (Korean red pepper flakes), and squeeze of lime juice.\n6. Slice avocados (2) into halves and remove pits. Arrange crispy tortilla chips on plates, top with cooked vegetables, avocado slices, fresh cilantro (¼ cup), and lime wedges.\n7. Diners assemble their own wraps by spooning vegetables and avocado onto crispy tortilla chips and squeezing lime over top.",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        "tomatoes (6 large or 2 28oz cans)",
+        "onion (1 medium)",
+        "garlic (4 cloves)",
+        "pepper (1)",
+        "jalapeño (1)",
+        "avocado (2)",
+        "cilantro (½ cup chopped)",
+        "lime (1)",
+        "corn tortillas (6-8)"
+      ],
+      "id": "afaa6345-11f2-4c16-a04d-4bc349fcec59",
+      "created_date": "2025-11-30T19:52:09.439156"
     }
   ]
 }
