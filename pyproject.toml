@@ -2,7 +2,7 @@
 name = "ai-recipe-planner"
 version = "0.1.0"
 description = "AI-powered meal planning and recipe management application"
-requires-python = ">=3.9"
+requires-python = ">=3.13"
 dependencies = [
     "anthropic>=0.40.0",
     "streamlit>=1.41.0",
@@ -12,6 +12,7 @@ dependencies = [
     "pyyaml>=6.0.3",
     "bcrypt>=5.0.0",
     "ruff>=0.14.7",
+    "google-genai>=1.56.0",
 ]
 
 [project.optional-dependencies]

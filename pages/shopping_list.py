@@ -22,6 +22,7 @@ from lib.shopping_list_manager import (
     categorize_ingredient,
     clear_shopping_list,
     load_shopping_list,
+    get_grouped_shopping_list,
     remove_items_from_list,
     toggle_item_checked,
 )
@@ -29,6 +30,17 @@ from lib.ui import apply_styling, render_header, render_metric_card
 
 setup_logging("INFO")
 logger = get_logger(__name__)
+
+
+# ============================================================================
+# PAGE CONFIGURATION
+# ============================================================================
+
+st.set_page_config(
+    page_title="Shopping List - AI Recipe Planner",
+    page_icon="🛒",
+    layout="wide",
+)
 
 # Apply mobile styles
 add_mobile_styles()
@@ -95,19 +107,6 @@ def add_item_to_pantry(item_name: str, category: str) -> bool:
         return False
 
 
-# ============================================================================
-# PAGE CONFIGURATION
-# ============================================================================
-
-st.set_page_config(
-    page_title="Shopping List - AI Recipe Planner",
-    page_icon="🛒",
-    layout="wide",
-)
-
-# Apply custom styling
-# apply_styling()
-
 # Authentication
 require_authentication()
 
@@ -137,9 +136,11 @@ with st.form("manual_add_form", clear_on_submit=True):
 st.markdown("---")
 
 try:
-    shopping_items = load_shopping_list()
+    # Load grouped shopping list (combined by ingredients, grouped by store section)
+    grouped_items = get_grouped_shopping_list()
+    total_items = sum(len(items) for items in grouped_items.values())
 
-    if not shopping_items:
+    if total_items == 0:
         st.info("📭 Your shopping list is empty!\n\nAdd ingredients from recipe suggestions on the **Generate Recipes** page.")
 
         # Quick navigation
@@ -151,48 +152,70 @@ try:
         col1, col2, col3 = st.columns(3)
 
         with col1:
-            render_metric_card("📋 Total Items", str(len(shopping_items)))
+            render_metric_card("📋 Combined Items", str(total_items))
 
         with col2:
-            unique_recipes = len({item['recipe'] for item in shopping_items})
-            render_metric_card("🍽️ Recipes", str(unique_recipes))
+            num_sections = len(grouped_items)
+            render_metric_card("🏪 Store Sections", str(num_sections))
 
         with col3:
-            # Find most recent added date
-            last_updated = max([item.get('added', '') for item in shopping_items]) if shopping_items else datetime.now().strftime("%Y-%m-%d")
+            # Find most recent added date from all items
+            all_items_list = [item for items in grouped_items.values() for item in items]
+            last_updated = max([item.get('added', '') for item in all_items_list]) if all_items_list else datetime.now().strftime("%Y-%m-%d")
             render_metric_card("📅 Last Updated", last_updated)
 
         st.markdown("---")
 
-        # Group items by recipe
-        shopping_items_sorted = sorted(shopping_items, key=lambda x: x['recipe'])
+        # Display grouped by store section
+        section_icons = {
+            "Fresh Produce": "🥬",
+            "Dairy & Eggs": "🥛",
+            "Proteins": "🥚",
+            "Grains & Pasta": "🌾",
+            "Canned & Dried": "🥫",
+            "Frozen Foods": "❄️",
+            "Beverages": "🥤",
+            "Baking Supplies": "🧁",
+            "Snacks": "🍿",
+            "Other": "📦"
+        }
 
-        for recipe_name, items_group in groupby(shopping_items_sorted, key=lambda x: x['recipe']):
-            with st.expander(f"📋 **{recipe_name}**", expanded=True):
-                items_list = list(items_group)
+        for section_name, items in grouped_items.items():
+            icon = section_icons.get(section_name, "📦")
 
+            with st.expander(f"{icon} **{section_name}** ({len(items)} items)", expanded=True):
                 # Display checkboxes for each item
                 checked_items = []
-                for idx, item in enumerate(items_list):
+                for idx, item in enumerate(items):
+                    # Format item display with recipes
+                    item_text = item['item']
+                    recipe_count = item.get('recipe_count', 1)
+
+                    if recipe_count > 1:
+                        item_display = f"{item_text} *(used in {recipe_count} recipes)*"
+                    else:
+                        item_display = item_text
+
                     # Use the checked state from JSON if available, default to False
                     is_checked = st.checkbox(
-                        item['item'],
+                        item_display,
                         value=item.get('checked', False),
-                        key=f"shop_item_{recipe_name}_{idx}",
+                        key=f"shop_item_{section_name}_{idx}",
                         help="Check items you've purchased"
                     )
-                    
-                    # Update state if changed
+
+                    # Update state if changed (update all original items)
                     if is_checked != item.get('checked', False):
-                        toggle_item_checked(recipe_name, item['item'], is_checked)
-                        # We don't rerun here to avoid jarring UX, just update backend
-                    
+                        # For combined items, we need to update all contributing recipes
+                        for recipe in item.get('recipes', []):
+                            toggle_item_checked(recipe, item_text, is_checked)
+
                     if is_checked:
-                        checked_items.append(item['item'])
+                        # Store both the display text and the structured name for matching
+                        structured_name = item.get('structured', {}).get('name', item['item'])
+                        checked_items.append((item['item'], structured_name, item.get('recipes', [])))
 
-                st.caption(f"*{len(items_list)} items for this recipe*")
-
-                # Action buttons for this recipe section
+                # Action buttons for this section
                 if checked_items:
                     st.markdown("---")
                     col1, col2 = st.columns(2)
@@ -200,19 +223,22 @@ try:
                     with col1:
                         if st.button(
                             f"✅ Bought → Add to Pantry ({len(checked_items)})",
-                            key=f"buy_{recipe_name}",
+                            key=f"buy_{section_name}",
                             use_container_width=True,
                             type="primary"
                         ):
                             # Add checked items to pantry
                             success_count = 0
-                            for item_name in checked_items:
-                                category = categorize_ingredient(item_name)
-                                if add_item_to_pantry(item_name, category):
+                            for item_text, structured_name, recipes in checked_items:
+                                # Parse ingredient name from formatted text
+                                ing_name = item_text.split('(')[0].strip() if '(' in item_text else item_text
+                                category = categorize_ingredient(ing_name)
+                                if add_item_to_pantry(ing_name, category):
                                     success_count += 1
 
-                            # Remove from shopping list
-                            remove_items_from_list(recipe_name, checked_items)
+                                # Remove from all recipes using structured name for better matching
+                                for recipe in recipes:
+                                    remove_items_from_list(recipe, [structured_name])
 
                             st.success(f"✅ Added {success_count} items to pantry!")
                             st.rerun()
@@ -220,12 +246,15 @@ try:
                     with col2:
                         if st.button(
                             f"🗑️ Remove ({len(checked_items)})",
-                            key=f"remove_{recipe_name}",
+                            key=f"remove_{section_name}",
                             use_container_width=True,
                             type="secondary"
                         ):
-                            # Just remove from shopping list without adding to pantry
-                            remove_items_from_list(recipe_name, checked_items)
+                            # Remove from all recipes using structured name for better matching
+                            for item_text, structured_name, recipes in checked_items:
+                                for recipe in recipes:
+                                    remove_items_from_list(recipe, [structured_name])
+
                             st.success(f"🗑️ Removed {len(checked_items)} items from list")
                             st.rerun()
 
@@ -259,9 +288,10 @@ try:
             st.markdown("*Copy this to your notes app or print it*")
 
             text_output = ""
-            for recipe_name, items_group in groupby(shopping_items_sorted, key=lambda x: x['recipe']):
-                text_output += f"\n**{recipe_name}:**\n"
-                for item in items_group:
+            for section_name, items in grouped_items.items():
+                icon = section_icons.get(section_name, "📦")
+                text_output += f"\n{icon} {section_name}:\n"
+                for item in items:
                     checkbox = "[x]" if item.get('checked') else "[ ]"
                     text_output += f"{checkbox} {item['item']}\n"
 

@@ -12,6 +12,7 @@ RECIPE_SOURCE_GENERATED = "Generated"
 RECIPE_SOURCE_LOVED = "Loved"
 RECIPE_SOURCE_LIKED = "Liked"
 RECIPE_SOURCE_NOT_AGAIN = "Not Again"
+RECIPE_SOURCE_CAPTURED = "Captured"
 
 # ============================================================================
 # RATING THRESHOLDS

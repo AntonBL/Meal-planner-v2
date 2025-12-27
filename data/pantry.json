@@ -8,7 +8,61 @@
       "type": "staple",
       "id": "003afe11-ca99-4400-8acc-87482720ffc6",
       "added": "2025-12-01"
+    },
+    {
+      "name": "Corn Cobb",
+      "quantity": "1",
+      "category": "Vegetables",
+      "expiry": null,
+      "type": "fresh",
+      "id": "38790b74-ce50-4e44-8428-db4f2ea96676",
+      "added": "2025-12-12"
+    },
+    {
+      "name": "Epazote",
+      "quantity": "1",
+      "category": "Fresh Herbs",
+      "expiry": null,
+      "type": "fresh",
+      "id": "81511611-1b5b-4707-82ee-4e590fd1c0fb",
+      "added": "2025-12-12"
+    },
+    {
+      "name": "Tortilla Chips",
+      "quantity": "1 bag",
+      "category": "Grains & Pasta",
+      "expiry": null,
+      "type": "staple",
+      "id": "e3392d67-a6ca-454f-905d-71ba511a7e5d",
+      "added": "2025-12-12"
+    },
+    {
+      "name": "Dried Ancho Pasillo Chilies",
+      "quantity": "1",
+      "category": "Spices & Herbs (Dried)",
+      "expiry": null,
+      "type": "staple",
+      "id": "522cfb9f-49c8-4e18-a7e0-778c19ac8835",
+      "added": "2025-12-12"
+    },
+    {
+      "name": "Dried Guanchillo Chilies",
+      "quantity": "1",
+      "category": "Spices & Herbs (Dried)",
+      "expiry": null,
+      "type": "staple",
+      "id": "cca231c4-bf72-4a9c-816d-7dfac55f171a",
+      "added": "2025-12-12"
+    },
+    {
+      "name": "Canada Dry Club Soda",
+      "quantity": "1 can",
+      "category": "Uncategorized",
+      "expiry": null,
+      "type": "staple",
+      "id": "0c8f274f-7fb5-4bdd-b62d-fab285569ecd",
+      "added": "2025-12-17"
     }
   ],
-  "last_updated": "2025-12-01T01:24:53.019816"
+  "last_updated": "2025-12-17T19:18:51.074344"
 }

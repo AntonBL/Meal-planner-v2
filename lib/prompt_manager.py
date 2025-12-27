@@ -53,27 +53,34 @@ IMPORTANT REQUIREMENTS:
 
 4. For each recipe, provide:
    - Name and brief description (1-2 sentences)
-   - List ingredients including amounts in two groups:
-     * AVAILABLE: Fresh ingredients already in pantry (from the lists above)
-     * NEEDED: Fresh ingredients to buy (DO NOT include oils, vinegars, spices, sauces, or condiments)
+   - List ALL ingredients with quantities in two groups:
+     * AVAILABLE: Fresh ingredients already in pantry (from the lists above) WITH FULL QUANTITIES
+     * NEEDED: Fresh ingredients to buy WITH FULL QUANTITIES (DO NOT include oils, vinegars, spices, sauces, or condiments)
    - Estimated time in minutes
    - Difficulty (easy/medium/hard)
    - Step-by-step cooking instructions (clear and concise) with amounts and timing
    - Why you're suggesting it (brief reason)
 
-5. Format your response EXACTLY like this for EACH recipe:
+5. INGREDIENT FORMAT REQUIREMENTS:
+   - ALWAYS include the quantity and unit (e.g., "2 cups", "1 lb", "3 cloves")
+   - Be specific with measurements (not "some spinach" but "2 cups fresh spinach")
+   - Include modifiers when relevant (e.g., "diced", "fresh", "chopped")
+   - Format: "[quantity] [unit] [modifier] [ingredient name]"
+   - Examples: "2 cups fresh spinach", "1 lb tomatoes (diced)", "3 cloves garlic"
+
+6. Format your response EXACTLY like this for EACH recipe:
 
 ---RECIPE---
 NAME: [Recipe Name]
 DESCRIPTION: [1-2 sentence description]
-AVAILABLE: [comma-separated list of FRESH ingredients already in pantry]
-NEEDED: [comma-separated list of FRESH ingredients to buy, or "None" if have everything]
+AVAILABLE: [comma-separated list of FRESH ingredients WITH QUANTITIES already in pantry, e.g., "2 cups spinach, 1 onion"]
+NEEDED: [comma-separated list of FRESH ingredients WITH QUANTITIES to buy, or "None" if have everything, e.g., "1 lb tomatoes, 2 bell peppers"]
 TIME: [number only, e.g., 30]
 DIFFICULTY: [easy/medium/hard]
 INSTRUCTIONS:
-1. [First step]
-2. [Second step]
-3. [Third step]
+1. [First step with specific quantities and timing]
+2. [Second step with specific quantities and timing]
+3. [Third step with specific quantities and timing]
 [Continue with all steps needed]
 REASON: [Why suggesting this recipe]
 ---END---
@@ -102,20 +109,23 @@ INSTRUCTIONS:
 2. Keep it VEGETARIAN (no meat, poultry, or fish)
 3. Update all relevant fields (ingredients, instructions, time, etc.)
 4. Maintain the same quality and clarity
+5. ALWAYS include quantities and units for ALL ingredients (e.g., "2 cups", "1 lb", "3 cloves")
+6. Be specific with measurements - never vague quantities
+7. Format ingredients as: "[quantity] [unit] [modifier] [ingredient name]"
 
 Format your response EXACTLY like this:
 
 ---RECIPE---
 NAME: [Recipe Name]
 DESCRIPTION: [1-2 sentence description]
-AVAILABLE: [comma-separated list of ingredients already in pantry]
-NEEDED: [comma-separated list of ingredients to buy, or "None" if have everything]
+AVAILABLE: [comma-separated list of ingredients WITH QUANTITIES already in pantry, e.g., "2 cups spinach, 1 onion"]
+NEEDED: [comma-separated list of ingredients WITH QUANTITIES to buy, or "None", e.g., "1 lb tomatoes, 2 bell peppers"]
 TIME: [number only, e.g., 30]
 DIFFICULTY: [easy/medium/hard]
 INSTRUCTIONS:
-1. [First step]
-2. [Second step]
-3. [Third step]
+1. [First step with specific quantities and timing]
+2. [Second step with specific quantities and timing]
+3. [Third step with specific quantities and timing]
 [Continue with all steps needed]
 REASON: [Brief note about the changes made based on user request]
 ---END---

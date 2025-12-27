@@ -14,7 +14,7 @@ import streamlit as st
 
 from lib.auth import require_authentication
 from lib.exceptions import LLMAPIError
-from lib.llm_agents import ClaudeProvider
+from lib.llm_core import get_smart_model
 from lib.logging_config import get_logger, setup_logging
 from lib.pantry_manager import (
     add_pantry_item,
@@ -49,9 +49,13 @@ render_header(
 if "pantry_messages" not in st.session_state:
     st.session_state.pantry_messages = []
 
+# Initialize session state for detected items from image
+if "detected_items_from_image" not in st.session_state:
+    st.session_state.detected_items_from_image = None
+
 # Initialize LLM
 try:
-    llm = ClaudeProvider()
+    llm = get_smart_model()
 except LLMAPIError as e:
     st.error(f"❌ Failed to initialize AI: {e}")
     st.stop()
@@ -140,48 +144,144 @@ st.markdown("---")
 st.markdown("### 🤖 Update Pantry")
 
 # Photo Upload Section
-with st.expander("📸 Quick Add: Upload Photo", expanded=False):
-    st.markdown("*Upload a photo of groceries, receipt, or your pantry to auto-detect items*")
+with st.expander("📸 Quick Add: Upload Photo(s)", expanded=False):
+    st.markdown("*Upload one or more photos of groceries, receipts, or your pantry to auto-detect items*")
 
-    uploaded_file = st.file_uploader(
-        "Choose an image",
+    uploaded_files = st.file_uploader(
+        "Choose image(s)",
         type=['jpg', 'jpeg', 'png', 'gif', 'webp'],
-        help="Supported formats: JPG, PNG, GIF, WebP",
-        key="pantry_photo_upload"
+        help="Supported formats: JPG, PNG, GIF, WebP. You can upload multiple images at once!",
+        key="pantry_photo_upload",
+        accept_multiple_files=True
     )
 
-    if uploaded_file:
-        col1, col2 = st.columns([1, 1])
+    if uploaded_files:
+        # Display all uploaded images
+        num_images = len(uploaded_files)
+        st.markdown(f"**{num_images} image{'s' if num_images > 1 else ''} uploaded**")
 
-        with col1:
-            st.image(uploaded_file, caption="Uploaded Image", use_container_width=True)
+        # Show images in a grid
+        cols_per_row = 3
+        for i in range(0, num_images, cols_per_row):
+            cols = st.columns(cols_per_row)
+            for j, col in enumerate(cols):
+                idx = i + j
+                if idx < num_images:
+                    with col:
+                        st.image(uploaded_files[idx], caption=f"Image {idx + 1}", use_container_width=True)
 
-        with col2:
-            if st.button("🔍 Detect Items with AI", type="primary", use_container_width=True):
-                with st.spinner("🤖 Analyzing image... This may take 10-15 seconds"):
-                    try:
+        # Detect button
+        st.markdown("")
+        if st.button("🔍 Detect Items with AI", type="primary", use_container_width=True):
+            with st.spinner(f"🤖 Analyzing {num_images} image{'s' if num_images > 1 else ''}... This may take {10 * num_images}-{15 * num_images} seconds"):
+                try:
+                    all_detected_items = []
+
+                    # Process each image
+                    for idx, uploaded_file in enumerate(uploaded_files):
                         uploaded_file.seek(0)
                         detected_items = detect_items_from_image(uploaded_file, llm)
 
                         if detected_items:
-                            item_descriptions = []
-                            for item in detected_items:
-                                item_descriptions.append(f"{item['name']} ({item['quantity']})")
+                            all_detected_items.extend(detected_items)
+                            logger.info(f"Detected {len(detected_items)} items from image {idx + 1}")
 
-                            items_text = ", ".join(item_descriptions)
-                            auto_prompt = f"Add {items_text}"
+                    if all_detected_items:
+                        st.session_state.detected_items_from_image = all_detected_items
+                        st.success(f"✅ Detected {len(all_detected_items)} items from {num_images} image{'s' if num_images > 1 else ''}! Review them below.")
+                        st.rerun()
+                    else:
+                        st.warning("⚠️ No items detected. Try clearer photos or add items manually using the chat below.")
 
-                            st.success(f"✅ Detected {len(detected_items)} items!")
-                            st.info(f"📝 Auto-prompt: \"{auto_prompt}\"")
-                            st.session_state.pantry_messages.append({"role": "user", "content": auto_prompt})
-                            st.session_state['process_vision_prompt'] = auto_prompt
-                            st.rerun()
-                        else:
-                            st.warning("⚠️ No items detected. Try a clearer photo or add items manually using the chat below.")
+                except Exception as e:
+                    st.error(f"❌ Error: {e}")
+                    logger.error("Photo upload error", exc_info=True)
+
+    # Display detected items for review
+    if st.session_state.detected_items_from_image:
+        st.markdown("---")
+        st.markdown("#### 📋 Detected Items - Review & Confirm")
+        st.markdown("*Uncheck items you don't want to add, then click 'Add to Pantry'*")
+
+        detected_items = st.session_state.detected_items_from_image
+
+        # Create a container for the items
+        items_container = st.container()
+
+        with items_container:
+            # Group items by category
+            categories = {}
+            for idx, item in enumerate(detected_items):
+                cat = item.get('category', 'Fresh Item')
+                if cat not in categories:
+                    categories[cat] = []
+                categories[cat].append((idx, item))
+
+            # Display items by category
+            for category, cat_items in categories.items():
+                st.markdown(f"**{category}:**")
+                cols = st.columns(2)
+
+                for i, (idx, item) in enumerate(cat_items):
+                    with cols[i % 2]:
+                        # Use the confirmed field from the item
+                        checked = st.checkbox(
+                            f"{item['name']} - {item['quantity']}",
+                            value=item.get('confirmed', True),
+                            key=f"confirm_item_{idx}",
+                            help=f"Category: {item['category']}"
+                        )
+                        # Update the item's confirmed status
+                        detected_items[idx]['confirmed'] = checked
+
+        st.markdown("")
+
+        # Action buttons
+        col1, col2, col3 = st.columns([2, 2, 1])
+
+        with col1:
+            if st.button("✅ Add Selected Items to Pantry", type="primary", use_container_width=True):
+                # Filter only confirmed items
+                items_to_add = [item for item in detected_items if item.get('confirmed', True)]
+
+                if items_to_add:
+                    try:
+                        # Map categories to pantry categories
+                        category_mapping = {
+                            "Pantry Staple": "Uncategorized",  # Will be categorized by AI if needed
+                            "Fresh Item": "Uncategorized",
+                        }
+
+                        for item in items_to_add:
+                            pantry_item = {
+                                'name': item['name'],
+                                'quantity': item['quantity'],
+                                'category': category_mapping.get(item['category'], item['category']),
+                                'type': 'fresh' if item['category'] == 'Fresh Item' else 'staple',
+                                'expiry': None
+                            }
+                            add_pantry_item(pantry_item)
+
+                        names = ", ".join([i['name'] for i in items_to_add])
+                        st.success(f"✅ Added {len(items_to_add)} items to pantry: {names}")
+
+                        # Clear the detected items
+                        st.session_state.detected_items_from_image = None
+                        st.rerun()
 
                     except Exception as e:
-                        st.error(f"❌ Error: {e}")
-                        logger.error("Photo upload error", exc_info=True)
+                        st.error(f"❌ Error adding items: {e}")
+                        logger.error("Error adding detected items to pantry", exc_info=True)
+                else:
+                    st.warning("⚠️ No items selected. Please check at least one item to add.")
+
+        with col2:
+            if st.button("❌ Cancel", use_container_width=True):
+                st.session_state.detected_items_from_image = None
+                st.rerun()
+
+        with col3:
+            st.markdown(f"*{len([i for i in detected_items if i.get('confirmed', True)])} selected*")
 
 # Chat Interface Section
 with st.expander("💬 Chat with AI to Update Pantry", expanded=False):

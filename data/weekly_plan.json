@@ -1,30 +1,22 @@
 {
   "current_plan": [
     {
-      "name": "Braised Broccolini with Olives, Herbs & Parmesan",
-      "recipe_id": "a5154d0b-31ad-44e4-9a2f-477e7345c401",
-      "source": "Generated",
-      "time_minutes": "22",
-      "difficulty": "Easy",
-      "added": "2025-12-01"
+      "name": "Dauphinoise Potatoes",
+      "recipe_id": "bd6e32d4-2639-4817-be25-9f6f3777bfdd",
+      "source": "Captured",
+      "time_minutes": "45",
+      "difficulty": "easy",
+      "added": "2025-12-24"
     },
     {
-      "name": "Indian Aloo Chana (Potato & Chickpea Curry)",
-      "recipe_id": "ce88ab90-920d-489c-9744-4d5b10914f93",
-      "source": "Generated",
-      "time_minutes": "40",
-      "difficulty": "Medium",
-      "added": "2025-12-01"
-    },
-    {
-      "name": "Korean Doenjang-jjigae (Soybean Paste Stew)",
-      "recipe_id": "d28bfa23-c646-415b-8965-d83adad75267",
-      "source": "Generated",
-      "time_minutes": "30",
-      "difficulty": "Easy",
-      "added": "2025-12-01"
+      "name": "Eggplant Parmesan",
+      "recipe_id": "d8ed3f6d-591f-4944-ac3b-32480d62324b",
+      "source": "Captured",
+      "time_minutes": 90,
+      "difficulty": "medium",
+      "added": "2025-12-24"
     }
   ],
   "history": [],
-  "last_updated": "2025-12-01T01:44:00.097923"
+  "last_updated": "2025-12-24T15:01:33.795553"
 }

@@ -7,7 +7,7 @@ import logging
 from typing import Optional
 
 from lib.exceptions import LLMAPIError
-from lib.llm_core import ClaudeProvider, LLMProvider
+from lib.llm_core import LLMProvider, get_fast_model
 
 logger = logging.getLogger(__name__)
 
@@ -19,9 +19,9 @@ class IngredientCategorizer:
         """Initialize ingredient categorizer.
 
         Args:
-            llm_provider: LLM provider instance (defaults to ClaudeProvider)
+            llm_provider: LLM provider instance (defaults to fast model)
         """
-        self.llm = llm_provider or ClaudeProvider()
+        self.llm = llm_provider or get_fast_model()
         logger.debug("IngredientCategorizer initialized")
 
     def categorize(self, ingredient_name: str) -> str:

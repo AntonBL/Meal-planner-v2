@@ -42,14 +42,11 @@ def save_recipe_feedback(
         today = datetime.now()
         date_str = today.strftime("%A, %Y-%m-%d")
         
-        # Prepare ingredients string
-        ingredients_list = []
-        if recipe.get('ingredients_available'):
-            ingredients_list.append(recipe['ingredients_available'])
-        if recipe.get('ingredients_needed'):
-            ingredients_list.append(recipe['ingredients_needed'])
-        
-        all_ingredients = ', '.join(ingredients_list) if ingredients_list else None
+        # Prepare ingredients string using unified schema
+        from lib.ingredient_schema import from_legacy_recipe, to_comma_separated
+
+        canonical_ingredients = from_legacy_recipe(recipe)
+        all_ingredients = to_comma_separated(canonical_ingredients) if canonical_ingredients else None
 
         meal_entry = {
             "date": date_str,
@@ -146,18 +143,20 @@ def update_pantry_after_cooking(recipe: dict) -> bool:
         True if successful, False otherwise
     """
     try:
-        # Get all ingredients from recipe
-        ingredients = []
+        # Get all ingredients from recipe using unified schema
+        from lib.ingredient_schema import from_legacy_recipe, to_string_list
 
-        if recipe.get('ingredients_available'):
-            ingredients.extend([i.strip() for i in recipe['ingredients_available'].split(',')])
+        canonical_ingredients = from_legacy_recipe(recipe)
 
-        if recipe.get('ingredients_needed'):
-            ingredients.extend([i.strip() for i in recipe['ingredients_needed'].split(',')])
-
-        if not ingredients:
-            logger.warning("No ingredients to update pantry with")
+        if not canonical_ingredients:
+            logger.warning(
+                "No ingredients to update pantry with",
+                extra={"recipe_name": recipe.get('name'), "recipe_keys": list(recipe.keys())}
+            )
             return True
+
+        # Convert to simple string list for processing
+        ingredients = to_string_list(canonical_ingredients)
 
         # Categorize ingredients
         items_to_remove = []

@@ -1,12 +1,131 @@
 {
   "items": [
     {
-      "item": "shiitake or button mushrooms (4 oz)",
-      "recipe": "Korean Doenjang-jjigae (Soybean Paste Stew)",
-      "added": "2025-12-01",
+      "item": "2 lbs russet or Yukon Gold potatoes",
+      "structured": {
+        "name": "potatoes",
+        "quantity": 2.0,
+        "unit": "lbs",
+        "modifier": null,
+        "prep_method": null
+      },
+      "recipe": "Dauphinoise Potatoes",
+      "added": "2025-12-24",
       "checked": false,
       "category": "Fresh Produce"
+    },
+    {
+      "item": "3 cloves garlic (minced)",
+      "structured": {
+        "name": "garlic",
+        "quantity": 3.0,
+        "unit": null,
+        "modifier": null,
+        "prep_method": "minced"
+      },
+      "recipe": "Dauphinoise Potatoes",
+      "added": "2025-12-24",
+      "checked": false,
+      "category": "Fresh Produce"
+    },
+    {
+      "item": "2 pounds eggplant (sliced into 1/4-inch-thick rounds)",
+      "structured": {
+        "name": "eggplant",
+        "quantity": 2.0,
+        "unit": "lbs",
+        "modifier": null,
+        "prep_method": "sliced into 1/4-inch-thick rounds"
+      },
+      "recipe": "Eggplant Parmesan",
+      "added": "2025-12-24",
+      "checked": false,
+      "category": "Fresh Produce"
+    },
+    {
+      "item": "4 large eggs",
+      "structured": {
+        "name": "eggs",
+        "quantity": 4.0,
+        "unit": null,
+        "modifier": "large",
+        "prep_method": null
+      },
+      "recipe": "Eggplant Parmesan",
+      "added": "2025-12-24",
+      "checked": true,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "item": "3 cans (14.5-ounce) diced tomatoes",
+      "structured": {
+        "name": "tomatoes",
+        "quantity": 43.5,
+        "unit": "oz",
+        "modifier": "canned",
+        "prep_method": "diced"
+      },
+      "recipe": "Eggplant Parmesan",
+      "added": "2025-12-24",
+      "checked": false,
+      "category": "Canned & Dried"
+    },
+    {
+      "item": "4 cloves garlic (minced)",
+      "structured": {
+        "name": "garlic",
+        "quantity": 4.0,
+        "unit": null,
+        "modifier": null,
+        "prep_method": "minced"
+      },
+      "recipe": "Eggplant Parmesan",
+      "added": "2025-12-24",
+      "checked": false,
+      "category": "Fresh Produce"
+    },
+    {
+      "item": "1/4 cup fresh basil (chopped)",
+      "structured": {
+        "name": "basil",
+        "quantity": 0.25,
+        "unit": "cup",
+        "modifier": "fresh",
+        "prep_method": "chopped"
+      },
+      "recipe": "Eggplant Parmesan",
+      "added": "2025-12-24",
+      "checked": false,
+      "category": "Fresh Produce"
+    },
+    {
+      "item": "10 leaves fresh basil (roughly torn)",
+      "structured": {
+        "name": "basil",
+        "quantity": 10.0,
+        "unit": null,
+        "modifier": "fresh",
+        "prep_method": "torn"
+      },
+      "recipe": "Eggplant Parmesan",
+      "added": "2025-12-24",
+      "checked": false,
+      "category": "Fresh Produce"
+    },
+    {
+      "item": "Ice cream sandwiches",
+      "structured": {
+        "name": "ice cream sandwiches",
+        "quantity": null,
+        "unit": null,
+        "modifier": null,
+        "prep_method": null
+      },
+      "recipe": "Manual Additions",
+      "added": "2025-12-24",
+      "checked": false,
+      "category": "FROZEN"
     }
   ],
-  "last_updated": "2025-12-01T02:05:02.888717"
+  "last_updated": "2025-12-24T18:05:35.816953"
 }

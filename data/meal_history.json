@@ -1,6 +1,20 @@
 {
   "meals": [
     {
+      "date": "Wednesday, 2025-12-17",
+      "name": "Italian Eggplant and Basil Risotto",
+      "rating": 5,
+      "notes": "",
+      "ingredients": null
+    },
+    {
+      "date": "Tuesday, 2025-12-16",
+      "name": "Spicy Mushroom and Spinach Curry",
+      "rating": 5,
+      "notes": "",
+      "ingredients": "None, Mushrooms (16 oz), fresh spinach (4 cups), onions (2 medium), tomatoes (3 medium), fresh ginger (2-inch piece), garlic (6 cloves), fresh cilantro (1/4 cup), heavy cream or coconut milk (1/2 cup)"
+    },
+    {
       "date": "Sunday, 2025-11-30",
       "name": "Spicy Vegetarian Sopa Azteca (Tortilla Soup) with Ancho, Pasilla & Guajillo Chiles**",
       "rating": 5,
@@ -8,5 +22,5 @@
       "ingredients": "2 tablespoons Extra Virgin Olive Oil, 4 cups tomatoes (diced), 6 cups vegetable broth, 1 onion (diced), 4 cloves garlic (minced), 2-3 ancho chiles, 1-2 pasilla chiles, 2 guajillo chiles, 2-3 Serrano peppers (sliced), 4 corn tortillas, 1½ cups corn kernels, 1 avocado (sliced), 3 tablespoons fresh cilantro, 3 tablespoons fresh recao, 1 lime, salt, pepper"
     }
   ],
-  "last_updated": "2025-11-30T19:17:16.712966"
+  "last_updated": "2025-12-17T19:00:51.150956"
 }

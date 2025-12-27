@@ -149,18 +149,11 @@ def add_recipe_to_plan(recipe: dict) -> bool:
                 "Added recipe to weekly plan",
                 extra={"recipe_name": recipe['name'], "plan_size": len(current_plan)}
             )
-            
-            # Add needed ingredients to shopping list
-            if recipe.get('ingredients_needed'):
-                add_ingredients_to_shopping_list(
-                    recipe['name'],
-                    recipe['ingredients_needed']
-                )
 
             # Clear Streamlit cache if available
             if hasattr(st, 'cache_data'):
                 st.cache_data.clear()
-                
+
             return True
         else:
             return False

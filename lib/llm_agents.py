@@ -218,6 +218,7 @@ class RecipeGenerator:
                     "ingredients_available",
                     "time_minutes",
                     "difficulty",
+                    "instructions",  # Ensure instructions are always present
                 ]
                 if all(field in recipe for field in required_fields):
                     recipes.append(recipe)

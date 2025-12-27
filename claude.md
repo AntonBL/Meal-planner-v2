@@ -441,13 +441,33 @@ curl -k -s https://localhost | head -20
 
 ### Environment Variables
 
-Credentials are stored in `.env` file:
-- `ANTHROPIC_API_KEY` - Claude API key
+Credentials and configuration are stored in `.env` file:
+
+**LLM Provider Configuration:**
+- `LLM_PROVIDER` - Choose your AI provider: `"gemini"` (or `"google"`) or `"claude"` (or `"anthropic"`)
+- `ANTHROPIC_API_KEY` - Claude API key (required if using Claude)
+- `GOOGLE_API_KEY` - Google AI API key (required if using Gemini)
+- `MODEL_SMART` - Model for complex tasks (recipe generation, chat)
+  - For Claude: `claude-sonnet-4-5-20250929`, `claude-opus-4-5-20251101`
+  - For Gemini: `gemini-3-pro-preview`, `gemini-2.0-flash-exp`, `gemini-1.5-pro`
+- `MODEL_FAST` - Model for quick parsing (ingredient categorization)
+  - Currently only Claude: `claude-haiku-4-5`
+
+**Authentication:**
 - `AUTH_USERNAME` - Login username
 - `AUTH_PASSWORD` - Login password (plaintext, hashed at runtime)
 - `AUTH_COOKIE_KEY` - Cookie encryption key (optional)
 
 After changing `.env`, restart: `supervisorctl restart meal-planner`
+
+**Example .env configuration for Gemini:**
+```bash
+LLM_PROVIDER=gemini
+GOOGLE_API_KEY=your_google_api_key_here
+MODEL_SMART=gemini-3-pro-preview
+MODEL_FAST=claude-haiku-4-5
+ANTHROPIC_API_KEY=your_anthropic_key_for_fast_model
+```
 
 ---
 
@@ -482,6 +502,12 @@ make help          # Show all available commands
 ### Manual Commands
 
 ```bash
+# Package management (using uv)
+uv pip install -r requirements.txt         # Install dependencies
+uv pip install google-genai==1.56.0        # Install specific package
+uv pip list                                 # List installed packages
+uv pip show package-name                    # Show package info
+
 # Linting
 ruff check lib/ app.py
 ruff check --fix lib/ app.py

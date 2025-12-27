@@ -11,14 +11,21 @@ from datetime import datetime
 
 import streamlit as st
 
-from lib.active_recipe_manager import save_active_recipe
+from lib.active_recipe_manager import add_active_recipe
 from lib.auth import require_authentication
 from lib.chat_manager import clear_chat_history
 from lib.constants import RECIPE_SOURCE_GENERATED
 from lib.exceptions import DataFileNotFoundError, LLMAPIError, RecipeParsingError
 from lib.file_manager import get_data_file_path
-from lib.llm_agents import ClaudeProvider, RecipeGenerator
+from lib.generated_recipes_manager import (
+    clear_generated_recipes,
+    load_generated_recipes,
+    save_generated_recipes,
+)
+from lib.llm_agents import RecipeGenerator
+from lib.llm_core import get_smart_model
 from lib.logging_config import get_logger, setup_logging
+from lib.recipe_book_manager import add_to_recipe_book, is_in_recipe_book
 from lib.recipe_feedback import (
     save_recipe_feedback,
     update_pantry_after_cooking,
@@ -74,6 +81,30 @@ require_authentication()
 st.title("🎲 Recipe Generator")
 st.markdown("*Let AI suggest delicious vegetarian recipes based on your pantry*")
 
+# Load persisted generated recipes if not in session state
+if "generated_recipes" not in st.session_state:
+    # First check if generated recipes have expired
+    from lib.generated_recipes_manager import are_generated_recipes_expired, get_generated_recipes_age
+
+    if are_generated_recipes_expired():
+        age = get_generated_recipes_age()
+        logger.info(
+            "Generated recipes expired, clearing them",
+            extra={"age_days": age}
+        )
+        clear_generated_recipes()
+        st.session_state["expired_recipes_cleared"] = True
+    else:
+        # Load valid recipes
+        persisted_data = load_generated_recipes()
+        if persisted_data:
+            st.session_state["generated_recipes"] = persisted_data.get("recipes", [])
+            st.session_state["generation_params"] = persisted_data.get("generation_params", {})
+            logger.info(
+                "Restored generated recipes from persistent storage",
+                extra={"count": len(st.session_state["generated_recipes"])}
+            )
+
 # Sidebar with instructions
 with st.sidebar:
     st.markdown("## How It Works")
@@ -87,6 +118,12 @@ with st.sidebar:
     )
     st.markdown("---")
     st.markdown("**💡 Tip:** The AI considers your vegetarian preferences and recent meals for variety!")
+
+# Show message if expired recipes were cleared
+if st.session_state.get("expired_recipes_cleared", False):
+    st.info("🧹 Your previous recipe suggestions expired (7+ days old) and were cleared. Generate new ones below!")
+    # Clear the flag so message doesn't persist
+    del st.session_state["expired_recipes_cleared"]
 
 # Main content
 st.markdown("### What sounds good tonight?")
@@ -178,8 +215,8 @@ if st.button("✨ Generate Recipe Suggestions", type="primary", use_container_wi
 
         try:
             with st.spinner("🤖 AI is thinking... This may take 10-15 seconds"):
-                # Initialize Claude provider and recipe generator
-                provider = ClaudeProvider()
+                # Initialize LLM provider and recipe generator
+                provider = get_smart_model()
                 generator = RecipeGenerator(provider)
 
                 # Generate recipes
@@ -190,23 +227,27 @@ if st.button("✨ Generate Recipe Suggestions", type="primary", use_container_wi
                     additional_context=additional_prefs if additional_prefs else None,
                 )
 
-                # Save generated recipes to recipe store
+                # Prepare recipe metadata (but don't save to main library yet)
+                from lib.ingredient_schema import from_comma_separated
+
                 for recipe in recipes:
                     recipe['source'] = RECIPE_SOURCE_GENERATED
                     recipe['rating'] = 0  # Not rated yet
                     recipe['cook_count'] = 0
                     recipe['tags'] = ['vegetarian']
 
-                    # Convert ingredients to list if needed
-                    all_ingredients = []
-                    if recipe.get('ingredients_available'):
-                        all_ingredients.extend([i.strip() for i in recipe['ingredients_available'].split(',')])
-                    if recipe.get('ingredients_needed'):
-                        all_ingredients.extend([i.strip() for i in recipe['ingredients_needed'].split(',')])
-                    recipe['ingredients'] = all_ingredients
+                    # Convert ingredients to canonical format
+                    # This preserves both the available/needed distinction AND provides a unified list
+                    canonical_ingredients = from_comma_separated(
+                        recipe.get('ingredients_available'),
+                        recipe.get('ingredients_needed')
+                    )
+                    recipe['ingredients'] = canonical_ingredients
 
-                    save_recipe(recipe)
-                    logger.info(f"Saved generated recipe to store: {recipe.get('name')}")
+                    # Keep the original comma-separated strings for backward compatibility
+                    # This allows both old and new code to work during migration
+
+                logger.info(f"Generated {len(recipes)} recipes (not saved to library yet)")
 
                 # Store in session state
                 st.session_state["generated_recipes"] = recipes
@@ -214,6 +255,12 @@ if st.button("✨ Generate Recipe Suggestions", type="primary", use_container_wi
                     "cuisines": selected_cuisines,
                     "meal_type": meal_type,
                 }
+
+                # Save to persistent storage
+                save_generated_recipes(
+                    recipes=recipes,
+                    params=st.session_state["generation_params"]
+                )
 
                 st.success(f"✅ Generated {len(recipes)} recipe suggestions!")
 
@@ -469,7 +516,7 @@ if "generated_recipes" in st.session_state:
                     with st.spinner("💬 Chatting..."):
                         try:
                             # Initialize provider and generator
-                            provider = ClaudeProvider()
+                            provider = get_smart_model()
                             generator = RecipeGenerator(provider)
 
                             # Add user message to chat history
@@ -519,7 +566,7 @@ if "generated_recipes" in st.session_state:
                     with st.spinner("✨ Updating recipe with your changes..."):
                         try:
                             # Initialize provider and generator
-                            provider = ClaudeProvider()
+                            provider = get_smart_model()
                             generator = RecipeGenerator(provider)
 
                             # Build a summary of all requested changes from chat
@@ -537,6 +584,12 @@ if "generated_recipes" in st.session_state:
 
                             # Update the recipe in the generated_recipes list
                             st.session_state["generated_recipes"][idx - 1] = updated_recipe
+
+                            # Save updated recipes to persistent storage
+                            save_generated_recipes(
+                                recipes=st.session_state["generated_recipes"],
+                                params=st.session_state.get("generation_params", {})
+                            )
 
                             # Clear chat history after successful update
                             st.session_state[chat_key] = []
@@ -566,26 +619,38 @@ if "generated_recipes" in st.session_state:
 
             # Action buttons
             st.markdown("---")
-            btn_col1, btn_col2, btn_col3, btn_col4 = st.columns(4)
+
+            # Check if recipe is already in library
+            from lib.recipe_store import get_recipe_by_id
+            in_library = get_recipe_by_id(recipe.get('id')) is not None
+
+            btn_col1, btn_col2, btn_col3, btn_col4, btn_col5 = st.columns(5)
 
             with btn_col1:
                 if st.button("👨‍🍳 Cook This", key=f"cook_{idx}"):
-                    # Store selected recipe in session state AND persistent storage for cooking mode
-                    st.session_state['active_recipe'] = recipe
-                    st.session_state['active_recipe_idx'] = idx
-                    save_active_recipe(recipe)
-                    # Clear any existing chat history for new recipe
-                    st.session_state['cooking_chat_history'] = []
-                    clear_chat_history()
-                    logger.info(
-                        "User selected recipe to cook",
-                        extra={"recipe_name": recipe["name"]},
-                    )
-                    # Navigate to cooking mode
-                    st.switch_page("pages/cooking_mode.py")
+                    # Auto-save to library if not already there
+                    if not in_library:
+                        save_recipe(recipe)
+                        logger.info(f"Auto-saved recipe to library when cooking: {recipe.get('name')}")
+
+                    # Add to multi-recipe cooking mode
+                    if add_active_recipe(recipe):
+                        logger.info(
+                            "User added recipe to cooking mode",
+                            extra={"recipe_name": recipe["name"]},
+                        )
+                        # Navigate to cooking mode
+                        st.switch_page("pages/cooking_mode.py")
+                    else:
+                        st.error("❌ Failed to add recipe to cooking mode")
 
             with btn_col2:
                 if st.button("📅 Add to Plan", key=f"plan_{idx}"):
+                    # Auto-save to library if not already there
+                    if not in_library:
+                        save_recipe(recipe)
+                        logger.info(f"Auto-saved recipe to library when adding to plan: {recipe.get('name')}")
+
                     # Prepare recipe for weekly planner with FULL details
                     plan_recipe = recipe.copy()  # Copy full recipe
                     plan_recipe['source'] = RECIPE_SOURCE_GENERATED  # Mark as generated
@@ -599,13 +664,19 @@ if "generated_recipes" in st.session_state:
                     # Note: add_recipe_to_plan shows its own warnings/errors
 
             with btn_col3:
-                if st.button("❌ Not Interested", key=f"pass_{idx}"):
-                    st.info("Noted! We'll suggest different recipes next time.")
-                    # TODO: Implement preference learning
-                    logger.info(
-                        "User passed on recipe",
-                        extra={"recipe_name": recipe["name"]},
-                    )
+                if in_library:
+                    st.button("✅ In Library", key=f"library_{idx}", disabled=True)
+                else:
+                    if st.button("💾 Save to Library", key=f"save_{idx}", type="primary"):
+                        if save_recipe(recipe):
+                            st.success("✅ Saved to your recipe library!")
+                            logger.info(
+                                "User explicitly saved recipe to library",
+                                extra={"recipe_name": recipe["name"]},
+                            )
+                            st.rerun()
+                        else:
+                            st.error("❌ Failed to save recipe. Check logs.")
 
             with btn_col4:
                 if st.button("🛒 Shopping List", key=f"shop_{idx}"):
@@ -627,21 +698,50 @@ if "generated_recipes" in st.session_state:
                     else:
                         st.info("No ingredients to add - you have everything!")
 
+            with btn_col5:
+                # Check if recipe is in Recipe Book
+                recipe_id = recipe.get('id')
+                if recipe_id and is_in_recipe_book(recipe_id):
+                    st.button("✅ In Book", key=f"in_book_{idx}", disabled=True)
+                else:
+                    if st.button("📚 Recipe Book", key=f"save_book_{idx}"):
+                        # Ensure recipe has an ID before adding
+                        if not recipe_id:
+                            import uuid
+                            recipe['id'] = str(uuid.uuid4())
+
+                        # Auto-save to library if not already there
+                        if not in_library:
+                            save_recipe(recipe)
+                            logger.info(f"Auto-saved recipe to library when adding to book: {recipe.get('name')}")
+
+                        if add_to_recipe_book(recipe):
+                            st.success("✅ Saved to Recipe Book!")
+                            logger.info(
+                                "Added recipe to book",
+                                extra={"recipe_name": recipe["name"]},
+                            )
+                            st.rerun()
+                        else:
+                            st.error("❌ Failed to save to Recipe Book")
+
     # Generate more button
     st.markdown("---")
     if st.button("🔄 Generate New Suggestions", use_container_width=True):
-        # Clear current suggestions
+        # Clear current suggestions from both session state and persistent storage
         if "generated_recipes" in st.session_state:
             del st.session_state["generated_recipes"]
         if "generation_params" in st.session_state:
             del st.session_state["generation_params"]
+        clear_generated_recipes()
         st.rerun()
 
 # Footer
 st.markdown("---")
 st.markdown(
     '<div style="text-align: center; color: #666;">'
-    "💡 <b>Tip:</b> All recipes are vegetarian and tailored to your preferences!"
+    "💡 <b>Tip:</b> All recipes are vegetarian and tailored to your preferences! "
+    "Generated suggestions expire after 7 days unless saved to your library."
     "</div>",
     unsafe_allow_html=True,
 )

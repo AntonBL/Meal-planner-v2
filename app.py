@@ -199,8 +199,16 @@ with st.sidebar:
     st.page_link("pages/pantry.py", label="Pantry", icon="🥫")
     st.page_link("pages/shopping_list.py", label="Shopping List", icon="🛒")
     st.page_link("pages/meal_history.py", label="Meal History", icon="📜")
+    st.page_link("pages/recipe_book.py", label="Recipe Book", icon="📚")
+
+    st.markdown("---")
+    st.markdown("### ⚙️ Settings & Tools")
+    st.page_link("pages/prompts.py", label="Prompts", icon="🎯")
 
     st.markdown("---")
     st.markdown("### ℹ️ About")
     st.markdown("AI Recipe Planner helps you discover recipes based on what you have in your pantry.")
     st.markdown("Built with ❤️ using Streamlit and Claude AI")
+
+    st.markdown("---")
+    st.page_link("pages/notes.py", label="Improvements", icon="📝")

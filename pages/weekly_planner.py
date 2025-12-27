@@ -11,16 +11,19 @@ load_dotenv()
 
 import streamlit as st
 
-from lib.active_recipe_manager import save_active_recipe
+from lib.active_recipe_manager import add_active_recipe
 from lib.auth import require_authentication
 from lib.logging_config import get_logger, setup_logging
 from lib.recipe_store import get_recipe_by_id, get_recipe_by_name, load_recipes
 from lib.weekly_plan_manager import (
+    add_ingredients_to_shopping_list,
     add_recipe_to_plan,
     clear_weekly_plan,
     load_current_plan,
     remove_meal_from_plan,
+    remove_recipe_from_shopping_list,
 )
+from lib.shopping_list_manager import is_recipe_in_shopping_list
 
 setup_logging("INFO")
 logger = get_logger(__name__)
@@ -112,7 +115,8 @@ with tab1:
 
         # Display each meal
         for idx, meal in enumerate(current_plan):
-            col1, col2, col3 = st.columns([5, 1, 1])
+            # Meal header with buttons
+            col1, col2, col3, col4 = st.columns([4, 1, 1, 1])
 
             with col1:
                 st.markdown(f"**{idx + 1}. {meal['name']}**")
@@ -129,7 +133,7 @@ with tab1:
                     st.caption(" • ".join(meta))
 
             with col2:
-                if st.button("👨‍🍳 Cook", key=f"view_{idx}", use_container_width=True):
+                if st.button("👨‍🍳 Cook", key=f"cook_{idx}", use_container_width=True):
                     # Load full recipe from recipe store by ID
 
                     # Try to get recipe by ID first (if available)
@@ -143,38 +147,133 @@ with tab1:
 
                     if full_recipe:
                         # Prepare active recipe data with all necessary fields
+                        # Use ingredient schema to preserve available vs needed distinction
+                        from lib.ingredient_schema import from_legacy_recipe, to_comma_separated
+
+                        canonical_ingredients = from_legacy_recipe(full_recipe)
+
                         active_recipe = {
                             'id': full_recipe.get('id'),
                             'name': full_recipe['name'],
                             'time_minutes': full_recipe.get('time_minutes'),
                             'difficulty': full_recipe.get('difficulty'),
                             'description': full_recipe.get('description', ''),
-                            'ingredients_available': ', '.join(full_recipe.get('ingredients', [])),
-                            'ingredients_needed': '',
+                            'ingredients_available': to_comma_separated(canonical_ingredients, 'available'),
+                            'ingredients_needed': to_comma_separated(canonical_ingredients, 'needed'),
                             'instructions': full_recipe.get('instructions', 'No instructions available'),
                             'reason': f"From your weekly plan • {full_recipe.get('source')} recipe"
                         }
 
-                        # Save to both session state AND persistent storage
-                        st.session_state['active_recipe'] = active_recipe
-                        save_active_recipe(active_recipe)
+                        # Add to multi-recipe cooking mode
+                        if add_active_recipe(active_recipe):
+                            logger.info(
+                                "User added recipe to cooking mode from weekly plan",
+                                extra={"recipe_name": meal['name'], "recipe_id": full_recipe.get('id')}
+                            )
 
-                        logger.info(
-                            "User started cooking from weekly plan",
-                            extra={"recipe_name": meal['name'], "recipe_id": full_recipe.get('id')}
-                        )
-
-                        st.switch_page("pages/cooking_mode.py")
+                            st.switch_page("pages/cooking_mode.py")
+                        else:
+                            st.error("❌ Failed to add recipe to cooking mode")
                     else:
                         st.error("❌ Could not find recipe details")
 
             with col3:
+                # Shopping list button with visual indicator
+                in_shopping_list = is_recipe_in_shopping_list(meal['name'])
+
+                if in_shopping_list:
+                    if st.button("✅ In List", key=f"shopping_{idx}", use_container_width=True, type="secondary"):
+                        # Remove from shopping list
+                        if remove_recipe_from_shopping_list(meal['name']):
+                            st.success("🗑️ Removed from shopping list")
+                            st.rerun()
+                        else:
+                            st.error("❌ Failed to remove")
+                else:
+                    if st.button("🛒 Add", key=f"shopping_{idx}", use_container_width=True):
+                        # Add to shopping list
+                        # Load full recipe to get ingredients
+                        full_recipe = None
+                        if meal.get('recipe_id'):
+                            full_recipe = get_recipe_by_id(meal['recipe_id'])
+                        if not full_recipe:
+                            full_recipe = get_recipe_by_name(meal['name'])
+
+                        if full_recipe:
+                            # Get needed ingredients using canonical schema
+                            from lib.ingredient_schema import from_legacy_recipe, to_comma_separated
+
+                            canonical_ingredients = from_legacy_recipe(full_recipe)
+                            ingredients_needed = to_comma_separated(canonical_ingredients, 'needed')
+
+                            if ingredients_needed:
+                                if add_ingredients_to_shopping_list(meal['name'], ingredients_needed):
+                                    st.success("✅ Added to shopping list")
+                                    st.rerun()
+                                else:
+                                    st.error("❌ Failed to add")
+                            else:
+                                st.warning("⚠️ No ingredients needed")
+                        else:
+                            st.error("❌ Could not find recipe")
+
+            with col4:
                 if st.button("🗑️", key=f"remove_{idx}", use_container_width=True):
                     if remove_meal_from_plan(idx):
                         st.success("✅ Removed")
                         st.rerun()
                     else:
                         st.error("❌ Failed")
+
+            # Expandable section for recipe details
+            with st.expander("📋 View Recipe Details", expanded=False):
+                # Load full recipe details
+                full_recipe = None
+                if meal.get('recipe_id'):
+                    full_recipe = get_recipe_by_id(meal['recipe_id'])
+                if not full_recipe:
+                    full_recipe = get_recipe_by_name(meal['name'])
+
+                if full_recipe:
+                    # Import ingredient schema utilities
+                    from lib.ingredient_schema import from_legacy_recipe, split_by_status
+
+                    # Show description if available
+                    if full_recipe.get('description'):
+                        st.markdown(f"*{full_recipe['description']}*")
+                        st.markdown("")
+
+                    # Display ingredients
+                    canonical_ingredients = from_legacy_recipe(full_recipe)
+
+                    if canonical_ingredients:
+                        available, needed = split_by_status(canonical_ingredients)
+
+                        col_a, col_b = st.columns(2)
+
+                        with col_a:
+                            st.markdown("**✅ Available Ingredients:**")
+                            if available:
+                                for ing in available:
+                                    st.markdown(f"• {ing.get('item', 'Unknown')}")
+                            else:
+                                st.caption("*None listed*")
+
+                        with col_b:
+                            st.markdown("**🛒 Need to Buy:**")
+                            if needed:
+                                for ing in needed:
+                                    st.markdown(f"• {ing.get('item', 'Unknown')}")
+                            else:
+                                st.caption("*Have everything!*")
+
+                    # Display instructions
+                    st.markdown("")
+                    st.markdown("**👨‍🍳 Instructions:**")
+                    instructions = full_recipe.get('instructions', 'No instructions available')
+                    st.markdown(instructions)
+                else:
+                    st.warning("Recipe details not found. This meal may have been deleted from your recipe library.")
 
             st.markdown("---")
 
