@@ -1,22 +1,30 @@
 {
   "current_plan": [
     {
-      "name": "Dauphinoise Potatoes",
-      "recipe_id": "bd6e32d4-2639-4817-be25-9f6f3777bfdd",
-      "source": "Captured",
+      "name": "Sheet Pan Roasted Root Vegetables with Parsley Gremolata",
+      "recipe_id": "9c974bec-23c2-4cd4-8eaf-b28b1e743908",
+      "source": "Generated",
       "time_minutes": "45",
       "difficulty": "easy",
-      "added": "2025-12-24"
+      "added": "2026-01-07"
     },
     {
-      "name": "Eggplant Parmesan",
-      "recipe_id": "d8ed3f6d-591f-4944-ac3b-32480d62324b",
-      "source": "Captured",
-      "time_minutes": 90,
+      "name": "Miso Oyster Mushroom and Butterball Potato Pasta",
+      "recipe_id": "6c7bc25d-facf-4633-8496-10a4e6b383c1",
+      "source": "Generated",
+      "time_minutes": "40",
       "difficulty": "medium",
-      "added": "2025-12-24"
+      "added": "2026-01-15"
+    },
+    {
+      "name": "Sheet Pan Autumn Root Vegetable Roast",
+      "recipe_id": "1a5aae3e-cdb6-4a0d-934d-dfeb7fe06294",
+      "source": "Generated",
+      "time_minutes": "50",
+      "difficulty": "easy",
+      "added": "2026-01-20"
     }
   ],
   "history": [],
-  "last_updated": "2025-12-24T15:01:33.795553"
+  "last_updated": "2026-01-20T00:01:50.719667"
 }

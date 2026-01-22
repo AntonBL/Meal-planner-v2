@@ -1,0 +1,18 @@
+[
+  {
+    "role": "user",
+    "content": "How big to slice negi "
+  },
+  {
+    "role": "assistant",
+    "content": "For this recipe, you should slice the **negi on a bias (diagonally) into 1-inch to 1.5-inch lengths**. Since the description mentions \"charred negi,\" cutting them into these larger, bite-sized pieces allows them to hold their structure while you sear them in the pan. Use both the white and light green parts of the stalk; these sections have a thick, succulent texture that mimics the heartiness of the oyster mushrooms.\n\nIf your negi are particularly thick (greater than an inch in diameter), slice them in half lengthwise before cutting them on the bias to ensure they soften evenly. If you cannot find negi and are substituting with standard green onions, keep them in 2-inch lengths as they are much thinner and will wilt faster.\n\nWhen you begin cooking, sear these pieces in a hot pan with a little oil or butter until they develop dark, charred spots on the outside while remaining tender in the center. This adds a smoky depth that balances the salty richness of the miso butter sauce."
+  },
+  {
+    "role": "user",
+    "content": "can we use doenjiang instead of miso"
+  },
+  {
+    "role": "assistant",
+    "content": "Yes, you can use **doenjang** as a substitute, but you will need to adjust your technique and quantity. While both are fermented soybean pastes, doenjang is much saltier, funkier, and more pungent than delicate white miso. It also has a coarser texture with whole soybean bits. Because of its intensity, **start with about half the amount called for (1.5 tbsp instead of 3 tbsp)** and taste the sauce before adding more.\n\nTo ensure the sauce remains silky, you should **strain or mash the doenjang** before adding it to the butter and pasta water. Unlike white miso, which dissolves easily, doenjang contains solid pieces of soybean that can feel gritty in a smooth pasta sauce. You may also want to reduce the amount of added parmesan cheese initially, as the combination of doenjang and cheese can quickly become overly salty.\n\nFlavor-wise, doenjang will change the profile from a sweet, nutty Japanese style to a deeper, more rustic Korean-inspired dish. It pairs exceptionally well with the charred negi and meaty oyster mushrooms, providing a robust \"umami bomb\" effect. If the flavor feels too heavy, a tiny splash of rice vinegar or a squeeze of lemon at the end can help brighten the fermented notes."
+  }
+]

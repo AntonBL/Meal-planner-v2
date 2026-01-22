@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-12-24T15:01:25.479180",
+  "last_updated": "2026-01-20T00:01:50.716253",
   "recipes": [
     {
       "name": "Spicy Vegetarian Sopa Azteca (Tortilla Soup) with Ancho, Pasilla & Guajillo Chiles",
@@ -238,6 +238,394 @@
       "instructions": "1. Finely dice the onion, carrots, and celery. Core and chop the fresh tomatoes.\n2. Heat 2 tbsp olive oil in a large pot over medium heat. Sauté the onion, carrots, and celery for 8 minutes until softened.\n3. Add the chopped tomatoes and 1 tsp red pepper flakes to the pot. Sauté for another 3 minutes until the tomatoes begin to break down.\n4. Rinse 1 lb lentils and add to the pot along with 1 tsp dried thyme, 1/2 tsp garlic powder, and 2 bay leaves.\n5. Pour in 6 cups vegetable broth. Bring to a boil, then reduce heat and simmer for 30-35 minutes until lentils are tender.\n6. Season with salt and pepper to taste.\n7. Remove bay leaves and stir in 1/4 cup chopped fresh parsley before serving.",
       "id": "67bda00d-c1e9-40bf-84d1-656ba3a1990e",
       "created_date": "2025-12-24T15:01:25.479008"
+    },
+    {
+      "name": "Vegetarian Hot and Sour Soup",
+      "description": "A savory, tangy, and spicy traditional Chinese soup packed with a variety of mushrooms, tofu, and vegetables.",
+      "time_minutes": 30,
+      "difficulty": "medium",
+      "ingredients": [
+        {
+          "item": "2 piece medium sized tomato (diced into small cubes)",
+          "name": "2 piece medium sized tomato (diced into small cubes)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 oz carrot (cut into thin strips)",
+          "name": "2 oz carrot (cut into thin strips)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 oz seafood mushroom (roots removed, stems cut in half)",
+          "name": "2 oz seafood mushroom (roots removed, stems cut in half)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 oz king oyster mushroom (cut into little strips)",
+          "name": "2 oz king oyster mushroom (cut into little strips)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "3 piece shiitake mushroom (cut into thin slices)",
+          "name": "3 piece shiitake mushroom (cut into thin slices)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "0.25 oz dried wood ear mushroom (rehydrated and cut into thin slices)",
+          "name": "0.25 oz dried wood ear mushroom (rehydrated and cut into thin slices)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 piece egg (beaten)",
+          "name": "2 piece egg (beaten)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "1 oz red bell pepper (approx. half a pepper, cut into thin strips)",
+          "name": "1 oz red bell pepper (approx. half a pepper, cut into thin strips)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 piece green onion (minced)",
+          "name": "2 piece green onion (minced)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 piece dried chili peppers (optional)",
+          "name": "2 piece dried chili peppers (optional)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "14 oz firm tofu (cut into thin strips)",
+          "name": "14 oz firm tofu (cut into thin strips)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "5 cup water (for soup base, boiling)",
+          "name": "5 cup water (for soup base, boiling)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 tbsp vinegar",
+          "name": "2 tbsp vinegar",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "1 tsp white pepper",
+          "name": "1 tsp white pepper",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "1 tsp salt",
+          "name": "1 tsp salt",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "1 tbsp sugar",
+          "name": "1 tbsp sugar",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 tbsp light soy sauce",
+          "name": "2 tbsp light soy sauce",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "0.50 tbsp dark soy sauce",
+          "name": "0.50 tbsp dark soy sauce",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "3 tbsp cornstarch",
+          "name": "3 tbsp cornstarch",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 tbsp water (for cornstarch slurry)",
+          "name": "2 tbsp water (for cornstarch slurry)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "1 tsp sesame oil (or to taste)",
+          "name": "1 tsp sesame oil (or to taste)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "1 tbsp corn oil",
+          "name": "1 tbsp corn oil",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        }
+      ],
+      "instructions": "1. Wash all vegetables. Prep ingredients by cutting 2 seafood mushrooms in half, slicing 2 oz king oyster mushrooms and 3 shiitake mushrooms into strips/slices, and cutting 14 oz tofu, 2 oz carrots, and 1 oz red bell pepper into thin strips. Mince 2 green onions and dice 2 tomatoes into small cubes.\n2. Rehydrate 0.25 oz dried wood ear mushrooms (and shiitake if dried) in warm water for 10 minutes, then slice thinly.\n3. In a small bowl, mix 3 tbsp cornstarch with 2 tbsp water to create a slurry. In a separate bowl, crack and beat 2 eggs.\n4. Bring 5 cups of water to a boil in advance to save time.\n5. Heat a wok on the highest heat setting. Add 1 tbsp corn oil and 2 dried chili peppers. Toss for 1 minute to infuse the oil, then remove and discard the chilies.\n6. Add the diced tomatoes to the wok and cook for 30-60 seconds.\n7. Pour in the 5 cups of boiling water. Add 1 tsp white pepper and stir for 15-30 seconds.\n8. Add 1 tsp salt, 1 tbsp sugar, 2 tbsp light soy sauce, and 0.50 tbsp dark soy sauce. Stir for 15-30 seconds.\n9. Add the prepared tofu, all mushrooms, carrots, and bell peppers (everything except green onions). Stir gently for 5-10 seconds.\n10. Cover the wok with a lid and bring the mixture to a boil (about 3-4 minutes).\n11. Uncover the wok. Give the cornstarch slurry a quick stir, then slowly pour it into the soup over 50-60 seconds while stirring constantly to thicken.\n12. Slowly pour the beaten eggs all around the wok over 20-30 seconds. Do not stir immediately to allow egg ribbons to form.\n13. Add 2 tbsp vinegar and 1 tsp sesame oil (to taste). Stir in the minced green onions and serve immediately.",
+      "source": "Captured",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "captured"
+      ],
+      "id": "0b3ec9fa-6606-4f17-9cbf-b247745d1c96"
+    },
+    {
+      "name": "Thyme and Lemon Leek and Butterball Potato Soup",
+      "description": "A silky, plant-based soup featuring the natural creaminess of German Butterball potatoes enhanced with aromatic fresh thyme and a bright squeeze of fresh lemon juice.",
+      "ingredients_available": "1 bunch leeks, 1.5 lbs German Butterball potatoes, 1 medium yellow onion, 1 bunch fresh parsley",
+      "ingredients_needed": "4 cups vegetable broth, 1 tbsp lemon juice, 1 tsp fresh thyme leaves, 2 tbsp olive oil, 1 tsp salt, 1/2 tsp black pepper",
+      "time_minutes": "45",
+      "difficulty": "easy",
+      "reason": "The white wine was removed and replaced with 1 tbsp of lemon juice to maintain the soup's acidity and brightness while keeping the recipe alcohol-free.",
+      "instructions": "1. Clean 1 bunch leeks thoroughly and slice the white and light green parts; peel and chop 1.5 lbs German Butterball potatoes into 1-inch cubes.\n2. Sauté the sliced leeks and 1 diced yellow onion in 2 tbsp olive oil over medium heat for 8-10 minutes until soft but not browned.\n3. Add the cubed 1.5 lbs German Butterball potatoes, 4 cups vegetable broth, and 1 tsp fresh thyme leaves; bring to a boil.\n4. Reduce heat to low and simmer for 20-25 minutes until the potatoes are fork-tender.\n5. Use an immersion blender to puree the soup until completely smooth and creamy.\n6. Stir in 1 tbsp lemon juice, 1 tsp salt, and 1/2 tsp black pepper; garnish with 1/4 cup chopped fresh parsley before serving.",
+      "id": "f74cc727-d851-4b96-a6f5-abcc939c2e44",
+      "created_date": "2026-01-07T19:13:10.055126"
+    },
+    {
+      "name": "Sheet Pan Roasted Root Vegetables with Parsley Gremolata",
+      "description": "A hearty American-style harvest roast featuring a variety of root vegetables tossed in herbs and finished with a fresh parsley lemon zest topping.",
+      "ingredients_available": "1 bag German Butterball Potatoes, 1 bunch Red Turnips, 1 bunch Carrots, 1 Yellow Onion, 1 bunch Parsley",
+      "ingredients_needed": "1 head Garlic, 1 Lemon",
+      "time_minutes": "45",
+      "difficulty": "easy",
+      "reason": "This uses the bulk of your root vegetables in a classic American preparation that highlights the sweetness of the carrots and turnips.",
+      "instructions": "1. Preheat oven to 425°F.\n2. Scrub and chop 1 bag German Butterball Potatoes, 1 bunch Red Turnips, and 1 bunch Carrots into 1-inch chunks. Peel and wedge 1 Yellow Onion.\n3. Spread vegetables on a large sheet pan. Toss with 3 tablespoons olive oil, 1 teaspoon salt, 1/2 teaspoon black pepper, and 1 teaspoon dried thyme.\n4. Roast for 30-35 minutes, tossing halfway through, until vegetables are tender and browned.\n5. While roasting, finely chop 1 bunch Parsley and mix with 3 cloves minced Garlic and the zest of 1 Lemon.\n6. Remove pan from oven and toss the hot vegetables with the parsley mixture before serving.",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        {
+          "item": "1 bag German Butterball Potatoes",
+          "name": "1 bag german butterball potatoes",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "available"
+        },
+        {
+          "item": "1 bunch Red Turnips",
+          "name": "1 bunch red turnips",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "available"
+        },
+        {
+          "item": "1 bunch Carrots",
+          "name": "1 bunch carrots",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "available"
+        },
+        {
+          "item": "1 Yellow Onion",
+          "name": "1 yellow onion",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "available"
+        },
+        {
+          "item": "1 bunch Parsley",
+          "name": "1 bunch parsley",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "available"
+        },
+        {
+          "item": "1 head Garlic",
+          "name": "1 head garlic",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "1 Lemon",
+          "name": "1 lemon",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        }
+      ],
+      "id": "9c974bec-23c2-4cd4-8eaf-b28b1e743908",
+      "created_date": "2026-01-07T19:14:42.123667"
+    },
+    {
+      "name": "Savoy Cabbage, Delicata Squash, and Kale Sabzi",
+      "description": "A hearty and nutritious Indian dry curry featuring sweet delicata squash, earthy kale, and cabbage seasoned with a warming blend of traditional spices.",
+      "ingredients_available": "1 unit Savoy Cabbage, 1 lb German Butterball Potatoes, 1 bunch Carrots, 1 unit Yellow Onion, 1 unit Delicata Squash, 1 bunch Kale",
+      "ingredients_needed": "2 cloves Garlic, 1 inch Fresh Ginger, 2 units Green Chilies, 1 tsp Garam Masala, 1 tsp Coriander Powder, 1 tsp Amchur Powder",
+      "time_minutes": "45",
+      "difficulty": "easy",
+      "reason": "I have incorporated the Delicata squash and kale into the cooking process, adjusting the timing to ensure the squash is tender. I also added coriander powder, garam masala, and amchur powder to enhance the authentic Indian flavor profile as requested.",
+      "instructions": "1. Peel and cube 1 lb German Butterball Potatoes into 1-inch pieces. Slice 1 unit Delicata Squash into half-moons (half-inch thick), removing seeds but leaving the skin on. Shred 1 unit Savoy Cabbage into thin strips. Destem and roughly chop 1 bunch Kale. Finely dice 1 unit Yellow Onion and 2 units Carrots.\n2. Heat 3 tbsp vegetable oil in a large pan over medium heat. Add 1 tsp cumin seeds and allow them to sizzle for 30 seconds.\n3. Add the diced 1 unit Yellow Onion, 2 cloves minced garlic, and 1 inch grated ginger. Sauté for 5 minutes until the onion is soft and translucent.\n4. Add the cubed 1 lb potatoes, sliced 1 unit delicata squash, and diced 2 units carrots. Season with 1 tsp turmeric, 1 tsp coriander powder, and 1 tsp salt. Cover and cook for 12-15 minutes, stirring occasionally, until the squash and potatoes are nearly tender.\n5. Add the shredded 1 unit Savoy Cabbage and 2 units slit green chilies. Stir well and cook uncovered for 8 minutes, allowing the cabbage to soften.\n6. Stir in 1 tsp garam masala and 1 tsp amchur powder for a tangy finish. Add the chopped 1 bunch kale and stir for 2-3 minutes until the kale is wilted and vibrant green.\n7. Garnish with 1/2 cup chopped parsley and serve hot with flatbread.",
+      "id": "9279e022-7858-4e9b-87b2-4bf91bca565d",
+      "created_date": "2026-01-14T00:54:00.636138"
+    },
+    {
+      "name": "Miso Oyster Mushroom and Butterball Potato Pasta",
+      "description": "A hearty and savory vegetarian pasta featuring meaty oyster mushrooms and creamy Butterball potatoes tossed in a silky white miso butter sauce with charred negi and garlic.",
+      "ingredients_available": "1 bunch Japanese negi scallions, 2 medium Butterball potatoes, 4 cloves garlic",
+      "ingredients_needed": "1 lb oyster mushrooms, 1 lb fettuccine or pappardelle pasta, 3 tbsp white miso paste, 4 oz parmesan cheese, 4 tbsp unsalted butter",
+      "time_minutes": "40",
+      "difficulty": "medium",
+      "reason": "Replaced Yukon Gold potatoes with Butterball potatoes and added 4 cloves of minced garlic to the aromatic base as requested.",
+      "instructions": "1. Bring a large pot of salted water to a boil and cook 1 lb fettuccine pasta according to package directions until al dente; reserve 1 cup of starchy pasta water before draining.\n2. While pasta cooks, slice 1 bunch Japanese negi into 1-inch rounds, mince 4 cloves garlic, and dice 2 medium Butterball potatoes into small 1/2-inch cubes to ensure quick cooking.\n3. Shred 1 lb oyster mushrooms by hand into bite-sized strips.\n4. In a large skillet, heat 3 tbsp olive oil over medium-high heat; add 1 lb shredded oyster mushrooms and the diced 2 medium Butterball potatoes. Cook for 10-12 minutes, stirring occasionally, until the mushrooms are crispy and the potatoes are golden-brown and fork-tender.\n5. Add the 1 bunch sliced negi rounds to the skillet and sauté for 3 minutes; then add the 4 cloves minced garlic and sauté for an additional 1-2 minutes until the negi is charred and the garlic is fragrant.\n6. In a small bowl, whisk 3 tbsp white miso paste with 1/2 cup of the reserved warm pasta water until completely smooth.\n7. Lower the skillet heat to medium-low; add the cooked 1 lb pasta, the miso mixture, 4 tbsp unsalted butter, and 4 oz grated parmesan cheese.\n8. Toss vigorously for 2 minutes, adding more pasta water if needed, until a silky, emulsified sauce coats the noodles; season with black pepper to taste and serve immediately.",
+      "id": "6c7bc25d-facf-4633-8496-10a4e6b383c1",
+      "created_date": "2026-01-15T00:33:25.220139"
+    },
+    {
+      "name": "Sheet Pan Autumn Root Vegetable Roast",
+      "description": "A hearty, colorful medley of roasted root vegetables and squash tossed in a balsamic-herb glaze. This dish highlights the natural sweetness of the radishes and delicata squash.",
+      "ingredients_available": "1 bunch Red Turnips, 1 Green Meat Radish, 1 Bordeaux Radish, 1 bunch Carrots, 1 Delicata Squash, 1 lb German Butterball Potatoes, 1 bunch Japanese Negi Scallions, 1 bunch Parsley",
+      "ingredients_needed": "",
+      "time_minutes": "50",
+      "difficulty": "easy",
+      "reason": "This recipe uses all your requested \"roast\" ingredients in a classic American preparation that celebrates the harvest.",
+      "instructions": "1. Preheat oven to 400°F (200°C).\n2. Scrub and dice 1 lb German Butterball Potatoes and 1 bunch Carrots into 1-inch chunks.\n3. Slice 1 Delicata Squash in half, remove seeds, and cut into half-moons (no need to peel).\n4. Quarter 1 bunch Red Turnips, and dice 1 Green Meat Radish and 1 Bordeaux Radish into 1-inch cubes.\n5. Toss all vegetables on a large sheet pan with 3 tbsp olive oil, 1 tsp salt, 1/2 tsp black pepper, and 1 tsp dried thyme.\n6. Roast for 30-35 minutes until tender and browned.\n7. Slice 1 bunch Japanese Negi Scallions into 1-inch pieces and toss them onto the pan for the last 10 minutes of roasting.\n8. Garnish with 1/2 cup chopped fresh Parsley and a drizzle of balsamic vinegar before serving.",
+      "source": "Generated",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "vegetarian"
+      ],
+      "ingredients": [
+        {
+          "item": "1 bunch Red Turnips",
+          "name": "1 bunch red turnips",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "available"
+        },
+        {
+          "item": "1 Green Meat Radish",
+          "name": "1 green meat radish",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "available"
+        },
+        {
+          "item": "1 Bordeaux Radish",
+          "name": "1 bordeaux radish",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "available"
+        },
+        {
+          "item": "1 bunch Carrots",
+          "name": "1 bunch carrots",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "available"
+        },
+        {
+          "item": "1 Delicata Squash",
+          "name": "1 delicata squash",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "available"
+        },
+        {
+          "item": "1 lb German Butterball Potatoes",
+          "name": "1 lb german butterball potatoes",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "available"
+        },
+        {
+          "item": "1 bunch Japanese Negi Scallions",
+          "name": "1 bunch japanese negi scallions",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "available"
+        },
+        {
+          "item": "1 bunch Parsley",
+          "name": "1 bunch parsley",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "available"
+        }
+      ],
+      "id": "1a5aae3e-cdb6-4a0d-934d-dfeb7fe06294",
+      "created_date": "2026-01-20T00:01:50.716060"
     }
   ]
 }

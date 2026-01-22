@@ -1,40 +1,6 @@
 {
-  "last_updated": "2025-12-24T14:30:19.481337",
+  "last_updated": "2026-01-07T19:15:44.096346",
   "recipes": [
-    {
-      "name": "Creamy Roasted Tomato and Basil Soup with Garlic Crostini",
-      "description": "A rich, velvety Italian-style tomato soup made from roasted fresh tomatoes and aromatic herbs, served with crispy bread. This comforting dinner is naturally vegetarian and packed with flavor.",
-      "ingredients_available": "Olive oil, balsamic vinegar, salt, black pepper, dried oregano, red pepper flakes, garlic powder",
-      "ingredients_needed": "3 lbs Roma tomatoes, 1 white onion, 6 cloves garlic, 1 bunch fresh basil, 1 pint vegetable broth, 1/2 cup heavy cream, 1 baguette",
-      "time_minutes": "45",
-      "difficulty": "easy",
-      "reason": "This recipe fits the \"Italian\" and \"Soup\" categories perfectly, providing a classic, comforting dinner that relies on simple, fresh produce.",
-      "instructions": "1. Preheat oven to 400°F (200°C). Halve 3 lbs of tomatoes and peel 6 cloves of garlic.\n2. Place tomatoes, garlic, and 1 chopped onion on a baking sheet. Drizzle with olive oil, salt, pepper, and dried oregano. Roast for 30 minutes.\n3. Transfer the roasted vegetables and all juices into a large pot. Add 1 pint of vegetable broth.\n4. Use an immersion blender to blend until smooth (or transfer to a standard blender in batches).\n5. Stir in 1/2 cup heavy cream and a handful of chopped fresh basil. Simmer on low for 5 minutes.\n6. Slice the baguette, brush with olive oil and garlic powder, and toast in the oven for 5 minutes until crisp.\n7. Serve the soup hot with the garlic crostini on the side.",
-      "source": "Generated",
-      "rating": 0,
-      "cook_count": 0,
-      "tags": [
-        "vegetarian"
-      ],
-      "ingredients": [
-        "Olive oil",
-        "balsamic vinegar",
-        "salt",
-        "black pepper",
-        "dried oregano",
-        "red pepper flakes",
-        "garlic powder",
-        "3 lbs Roma tomatoes",
-        "1 white onion",
-        "6 cloves garlic",
-        "1 bunch fresh basil",
-        "1 pint vegetable broth",
-        "1/2 cup heavy cream",
-        "1 baguette"
-      ],
-      "id": "13e3b15a-2117-4ce3-8ad5-0e297d79a4cb",
-      "added_to_book": "2025-12-17T21:10:44.180649"
-    },
     {
       "name": "Eggplant Parmesan",
       "description": "This lighter take on the classic Italian dish uses oven-baked breaded eggplant slices instead of deep-frying to reduce grease and prep time while maintaining a crisp texture.",
@@ -71,6 +37,199 @@
       "id": "d8ed3f6d-591f-4944-ac3b-32480d62324b",
       "created_date": "2025-12-24T14:30:16.321331",
       "added_to_book": "2025-12-24T14:30:19.481208"
+    },
+    {
+      "name": "Vegetarian Hot and Sour Soup",
+      "description": "A savory, tangy, and spicy traditional Chinese soup packed with a variety of mushrooms, tofu, and vegetables.",
+      "time_minutes": 30,
+      "difficulty": "medium",
+      "ingredients": [
+        {
+          "item": "2 piece medium sized tomato (diced into small cubes)",
+          "name": "2 piece medium sized tomato (diced into small cubes)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 oz carrot (cut into thin strips)",
+          "name": "2 oz carrot (cut into thin strips)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 oz seafood mushroom (roots removed, stems cut in half)",
+          "name": "2 oz seafood mushroom (roots removed, stems cut in half)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 oz king oyster mushroom (cut into little strips)",
+          "name": "2 oz king oyster mushroom (cut into little strips)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "3 piece shiitake mushroom (cut into thin slices)",
+          "name": "3 piece shiitake mushroom (cut into thin slices)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "0.25 oz dried wood ear mushroom (rehydrated and cut into thin slices)",
+          "name": "0.25 oz dried wood ear mushroom (rehydrated and cut into thin slices)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 piece egg (beaten)",
+          "name": "2 piece egg (beaten)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "1 oz red bell pepper (approx. half a pepper, cut into thin strips)",
+          "name": "1 oz red bell pepper (approx. half a pepper, cut into thin strips)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 piece green onion (minced)",
+          "name": "2 piece green onion (minced)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 piece dried chili peppers (optional)",
+          "name": "2 piece dried chili peppers (optional)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "14 oz firm tofu (cut into thin strips)",
+          "name": "14 oz firm tofu (cut into thin strips)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "5 cup water (for soup base, boiling)",
+          "name": "5 cup water (for soup base, boiling)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 tbsp vinegar",
+          "name": "2 tbsp vinegar",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "1 tsp white pepper",
+          "name": "1 tsp white pepper",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "1 tsp salt",
+          "name": "1 tsp salt",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "1 tbsp sugar",
+          "name": "1 tbsp sugar",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 tbsp light soy sauce",
+          "name": "2 tbsp light soy sauce",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "0.50 tbsp dark soy sauce",
+          "name": "0.50 tbsp dark soy sauce",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "3 tbsp cornstarch",
+          "name": "3 tbsp cornstarch",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "2 tbsp water (for cornstarch slurry)",
+          "name": "2 tbsp water (for cornstarch slurry)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "1 tsp sesame oil (or to taste)",
+          "name": "1 tsp sesame oil (or to taste)",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        },
+        {
+          "item": "1 tbsp corn oil",
+          "name": "1 tbsp corn oil",
+          "quantity": null,
+          "unit": null,
+          "modifier": null,
+          "status": "needed"
+        }
+      ],
+      "instructions": "1. Wash all vegetables. Prep ingredients by cutting 2 seafood mushrooms in half, slicing 2 oz king oyster mushrooms and 3 shiitake mushrooms into strips/slices, and cutting 14 oz tofu, 2 oz carrots, and 1 oz red bell pepper into thin strips. Mince 2 green onions and dice 2 tomatoes into small cubes.\n2. Rehydrate 0.25 oz dried wood ear mushrooms (and shiitake if dried) in warm water for 10 minutes, then slice thinly.\n3. In a small bowl, mix 3 tbsp cornstarch with 2 tbsp water to create a slurry. In a separate bowl, crack and beat 2 eggs.\n4. Bring 5 cups of water to a boil in advance to save time.\n5. Heat a wok on the highest heat setting. Add 1 tbsp corn oil and 2 dried chili peppers. Toss for 1 minute to infuse the oil, then remove and discard the chilies.\n6. Add the diced tomatoes to the wok and cook for 30-60 seconds.\n7. Pour in the 5 cups of boiling water. Add 1 tsp white pepper and stir for 15-30 seconds.\n8. Add 1 tsp salt, 1 tbsp sugar, 2 tbsp light soy sauce, and 0.50 tbsp dark soy sauce. Stir for 15-30 seconds.\n9. Add the prepared tofu, all mushrooms, carrots, and bell peppers (everything except green onions). Stir gently for 5-10 seconds.\n10. Cover the wok with a lid and bring the mixture to a boil (about 3-4 minutes).\n11. Uncover the wok. Give the cornstarch slurry a quick stir, then slowly pour it into the soup over 50-60 seconds while stirring constantly to thicken.\n12. Slowly pour the beaten eggs all around the wok over 20-30 seconds. Do not stir immediately to allow egg ribbons to form.\n13. Add 2 tbsp vinegar and 1 tsp sesame oil (to taste). Stir in the minced green onions and serve immediately.",
+      "source": "Captured",
+      "rating": 0,
+      "cook_count": 0,
+      "tags": [
+        "captured"
+      ],
+      "id": "0b3ec9fa-6606-4f17-9cbf-b247745d1c96",
+      "added_to_book": "2026-01-06T02:02:36.329482"
     }
   ]
 }

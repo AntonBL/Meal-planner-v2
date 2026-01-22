@@ -10,59 +10,149 @@
       "added": "2025-12-01"
     },
     {
-      "name": "Corn Cobb",
+      "name": "Savoy Cabbage",
       "quantity": "1",
       "category": "Vegetables",
       "expiry": null,
       "type": "fresh",
-      "id": "38790b74-ce50-4e44-8428-db4f2ea96676",
-      "added": "2025-12-12"
+      "id": "84055c05-9e17-4423-915b-837eced28a13",
+      "added": "2026-01-07"
     },
     {
-      "name": "Epazote",
-      "quantity": "1",
+      "name": "Parsley",
+      "quantity": "1 bunch",
       "category": "Fresh Herbs",
       "expiry": null,
       "type": "fresh",
-      "id": "81511611-1b5b-4707-82ee-4e590fd1c0fb",
-      "added": "2025-12-12"
+      "id": "1a99800a-4ee4-48b8-8267-d0eac1df6a99",
+      "added": "2026-01-07"
     },
     {
-      "name": "Tortilla Chips",
-      "quantity": "1 bag",
-      "category": "Grains & Pasta",
-      "expiry": null,
-      "type": "staple",
-      "id": "e3392d67-a6ca-454f-905d-71ba511a7e5d",
-      "added": "2025-12-12"
-    },
-    {
-      "name": "Dried Ancho Pasillo Chilies",
+      "name": "Rutabaga",
       "quantity": "1",
-      "category": "Spices & Herbs (Dried)",
+      "category": "Vegetables",
       "expiry": null,
-      "type": "staple",
-      "id": "522cfb9f-49c8-4e18-a7e0-778c19ac8835",
-      "added": "2025-12-12"
+      "type": "fresh",
+      "id": "c457b8be-29a7-4ee0-bdf9-a38d1bcdc3c5",
+      "added": "2026-01-22"
     },
     {
-      "name": "Dried Guanchillo Chilies",
+      "name": "Red Japanese Scallions",
+      "quantity": "1 bunch",
+      "category": "Vegetables",
+      "expiry": null,
+      "type": "fresh",
+      "id": "5217c82f-4e40-4265-b1e9-5880fc98fcc3",
+      "added": "2026-01-22"
+    },
+    {
+      "name": "Brussels Sprouts",
       "quantity": "1",
-      "category": "Spices & Herbs (Dried)",
+      "category": "Vegetables",
       "expiry": null,
-      "type": "staple",
-      "id": "cca231c4-bf72-4a9c-816d-7dfac55f171a",
-      "added": "2025-12-12"
+      "type": "fresh",
+      "id": "90827f7f-3a8f-4eb4-b557-d0897bfdc066",
+      "added": "2026-01-22"
     },
     {
-      "name": "Canada Dry Club Soda",
-      "quantity": "1 can",
-      "category": "Uncategorized",
+      "name": "Dino Kale",
+      "quantity": "1 bunch",
+      "category": "Vegetables",
       "expiry": null,
-      "type": "staple",
-      "id": "0c8f274f-7fb5-4bdd-b62d-fab285569ecd",
-      "added": "2025-12-17"
+      "type": "fresh",
+      "id": "a6a0b99e-59fc-4949-8a08-6b2ed54159ee",
+      "added": "2026-01-22"
+    },
+    {
+      "name": "Flat Head Cabbage",
+      "quantity": "1",
+      "category": "Vegetables",
+      "expiry": null,
+      "type": "fresh",
+      "id": "82447985-4085-4dec-bff0-6e8f6d53eeec",
+      "added": "2026-01-22"
+    },
+    {
+      "name": "Candy Cane Beets",
+      "quantity": "1",
+      "category": "Vegetables",
+      "expiry": null,
+      "type": "fresh",
+      "id": "9ec3abaa-12a1-4568-89c4-0baf9b49d06c",
+      "added": "2026-01-22"
+    },
+    {
+      "name": "Adirondack Red or Blue Potatoes",
+      "quantity": "1",
+      "category": "Vegetables",
+      "expiry": null,
+      "type": "fresh",
+      "id": "9c7cffbf-47ba-464f-9631-6da8cc98be27",
+      "added": "2026-01-22"
+    },
+    {
+      "name": "Carrots",
+      "quantity": "1",
+      "category": "Vegetables",
+      "expiry": null,
+      "type": "fresh",
+      "id": "3858c3a6-ec41-458d-b5ff-b9bf21c4f604",
+      "added": "2026-01-22"
+    },
+    {
+      "name": "Yellow Onion",
+      "quantity": "1",
+      "category": "Vegetables",
+      "expiry": null,
+      "type": "fresh",
+      "id": "7a272d16-5dd0-4cda-a065-b3ae0539cbd7",
+      "added": "2026-01-22"
+    },
+    {
+      "name": "Acorn Squash",
+      "quantity": "1",
+      "category": "Vegetables",
+      "expiry": null,
+      "type": "fresh",
+      "id": "6c3ba067-456c-4501-b1b2-8796a03707a4",
+      "added": "2026-01-22"
+    },
+    {
+      "name": "Black Radish",
+      "quantity": "1",
+      "category": "Vegetables",
+      "expiry": null,
+      "type": "fresh",
+      "id": "9b826acf-03b4-4937-ae00-f591a164eadc",
+      "added": "2026-01-22"
+    },
+    {
+      "name": "Pac Choi",
+      "quantity": "1",
+      "category": "Vegetables",
+      "expiry": null,
+      "type": "fresh",
+      "id": "a4dd0572-fe42-421a-9c18-10f5652c3741",
+      "added": "2026-01-22"
+    },
+    {
+      "name": "Sunchokes",
+      "quantity": "1",
+      "category": "Vegetables",
+      "expiry": null,
+      "type": "fresh",
+      "id": "2c895da8-f181-47df-af9c-8bc9550002bc",
+      "added": "2026-01-22"
+    },
+    {
+      "name": "Purple Top Turnips",
+      "quantity": "1",
+      "category": "Vegetables",
+      "expiry": null,
+      "type": "fresh",
+      "id": "28e9a7a6-5164-4e15-8a24-fd8202fa22eb",
+      "added": "2026-01-22"
     }
   ],
-  "last_updated": "2025-12-17T19:18:51.074344"
+  "last_updated": "2026-01-22T00:44:57.596178"
 }
